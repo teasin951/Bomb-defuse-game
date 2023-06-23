@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "Bomb-parts")(type "KiCad")(uri "${KIPRJMOD}/Bomb-parts.kicad_sym")(options "")(descr ""))
+)
