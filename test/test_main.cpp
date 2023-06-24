@@ -1,0 +1,35 @@
+#include <unity.h>
+
+#include "./tests/components/test_joystick.cpp"
+#include "./tests/components/test_ADKeypad.cpp"
+
+void setUp(void) {
+  // set stuff up here
+  pinSetup();
+}
+
+void tearDown(void) {
+  // clean stuff up here
+}
+
+
+int runUnityTests() {
+    UNITY_BEGIN();
+
+    runKeyboardTests();
+    runJoystickTests();
+
+    return UNITY_END();
+}
+
+
+
+void setup(){
+  // Wait ~1 seconds before the Unity test runner
+  // establishes connection with a board Serial interface
+  delay(2000);
+
+  runUnityTests();
+}
+
+void loop() {}
