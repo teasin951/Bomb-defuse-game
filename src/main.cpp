@@ -4,6 +4,7 @@
 
 #include "adkeyboard.h"
 #include "joystick.h"
+#include "relays.h"
 
 Joystick joystick;  /**< Create joystick struct */
 

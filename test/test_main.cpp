@@ -2,6 +2,7 @@
 
 #include "./tests/components/test_joystick.cpp"
 #include "./tests/components/test_ADKeypad.cpp"
+#include "./tests/components/test_relays.cpp"
 
 void setUp(void) {
   // set stuff up here
@@ -18,6 +19,7 @@ int runUnityTests() {
 
     runKeyboardTests();
     runJoystickTests();
+    runRelaysTest();
 
     return UNITY_END();
 }
