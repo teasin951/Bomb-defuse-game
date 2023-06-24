@@ -115,7 +115,6 @@ void test_up_release() {
 
 void test_down_press(void) {
     TEST_MESSAGE("Press the down button on ADKeaboard");
-    printf("\n");
 
     uint16_t millis_start = millis();
     while( millis() < millis_start + 5000 ) {
