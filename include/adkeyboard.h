@@ -10,6 +10,18 @@
  * !!! ADKeyboard.check() has to be called in a loop() !!!
 */
 
+/**
+ * @brief ADKeypad state
+*/
+struct Keypad {
+    uint8_t left = ButtonState::RELEASED;
+    uint8_t right = ButtonState::RELEASED;
+    uint8_t up = ButtonState::RELEASED;
+    uint8_t down = ButtonState::RELEASED;
+    uint8_t enter = ButtonState::RELEASED;
+};
+
+
 AnalogButtons ADKeyboard(ADKEYBOARD, INPUT);
 struct Keypad keypad;
 

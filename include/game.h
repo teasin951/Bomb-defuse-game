@@ -73,21 +73,11 @@ enum ButtonState {
 };
 
 /**
- * @brief ADKeypad state
+ * @brief Relay state
 */
-struct Keypad {
-    uint8_t left = ButtonState::RELEASED;
-    uint8_t right = ButtonState::RELEASED;
-    uint8_t up = ButtonState::RELEASED;
-    uint8_t down = ButtonState::RELEASED;
-    uint8_t enter = ButtonState::RELEASED;
-};
-
-/**
- * @brief Joystick state
-*/
-struct Joystick {
-    uint8_t button = ButtonState::RELEASED;
-    int16_t x = 0;
-    int16_t y = 0;
+struct Relays {
+    bool rel1 = false;
+    bool rel2 = false;
+    bool rel3 = false;
+    bool rel4 = false;
 };
