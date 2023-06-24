@@ -18,7 +18,7 @@ struct Game {
  * @brief Scenario for the first time playing 
  */
 struct FirstScenario : public Game {
-    uint8_t countdown_sec = 360;
+    uint16_t countdown_sec = 360;
    
 };
 

@@ -1,12 +1,21 @@
 #include <Arduino.h>
-#include "adkeyboard.h"
+#include "pins.h"
+#include "game.h"
 
+#include "adkeyboard.h"
+#include "joystick.h"
+
+Joystick joystick;  /**< Create joystick struct */
 
 void setup() {
-  
+  Serial.begin(9600);
+  pinSetup();
 }
 
 void loop() {
-  ADKeyboard.check();
+  readADKeyboard();
+  readJoystick(joystick, JOYSTICK_SW, JOYSTICK_X, JOYSTICK_Y);
+  Serial.println(adkeyboard.left);
 
+  delay(50);
 }
