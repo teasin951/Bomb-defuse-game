@@ -24,10 +24,10 @@
 */
 void pinSetup() {
     const int INPIN = 4;
-    const int OUTPIN = 0;
+    const int OUTPIN = 4;
 
     int input_pin[INPIN] = { ADKEYBOARD, JOYSTICK_SW, JOYSTICK_X, JOYSTICK_Y };  // fill input pins!!
-    int output_pin[OUTPIN] = { };  // fill output pins!!
+    int output_pin[OUTPIN] = { RELAY_1, RELAY_2, RELAY_3, RELAY_4 };  // fill output pins!!
 
     // set pins
     for( int i = 0; i < INPIN; i++ ) {
@@ -37,4 +37,9 @@ void pinSetup() {
     for( int i = 0; i < OUTPIN; i++ ) {
         pinMode(output_pin[i], OUTPUT);
     }
+
+    digitalWrite(RELAY_1, HIGH);
+    digitalWrite(RELAY_2, HIGH);
+    digitalWrite(RELAY_3, HIGH);
+    digitalWrite(RELAY_4, HIGH);
 }

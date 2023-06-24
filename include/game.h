@@ -71,13 +71,3 @@ enum ButtonState {
     PRESSED = 1,
     HELD = 2
 };
-
-/**
- * @brief Relay state
-*/
-struct Relays {
-    bool rel1 = false;
-    bool rel2 = false;
-    bool rel3 = false;
-    bool rel4 = false;
-};
