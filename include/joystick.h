@@ -28,11 +28,15 @@ typedef struct Joystick Joystick;
  * @param p_y Pin where the y axes is connected (analog)
 */
 Joystick & readJoystick( Joystick & joy, int p_button, int p_x, int p_y ) {
-    if( digitalRead(p_button) == HIGH ) 
+    if( analogRead(p_button) < 10 ) {
         joy.button = ButtonState::PRESSED;
-    else
+    }
+    else {
         joy.button = ButtonState::RELEASED;
+    }
 
     joy.x = analogRead(p_x);
     joy.y = analogRead(p_y);
+
+    return joy;
 }

@@ -15,7 +15,6 @@ void setup() {
 void loop() {
   readADKeyboard();
   readJoystick(joystick, JOYSTICK_SW, JOYSTICK_X, JOYSTICK_Y);
-  Serial.println(adkeyboard.left);
 
   delay(50);
 }

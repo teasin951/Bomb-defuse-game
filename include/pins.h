@@ -11,6 +11,10 @@
 #define JOYSTICK_Y A3
 #define JOYSTICK_X A4
 
+#define RELAY_1 28
+#define RELAY_2 29
+#define RELAY_3 30
+#define RELAY_4 31
 
 
 /**
