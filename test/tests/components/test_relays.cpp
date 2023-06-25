@@ -37,7 +37,7 @@ void test_relays() {
     setRelays(0, 0, 0, 0);
     delay(time);
 
-    TEST_MESSAGE("Press enter button on ADKeypad if all relays work");
+    TEST_MESSAGE("Press the enter button on ADKeypad if all relays work");
 
     uint16_t millis_start = millis();
     while( millis() < millis_start + 5000 ) {
