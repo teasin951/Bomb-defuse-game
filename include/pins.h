@@ -16,6 +16,11 @@
 #define RELAY_3 30
 #define RELAY_4 31
 
+#define BUTTON_IN 22
+#define BUTTON_R 11
+#define BUTTON_G 12
+#define BUTTON_B 13
+
 
 /**
  * @brief Set all pins to their respective modes
@@ -23,11 +28,11 @@
  * You need to set the corrent amount of pins and list them accordingly
 */
 void pinSetup() {
-    const int INPIN = 4;
-    const int OUTPIN = 4;
+    const int INPIN = 5;
+    const int OUTPIN = 7;
 
-    int input_pin[INPIN] = { ADKEYBOARD, JOYSTICK_SW, JOYSTICK_X, JOYSTICK_Y };  // fill input pins!!
-    int output_pin[OUTPIN] = { RELAY_1, RELAY_2, RELAY_3, RELAY_4 };  // fill output pins!!
+    int input_pin[INPIN] = { ADKEYBOARD, JOYSTICK_SW, JOYSTICK_X, JOYSTICK_Y, BUTTON_IN };  // fill input pins!!
+    int output_pin[OUTPIN] = { RELAY_1, RELAY_2, RELAY_3, RELAY_4, BUTTON_R, BUTTON_G, BUTTON_B };  // fill output pins!!
 
     // set pins
     for( int i = 0; i < INPIN; i++ ) {
