@@ -32,10 +32,10 @@
 */
 void pinSetup() {
     const int INPIN = 5;
-    const int OUTPIN = 7;
+    const int OUTPIN = 9;
 
     int input_pin[INPIN] = { ADKEYBOARD, JOYSTICK_SW, JOYSTICK_X, JOYSTICK_Y, BUTTON_IN };  // fill input pins!!
-    int output_pin[OUTPIN] = { RELAY_1, RELAY_2, RELAY_3, RELAY_4, BUTTON_R, BUTTON_G, BUTTON_B };  // fill output pins!!
+    int output_pin[OUTPIN] = { RELAY_1, RELAY_2, RELAY_3, RELAY_4, BUTTON_R, BUTTON_G, BUTTON_B, BUZZER_1, BUZZER_2 };  // fill output pins!!
 
     // set pins
     for( int i = 0; i < INPIN; i++ ) {

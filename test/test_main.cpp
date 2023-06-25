@@ -4,6 +4,7 @@
 #include "./tests/components/test_ADKeypad.cpp"
 #include "./tests/components/test_relays.cpp"
 #include "./tests/components/test_button.cpp"
+#include "./tests/components/test_buzzers.cpp"
 
 void setUp(void) {
   // set stuff up here
@@ -22,6 +23,7 @@ int runUnityTests() {
     runJoystickTests();
     runRelaysTest();
     runEmergencyButtonTest();
+    runBuzzerTest();
 
     return UNITY_END();
 }
