@@ -21,6 +21,9 @@
 #define BUTTON_G 12
 #define BUTTON_B 13
 
+#define BUZZER_1 9
+#define BUZZER_2 10
+
 
 /**
  * @brief Set all pins to their respective modes
