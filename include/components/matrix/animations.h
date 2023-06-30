@@ -7,7 +7,6 @@
 */
 
 /* defining frames here to avoid dynamic allocation */
-#define BLINKING_CROSS_FRAMES 2
 #define DANCING_EXCLE_FRAMES 2
 
 /**
@@ -23,13 +22,23 @@ public:
      * 
      * Each child should define it's frames, frames_count and next_frame_in here
     */
-    Animation();
+    Animation() = default;
     virtual ~Animation() = default;
 
     /**
      * @brief Resets the animation to the beggining
+     * 
+     * Most importantly, it sets the 'start_millis' variable to the current time and put the starting image to leds.
+     * 
+     * @param leds array of CRGBs used by FastLED to display
     */
-    virtual void resetAnimation() {
+    virtual void resetAnimation( CRGB (&leds)[NUM_LEDS] ) {
+        for (uint8_t y = 0; y < NUM_Y; y++) {
+            for (uint8_t x = 0; x < NUM_X; x++) {
+                leds[(y*NUM_X)+x] = base_frame[ (y*NUM_X)+x ];
+            }
+        }
+
         frame = 0;
         start_millis = millis();
     }
@@ -37,75 +46,132 @@ public:
     /**
      * @brief Prepares the animation to be displayed
      * 
-     * Most importantly, it sets the 'start_millis' variable to the current time.
+     * Must be called when changing animations!
+     * 
+     * @param leds array of CRGBs used by FastLED to display
     */
-    virtual void setAnimation() {
-        resetAnimation();
+    virtual void setAnimation( CRGB (&leds)[NUM_LEDS] ) {
+        resetAnimation(leds);
     }
 
     /**
-     * @brief Checks if we are supposed to move to the next frame.
+     * @brief Checks if we are supposed to move to the next frame and do it.
      * 
      * Should be called periodically.
+     * 
+     * @param leds array of CRGBs used by FastLED to display
     */
-    virtual void checkFrame() {
+    virtual void proceed( CRGB (&leds)[NUM_LEDS] ) {
+
+        // time to change frames
         if( millis() > start_millis + (frame+1) * next_frame_in ) {
+
+            // frame overflow
             if( frame >= frame_count - 1 ) {
-                resetAnimation();
+                frame = 0;
+                start_millis = millis() + 50000;
             }
+
+            // frame advancement
             else {
                 frame++;
             }
         }
     }
 
-    /**
-     * @brief Returns pixel values at a given index in the current frame
-     * 
-     * Used to set the 'leds' array for FastLED.h
-     * Every child should redefine this to access the correct data
-     * 
-     * @return CRGB struct for a given pixel
-    */
-    virtual CRGB & getData( uint16_t index ) {
-        return frames[frame][index];
-    }
-
 protected:
     uint32_t start_millis = 0;  /**< Millis when we switched to this animation */
     uint16_t frame = 0;  /**< Animation frame currently displayed */
     uint16_t frame_count = 1;  /**< Number of frames in the animation, change in constructor!!! */
-    uint16_t next_frame_in = 40;  /**< ms between frames, change in constructor!!! */
+    uint16_t next_frame_in = 40000;  /**< ms between frames, change in constructor!!! */
 
-    CRGB frames[1][NUM_LEDS];  /**< frames */
-};
+    const CRGB base_frame[NUM_LEDS] = {
+        CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),
+        CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),
+        CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),
+        CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),
+        CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),
+        CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),
+        CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),
+        CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),
+    };  /**< The first base frame for the animation */
 
-
-class BlinkingCross : public Animation {
-public:
-    BlinkingCross();
-    virtual ~BlinkingCross() = default;
-
-    virtual CRGB & getData( uint16_t index ) override {
-        return frames[frame][index];
-    }
-
-private:
-
-    CRGB frames[BLINKING_CROSS_FRAMES][NUM_LEDS];  /**< frames */
+    void (*actions[1])( CRGB (&)[NUM_LEDS] ) = { nullptr };  /**< Actions to perform when changing to the next frame */
 };
 
 
 class DancingExcle : public Animation {
 public:
-    DancingExcle();
+    DancingExcle() {
+        frame_count = DANCING_EXCLE_FRAMES;
+        next_frame_in = 500;
+    }
     virtual ~DancingExcle() = default;
 
-    virtual CRGB & getData( uint16_t index ) override {
-        return frames[frame][index];
+    void resetAnimation( CRGB (&leds)[NUM_LEDS] ) override {
+        for (uint8_t y = 0; y < NUM_Y; y++) {
+            for (uint8_t x = 0; x < NUM_X; x++) {
+                leds[(y*NUM_X)+x] = base_frame[ (y*NUM_X)+x ];
+            }
+        }
+
+        frame = 0;
+        start_millis = millis();
+    }
+
+    void moveRight( CRGB (&leds)[NUM_LEDS] ) {
+        for (uint8_t y = 0; y < NUM_Y; y++) {
+            for (uint8_t x = NUM_X; x > 0; x--) {
+                leds[(y*NUM_X)+x] = leds[ (y*NUM_X) + x - 1 ];
+            }
+        }
+        for (uint8_t y = 0; y < NUM_Y; y++) {
+            leds[(y*NUM_X) + 0] = CRGB(0,0,0);
+        }
+    }
+
+    void proceed( CRGB (&leds)[NUM_LEDS] ) override {
+
+        // time to change frames
+        if( millis() > start_millis + (frame+1) * next_frame_in ) {
+
+            // do asociated action
+            (this->*actions[frame])(leds);
+
+            // frame overflow
+            if( frame >= frame_count - 1 ) {
+                resetAnimation(leds);
+            }
+
+            // frame advancement
+            else {
+                frame++;
+            }
+        }
     }
 
 private:
+    const CRGB base_frame[NUM_LEDS] = {
+        CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),
+        CRGB(0,0,0),CRGB(192,0,0),CRGB(0,0,0),CRGB(192,0,0),CRGB(0,0,0),CRGB(192,0,0),CRGB(0,0,0),CRGB(0,0,0),
+        CRGB(0,0,0),CRGB(192,0,0),CRGB(0,0,0),CRGB(192,0,0),CRGB(0,0,0),CRGB(192,0,0),CRGB(0,0,0),CRGB(0,0,0),
+        CRGB(0,0,0),CRGB(192,0,0),CRGB(0,0,0),CRGB(192,0,0),CRGB(0,0,0),CRGB(192,0,0),CRGB(0,0,0),CRGB(0,0,0),
+        CRGB(0,0,0),CRGB(192,0,0),CRGB(0,0,0),CRGB(192,0,0),CRGB(0,0,0),CRGB(192,0,0),CRGB(0,0,0),CRGB(0,0,0),
+        CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),
+        CRGB(0,0,0),CRGB(192,0,0),CRGB(0,0,0),CRGB(192,0,0),CRGB(0,0,0),CRGB(192,0,0),CRGB(0,0,0),CRGB(0,0,0),
+        CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),
+    };  /**< The first base frame for the animation */
 
-    CRGB frames[DANCING_EXCLE_FRAMES][NUM_LEDS];  /**< frames */
+    void (DancingExcle::*actions[DANCING_EXCLE_FRAMES])( CRGB (&)[NUM_LEDS] ) = { 
+        &DancingExcle::moveRight, nullptr };  /**< Actions to perform when changing to the next frame */
 };
+
+
+class DancingCross : public Animation {
+public:
+    DancingCross();
+    virtual ~DancingCross() = default;
+
+private:
+};
+

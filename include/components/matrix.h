@@ -16,14 +16,7 @@ CRGB leds[NUM_LEDS];
  * @param animation Animation object to be displayed
 */
 void display( Animation & animation ) {
-    animation.checkFrame();
-
-    for (uint8_t y = 0; y < NUM_Y; y++) {
-        for (uint8_t x = 0; x < NUM_X; x++) {
-            leds[(y*NUM_X)+x] = animation.getData( (y*NUM_X)+x );
-        }
-    }
-
+    animation.proceed( leds );
     FastLED.show();
 }
 
