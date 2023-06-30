@@ -8,6 +8,7 @@
 
 /* defining frames here to avoid dynamic allocation */
 #define BLINKING_CROSS_FRAMES 2
+#define DANCING_EXCLE_FRAMES 2
 
 /**
  * @class Base class for animations
@@ -22,7 +23,7 @@ public:
      * 
      * Each child should define it's frames, frames_count and next_frame_in here
     */
-    Animation() = default;
+    Animation();
     virtual ~Animation() = default;
 
     /**
@@ -43,7 +44,7 @@ public:
     }
 
     /**
-     * @brief Checks if we are supposed to move to the next frame
+     * @brief Checks if we are supposed to move to the next frame.
      * 
      * Should be called periodically.
     */
@@ -66,7 +67,9 @@ public:
      * 
      * @return CRGB struct for a given pixel
     */
-    virtual CRGB & getData( uint16_t index ) = 0;
+    virtual CRGB & getData( uint16_t index ) {
+        return frames[frame][index];
+    }
 
 protected:
     uint32_t start_millis = 0;  /**< Millis when we switched to this animation */
@@ -90,4 +93,19 @@ public:
 private:
 
     CRGB frames[BLINKING_CROSS_FRAMES][NUM_LEDS];  /**< frames */
+};
+
+
+class DancingExcle : public Animation {
+public:
+    DancingExcle();
+    virtual ~DancingExcle() = default;
+
+    virtual CRGB & getData( uint16_t index ) override {
+        return frames[frame][index];
+    }
+
+private:
+
+    CRGB frames[DANCING_EXCLE_FRAMES][NUM_LEDS];  /**< frames */
 };
