@@ -1,7 +1,7 @@
 #include "unity.h"
-#include "pins.h"
-#include "adkeyboard.h"
-#include "button.h"
+#include "components/pins.h"
+#include "components/adkeyboard.h"
+#include "components/button.h"
 
 void test_emebutton_press(void) {
     TEST_MESSAGE("Press the emergency button");

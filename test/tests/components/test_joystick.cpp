@@ -1,6 +1,6 @@
 #include "unity.h"
-#include "joystick.h"
-#include "pins.h"
+#include "components/joystick.h"
+#include "components/pins.h"
 
 
 void test_button_press(void) {

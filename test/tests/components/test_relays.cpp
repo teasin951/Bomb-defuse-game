@@ -1,7 +1,7 @@
 #include "unity.h"
-#include "relays.h"
-#include "pins.h"
-#include "adkeyboard.h"
+#include "components/relays.h"
+#include "components/pins.h"
+#include "components/adkeyboard.h"
 
 
 void test_relays() {

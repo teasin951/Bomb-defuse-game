@@ -1,6 +1,6 @@
 #include "unity.h"
-#include "pins.h"
-#include "adkeyboard.h"
+#include "components/pins.h"
+#include "components/adkeyboard.h"
 
 
 void test_buzzer1() {
