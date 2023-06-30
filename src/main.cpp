@@ -1,11 +1,11 @@
 #include <Arduino.h>
-#include "pins.h"
+#include "components/pins.h"
 #include "game.h"
 
-#include "adkeyboard.h"
-#include "joystick.h"
-#include "relays.h"
-#include "matrix.h"
+#include "components/adkeyboard.h"
+#include "components/joystick.h"
+#include "components/relays.h"
+#include "components/matrix.h"
 
 
 Joystick joystick;  /**< Create joystick struct */

@@ -1,5 +1,5 @@
-#include "matrix/animations.h"
-#include "matrix/definitions.h"
+#include "components/matrix/animations.h"
+#include "components/matrix/definitions.h"
 
 /**
  * @file Frame definition for BlinkingCross object
