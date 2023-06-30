@@ -24,6 +24,8 @@
 #define BUZZER_1 9
 #define BUZZER_2 10
 
+#define MATRIX 8
+
 
 /**
  * @brief Set all pins to their respective modes

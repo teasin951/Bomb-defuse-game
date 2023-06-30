@@ -1,0 +1,37 @@
+#include "matrix/animations.h"
+#include "matrix/definitions.h"
+
+/**
+ * @file Frame definition for BlinkingCross object
+*/
+
+CRGB frame0[NUM_X*NUM_Y] = {
+    CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),
+    CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),
+    CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),
+    CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),
+    CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),
+    CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),
+    CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),
+    CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),
+};
+
+CRGB frame1[NUM_X*NUM_Y] = {
+    CRGB(246,187,0),CRGB(192,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(192,0,0),CRGB(246,187,0),
+    CRGB(192,0,0),CRGB(246,187,0),CRGB(192,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(192,0,0),CRGB(246,187,0),CRGB(192,0,0),
+    CRGB(0,0,0),CRGB(192,0,0),CRGB(246,187,0),CRGB(192,0,0),CRGB(192,0,0),CRGB(246,187,0),CRGB(192,0,0),CRGB(0,0,0),
+    CRGB(0,0,0),CRGB(0,0,0),CRGB(192,0,0),CRGB(246,187,0),CRGB(246,187,0),CRGB(192,0,0),CRGB(0,0,0),CRGB(0,0,0),
+    CRGB(0,0,0),CRGB(0,0,0),CRGB(192,0,0),CRGB(246,187,0),CRGB(246,187,0),CRGB(192,0,0),CRGB(0,0,0),CRGB(0,0,0),
+    CRGB(0,0,0),CRGB(192,0,0),CRGB(246,187,0),CRGB(192,0,0),CRGB(192,0,0),CRGB(246,187,0),CRGB(192,0,0),CRGB(0,0,0),
+    CRGB(192,0,0),CRGB(246,187,0),CRGB(192,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(192,0,0),CRGB(246,187,0),CRGB(192,0,0),
+    CRGB(246,187,0),CRGB(192,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(192,0,0),CRGB(246,187,0),
+};
+
+
+BlinkingCross::BlinkingCross() {
+    frame_count = BLINKING_CROSS_FRAMES;
+    next_frame_in = 1000;
+
+    memcpy(frames[0], frame0, sizeof(frame0));
+    memcpy(frames[1], frame1, sizeof(frame1));
+}
