@@ -5,7 +5,7 @@
  * @file Frame definition for BlinkingCross object
 */
 
-CRGB frame0[NUM_X*NUM_Y] = {
+CRGB BlinkingCross_frame0[NUM_X*NUM_Y] = {
     CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),
     CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),
     CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),
@@ -16,7 +16,7 @@ CRGB frame0[NUM_X*NUM_Y] = {
     CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),
 };
 
-CRGB frame1[NUM_X*NUM_Y] = {
+CRGB BlinkingCross_frame1[NUM_X*NUM_Y] = {
     CRGB(246,187,0),CRGB(192,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(192,0,0),CRGB(246,187,0),
     CRGB(192,0,0),CRGB(246,187,0),CRGB(192,0,0),CRGB(0,0,0),CRGB(0,0,0),CRGB(192,0,0),CRGB(246,187,0),CRGB(192,0,0),
     CRGB(0,0,0),CRGB(192,0,0),CRGB(246,187,0),CRGB(192,0,0),CRGB(192,0,0),CRGB(246,187,0),CRGB(192,0,0),CRGB(0,0,0),
@@ -32,6 +32,6 @@ BlinkingCross::BlinkingCross() {
     frame_count = BLINKING_CROSS_FRAMES;
     next_frame_in = 1000;
 
-    memcpy(frames[0], frame0, sizeof(frame0));
-    memcpy(frames[1], frame1, sizeof(frame1));
+    memcpy(frames[0], BlinkingCross_frame0, sizeof(BlinkingCross_frame0));
+    memcpy(frames[1], BlinkingCross_frame1, sizeof(BlinkingCross_frame1));
 }

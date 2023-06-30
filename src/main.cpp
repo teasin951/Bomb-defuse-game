@@ -10,6 +10,12 @@
 
 Joystick joystick;  /**< Create joystick struct */
 
+BlinkingCross c;
+DancingExcle d;
+Animation b;
+
+int j = 0;
+
 void setup() {
   Serial.begin(9600);
   pinSetup();
@@ -19,11 +25,34 @@ void setup() {
 void loop() {
   readADKeyboard();
   readJoystick(joystick, JOYSTICK_SW, JOYSTICK_X, JOYSTICK_Y);
-  displayMatrix();
 
-  if(adkeyboard.left == ButtonState::PRESSED ) {
-    tone(BUZZER_1, 400, 50);
+  /* --- Experiment --- */
+  if( adkeyboard.left == ButtonState::PRESSED ) {
+    j = 1;
   }
+  else if( adkeyboard.right == ButtonState::PRESSED ) {
+    j = 2;
+  }
+  else if( adkeyboard.up == ButtonState::PRESSED ) {
+    j = 3;
+  }
+  else if( adkeyboard.enter == ButtonState::PRESSED ) {
+    j = 0;
+  }
+
+  if( j == 1 ) {
+    display(c);
+  }
+  else if( j == 2 ) {
+    display(d);
+  }
+  else if( j == 3 ) {
+    joystickDisplay( joystick );
+  }
+  else {
+    display(b);
+  }
+  /* --- ~Experiment --- */
 
   delay(50);
 }
