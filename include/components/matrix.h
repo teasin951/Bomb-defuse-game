@@ -23,19 +23,19 @@ void display( Animation & animation ) {
 /**
  * Experiment
 */
-void joystickDisplay( Joystick & joy ) {
-    for (uint8_t y = 0; y < NUM_Y; y++) {
-        for (uint8_t x = 0; x < NUM_X; x++) {
-            canvas.m_LED[(y*NUM_X)+x] = CRGB(0, 0, 0);
-        }
-    }
+// void joystickDisplay( Joystick & joy ) {
+//     for (uint8_t y = 0; y < NUM_Y; y++) {
+//         for (uint8_t x = 0; x < NUM_X; x++) {
+//             canvas.m_LED[(y*NUM_X)+x] = CRGB(0, 0, 0);
+//         }
+//     }
 
-    int x = map(joy.x-10, 1023, 0, 0, 7);
-    int y = map(joy.y-10, 1023, 0, 0, 7);
-    canvas.m_LED[y*NUM_X + x] = CRGB(0, 127, 255);
+//     int x = map(joy.x-10, 1023, 0, 0, 7);
+//     int y = map(joy.y-10, 1023, 0, 0, 7);
+//     canvas.m_LED[y*NUM_X + x] = CRGB(0, 127, 255);
 
-    FastLED.show();
-}
+//     FastLED.show();
+// }
 
 /**
  * @brief Set up FastLED as needed

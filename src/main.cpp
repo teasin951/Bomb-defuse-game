@@ -6,17 +6,18 @@
 #include "components/joystick.h"
 #include "components/relays.h"
 #include "components/matrix.h"
+#include "components/lcd.h"
 
 
 Joystick joystick;  /**< Create joystick struct */
 
-int j = 0;
-
 void setup() {
   Serial.begin(9600);
+  Wire.begin();
+
   pinSetup();
   setupFastLED();
-
+  lcd.init();
 }
 
 void loop() {

@@ -26,6 +26,9 @@
 
 #define MATRIX 8
 
+#define LCD_SDA 20
+#define LCD_SCL 21
+
 
 /**
  * @brief Set all pins to their respective modes
