@@ -6,6 +6,8 @@
 #include "./tests/components/test_button.cpp"
 #include "./tests/components/test_buzzers.cpp"
 #include "./tests/components/test_matrix.cpp"
+#include "./tests/components/test_lcd.cpp"
+
 
 void setUp(void) {
   // set stuff up here
@@ -26,6 +28,7 @@ int runUnityTests() {
     // runEmergencyButtonTest();
     // runBuzzerTest();
     runMatrixTest();
+    runLCDTest();
 
     return UNITY_END();
 }
