@@ -29,6 +29,14 @@
 #define LCD_SDA 20
 #define LCD_SCL 21
 
+#define KEY_LEFT_COL 34
+#define KEY_MID_COL 35
+#define KEY_RIGHT_COL 36
+#define KEY_FIRST_ROW 37
+#define KEY_SECOND_ROW 38
+#define KEY_THIRD_ROW 39
+#define KEY_FORTH_ROW 40
+
 
 /**
  * @brief Set all pins to their respective modes
