@@ -7,6 +7,7 @@
 #include "./tests/components/test_buzzers.cpp"
 #include "./tests/components/test_matrix.cpp"
 #include "./tests/components/test_lcd.cpp"
+#include "./tests/components/test_keypad.cpp"
 
 
 void setUp(void) {
@@ -29,6 +30,7 @@ int runUnityTests() {
     runBuzzerTest();
     runMatrixTest();
     runLCDTest();
+    runKeypadTest();
 
     return UNITY_END();
 }

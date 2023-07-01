@@ -98,12 +98,13 @@ void eventHandler( KeypadEvent x ) {
 
     // Number pressed
     else {
-      k.pressed();
 
       // We are not at the end of the sequence yet
       if( k.length < k.match_length ) {
         k.sequence[k.length] = x;
         k.length += 1;
+
+        k.pressed();
       }
 
       // We are out of space
@@ -124,7 +125,7 @@ void eventHandler( KeypadEvent x ) {
  * 
  * @param match sequence that shall be matched by the user
  * @param size length of the sequence
- * @param pressed function to call when a button is pressed
+ * @param pressed function to call when a number button is pressed and added to the sequence
  * @param s_matched function to call when the correct sequence is entered
  * @param s_did_not_match function to call when an incorrect sequence is entered
  * @param s_cleared function to call when the sequence is manually cleared

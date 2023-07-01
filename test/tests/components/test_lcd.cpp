@@ -15,11 +15,11 @@ void test_lcd() {
 
     for( int i = 0; i < 12; i++ ) {
         lcd.scrollDisplayRight();
-        delay(300);
+        delay(400);
     }
     for( int i = 0; i < 12; i++ ) {
         lcd.scrollDisplayLeft();
-        delay(300);
+        delay(400);
     }
 
     delay(500);
