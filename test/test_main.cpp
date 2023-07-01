@@ -22,11 +22,11 @@ void tearDown(void) {
 int runUnityTests() {
     UNITY_BEGIN();
 
-    // runKeyboardTests();
-    // runJoystickTests();
-    // runRelaysTest();
-    // runEmergencyButtonTest();
-    // runBuzzerTest();
+    runKeyboardTests();
+    runJoystickTests();
+    runRelaysTest();
+    runEmergencyButtonTest();
+    runBuzzerTest();
     runMatrixTest();
     runLCDTest();
 
