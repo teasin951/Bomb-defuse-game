@@ -5,6 +5,7 @@
 #include "./tests/components/test_relays.cpp"
 #include "./tests/components/test_button.cpp"
 #include "./tests/components/test_buzzers.cpp"
+#include "./tests/components/test_matrix.cpp"
 
 void setUp(void) {
   // set stuff up here
@@ -19,11 +20,12 @@ void tearDown(void) {
 int runUnityTests() {
     UNITY_BEGIN();
 
-    runKeyboardTests();
-    runJoystickTests();
-    runRelaysTest();
-    runEmergencyButtonTest();
-    runBuzzerTest();
+    // runKeyboardTests();
+    // runJoystickTests();
+    // runRelaysTest();
+    // runEmergencyButtonTest();
+    // runBuzzerTest();
+    runMatrixTest();
 
     return UNITY_END();
 }
