@@ -26,6 +26,9 @@ struct Keyboard {
 */
 struct Keyboard adkeyboard;  
 
+uint16_t lastDebounceMillis = 0;
+uint16_t debounceDelay = 50;
+
   
 void leftButtonClick() {
     adkeyboard.left = ButtonState::PRESSED;
@@ -81,42 +84,50 @@ void buttonRelease() {
 void readADKeyboard() {
     uint16_t value = analogRead(ADKEYBOARD);
 
-    /* left button */
-    if( value < 20 ) {
-        if( adkeyboard.left == ButtonState::RELEASED ) {
-            leftButtonClick();
+    /* Debounce */
+    if( millis() - lastDebounceMillis > debounceDelay ) {
+        /* left button */
+        if( value < 20 ) {
+            if( adkeyboard.left == ButtonState::RELEASED ) {
+                leftButtonClick();
+                lastDebounceMillis = millis();
+            }
         }
-    }
-    
-    /* right button */
-    else if( 485 < value && value < 500 ) {
-        if( adkeyboard.right == ButtonState::RELEASED ) {
-            rightButtonClick();
+        
+        /* right button */
+        else if( 485 < value && value < 500 ) {
+            if( adkeyboard.right == ButtonState::RELEASED ) {
+                rightButtonClick();
+                lastDebounceMillis = millis();
+            }
         }
-    }
 
-    /* up button */
-    else if( 140 < value && value < 160 ) {
-        if( adkeyboard.up == ButtonState::RELEASED ) {
-            upButtonClick();
+        /* up button */
+        else if( 140 < value && value < 160 ) {
+            if( adkeyboard.up == ButtonState::RELEASED ) {
+                upButtonClick();
+                lastDebounceMillis = millis();
+            }
         }
-    }
 
-    /* down button */
-    else if( 295 < value && value < 325 ) {
-        if( adkeyboard.down == ButtonState::RELEASED ) {
-            downButtonClick();
+        /* down button */
+        else if( 295 < value && value < 325 ) {
+            if( adkeyboard.down == ButtonState::RELEASED ) {
+                downButtonClick();
+                lastDebounceMillis = millis();
+            }
         }
-    }
 
-    /* enter button */
-    else if( 775 < value && value < 800 ) {
-        if( adkeyboard.enter == ButtonState::RELEASED ) {
-            enterButtonClick();
+        /* enter button */
+        else if( 775 < value && value < 800 ) {
+            if( adkeyboard.enter == ButtonState::RELEASED ) {
+                enterButtonClick();
+                lastDebounceMillis = millis();
+            }
         }
-    }
 
-    else {
-        buttonRelease();
+        else {
+            buttonRelease();
+        }
     }
 }
