@@ -1,6 +1,7 @@
 #include "unity.h"
 #include "components/joystick.h"
 #include "components/pins.h"
+#include <Keypad.h>
 
 
 void test_button_press(void) {
@@ -11,11 +12,11 @@ void test_button_press(void) {
     while( millis() < millis_start + 5000 ) {
         readJoystick(joy, JOYSTICK_SW, JOYSTICK_X, JOYSTICK_Y);
 
-        if( joy.button == ButtonState::PRESSED ) {
+        if( joy.button == PRESSED ) {
             TEST_ASSERT_TRUE(true);
             return;
         }
-        else if ( joy.button != ButtonState::RELEASED ) {
+        else if ( joy.button != RELEASED ) {
             TEST_FAIL();
         }
     }
@@ -30,11 +31,11 @@ void test_button_release(void) {
     while( millis() < millis_start + 5000 ) {
         readJoystick(joy, JOYSTICK_SW, JOYSTICK_X, JOYSTICK_Y);
 
-        if( joy.button == ButtonState::RELEASED ) {
+        if( joy.button == RELEASED ) {
             TEST_ASSERT_TRUE(true);
             return;
         }
-        else if ( joy.button != ButtonState::PRESSED ) {
+        else if ( joy.button != PRESSED ) {
             TEST_FAIL();
         }
     }

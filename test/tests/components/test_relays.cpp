@@ -2,6 +2,7 @@
 #include "components/relays.h"
 #include "components/pins.h"
 #include "components/adkeyboard.h"
+#include <Keypad.h>
 
 
 void test_relays() {
@@ -43,7 +44,7 @@ void test_relays() {
     while( millis() < millis_start + 5000 ) {
         readADKeyboard();
 
-        if( adkeyboard.enter == ButtonState::PRESSED ) {
+        if( adkeyboard.enter == PRESSED ) {
             TEST_ASSERT_TRUE(true);
             return;
         }

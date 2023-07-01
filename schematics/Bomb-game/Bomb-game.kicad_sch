@@ -1682,7 +1682,7 @@
     (property "Reference" "U8" (at 241.3 113.665 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "3x4 keyboard" (at 247.65 116.84 0)
+    (property "Value" "3x4 keypad" (at 246.38 116.84 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "" (at 229.87 114.3 0)

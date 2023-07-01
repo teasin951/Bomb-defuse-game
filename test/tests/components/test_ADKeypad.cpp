@@ -1,5 +1,6 @@
 #include "unity.h"
 #include "components/adkeyboard.h"
+#include <Keypad.h>
 
 
 void test_left_press(void) {
@@ -9,11 +10,11 @@ void test_left_press(void) {
     while( millis() < millis_start + 5000 ) {
         readADKeyboard();
 
-        if( adkeyboard.left == ButtonState::PRESSED ) {
+        if( adkeyboard.left == PRESSED ) {
             TEST_ASSERT_TRUE(true);
             return;
         }
-        else if ( adkeyboard.left != ButtonState::RELEASED ) {
+        else if ( adkeyboard.left != RELEASED ) {
             TEST_FAIL();
         }
     }
@@ -27,11 +28,11 @@ void test_left_release() {
     while( millis() < millis_start + 5000 ) {
         readADKeyboard();
 
-        if( adkeyboard.left == ButtonState::RELEASED ) {
+        if( adkeyboard.left == RELEASED ) {
             TEST_ASSERT_TRUE(true);
             return;
         }
-        else if ( adkeyboard.left != ButtonState::PRESSED ) {
+        else if ( adkeyboard.left != PRESSED ) {
             TEST_FAIL();
         }
     }
@@ -46,11 +47,11 @@ void test_right_press(void) {
     while( millis() < millis_start + 5000 ) {
         readADKeyboard();
 
-        if( adkeyboard.right == ButtonState::PRESSED ) {
+        if( adkeyboard.right == PRESSED ) {
             TEST_ASSERT_TRUE(true);
             return;
         }
-        else if ( adkeyboard.right != ButtonState::RELEASED ) {
+        else if ( adkeyboard.right != RELEASED ) {
             TEST_FAIL();
         }
     }
@@ -64,11 +65,11 @@ void test_right_release() {
     while( millis() < millis_start + 5000 ) {
         readADKeyboard();
 
-        if( adkeyboard.right == ButtonState::RELEASED ) {
+        if( adkeyboard.right == RELEASED ) {
             TEST_ASSERT_TRUE(true);
             return;
         }
-        else if ( adkeyboard.right != ButtonState::PRESSED ) {
+        else if ( adkeyboard.right != PRESSED ) {
             TEST_FAIL();
         }
     }
@@ -83,11 +84,11 @@ void test_up_press(void) {
     while( millis() < millis_start + 5000 ) {
         readADKeyboard();
 
-        if( adkeyboard.up == ButtonState::PRESSED ) {
+        if( adkeyboard.up == PRESSED ) {
             TEST_ASSERT_TRUE(true);
             return;
         }
-        else if ( adkeyboard.up != ButtonState::RELEASED ) {
+        else if ( adkeyboard.up != RELEASED ) {
             TEST_FAIL();
         }
     }
@@ -101,11 +102,11 @@ void test_up_release() {
     while( millis() < millis_start + 5000 ) {
         readADKeyboard();
 
-        if( adkeyboard.up == ButtonState::RELEASED ) {
+        if( adkeyboard.up == RELEASED ) {
             TEST_ASSERT_TRUE(true);
             return;
         }
-        else if ( adkeyboard.up != ButtonState::PRESSED ) {
+        else if ( adkeyboard.up != PRESSED ) {
             TEST_FAIL();
         }
     }
@@ -120,11 +121,11 @@ void test_down_press(void) {
     while( millis() < millis_start + 5000 ) {
         readADKeyboard();
 
-        if( adkeyboard.down == ButtonState::PRESSED ) {
+        if( adkeyboard.down == PRESSED ) {
             TEST_ASSERT_TRUE(true);
             return;
         }
-        else if ( adkeyboard.down != ButtonState::RELEASED ) {
+        else if ( adkeyboard.down != RELEASED ) {
             TEST_FAIL();
         }
     }
@@ -138,11 +139,11 @@ void test_down_release() {
     while( millis() < millis_start + 5000 ) {
         readADKeyboard();
 
-        if( adkeyboard.down == ButtonState::RELEASED ) {
+        if( adkeyboard.down == RELEASED ) {
             TEST_ASSERT_TRUE(true);
             return;
         }
-        else if ( adkeyboard.down != ButtonState::PRESSED ) {
+        else if ( adkeyboard.down != PRESSED ) {
             TEST_FAIL();
         }
     }
@@ -157,11 +158,11 @@ void test_enter_press(void) {
     while( millis() < millis_start + 5000 ) {
         readADKeyboard();
 
-        if( adkeyboard.enter == ButtonState::PRESSED ) {
+        if( adkeyboard.enter == PRESSED ) {
             TEST_ASSERT_TRUE(true);
             return;
         }
-        else if ( adkeyboard.enter != ButtonState::RELEASED ) {
+        else if ( adkeyboard.enter != RELEASED ) {
             TEST_FAIL();
         }
     }
@@ -175,11 +176,11 @@ void test_enter_release() {
     while( millis() < millis_start + 5000 ) {
         readADKeyboard();
 
-        if( adkeyboard.enter == ButtonState::RELEASED ) {
+        if( adkeyboard.enter == RELEASED ) {
             TEST_ASSERT_TRUE(true);
             return;
         }
-        else if ( adkeyboard.enter != ButtonState::PRESSED ) {
+        else if ( adkeyboard.enter != PRESSED ) {
             TEST_FAIL();
         }
     }

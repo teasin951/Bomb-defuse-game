@@ -61,13 +61,3 @@ enum GameMode {
     HARD = 4,
     SUICIDE = 5
 };
-
-
-/**
- * @brief enum for button states
-*/
-enum ButtonState {
-    RELEASED = 0,
-    PRESSED = 1,
-    HELD = 2
-};

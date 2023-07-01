@@ -2,6 +2,7 @@
 #include "components/lcd.h"
 #include "components/pins.h"
 #include "components/adkeyboard.h"
+#include <Keypad.h>
 
 
 void test_lcd() {
@@ -33,7 +34,7 @@ void test_lcd() {
     while( millis() < millis_start + 5000 ) {
         readADKeyboard();
 
-        if( adkeyboard.enter == ButtonState::PRESSED ) {
+        if( adkeyboard.enter == PRESSED ) {
             TEST_ASSERT_TRUE(true);
             return;
         }

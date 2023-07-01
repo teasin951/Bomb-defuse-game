@@ -1,5 +1,7 @@
 #pragma once
 #include <Arduino.h>
+#include <Keypad.h>
+
 #include "game.h"
 #include "pins.h"
 
@@ -13,11 +15,11 @@
  * @brief ADKeypad state
 */
 struct Keyboard {
-    uint8_t left = ButtonState::RELEASED;
-    uint8_t right = ButtonState::RELEASED;
-    uint8_t up = ButtonState::RELEASED;
-    uint8_t down = ButtonState::RELEASED;
-    uint8_t enter = ButtonState::RELEASED;
+    uint8_t left = RELEASED;
+    uint8_t right = RELEASED;
+    uint8_t up = RELEASED;
+    uint8_t down = RELEASED;
+    uint8_t enter = RELEASED;
 };
 
 /* 
@@ -31,51 +33,51 @@ uint16_t debounceDelay = 50;
 
   
 void leftButtonClick() {
-    adkeyboard.left = ButtonState::PRESSED;
+    adkeyboard.left = PRESSED;
 }  
   
 void leftButtonHold() {
-    adkeyboard.left = ButtonState::HELD;
+    adkeyboard.left = HOLD;
 }  
   
 void rightButtonClick() {
-    adkeyboard.right = ButtonState::PRESSED;
+    adkeyboard.right = PRESSED;
 }  
   
 void rightButtonHold() {
-    adkeyboard.right = ButtonState::HELD;
+    adkeyboard.right = HOLD;
 }  
   
 void upButtonClick() {
-    adkeyboard.up = ButtonState::PRESSED;
+    adkeyboard.up = PRESSED;
 }  
   
 void upButtonHold() {
-    adkeyboard.up = ButtonState::HELD;
+    adkeyboard.up = HOLD;
 }  
   
 void downButtonClick() {
-    adkeyboard.down = ButtonState::PRESSED;
+    adkeyboard.down = PRESSED;
 }  
   
 void downButtonHold() {
-    adkeyboard.down = ButtonState::HELD;
+    adkeyboard.down = HOLD;
 }  
   
 void enterButtonClick() {
-    adkeyboard.enter = ButtonState::PRESSED;
+    adkeyboard.enter = PRESSED;
 }  
   
 void enterButtonHold() {
-    adkeyboard.enter = ButtonState::HELD;
+    adkeyboard.enter = HOLD;
 }  
   
 void buttonRelease() {
-    adkeyboard.left = ButtonState::RELEASED;
-    adkeyboard.right = ButtonState::RELEASED;
-    adkeyboard.up = ButtonState::RELEASED;
-    adkeyboard.down = ButtonState::RELEASED;
-    adkeyboard.enter = ButtonState::RELEASED;
+    adkeyboard.left = RELEASED;
+    adkeyboard.right = RELEASED;
+    adkeyboard.up = RELEASED;
+    adkeyboard.down = RELEASED;
+    adkeyboard.enter = RELEASED;
 }     
    
 /**
@@ -88,7 +90,7 @@ void readADKeyboard() {
     if( millis() - lastDebounceMillis > debounceDelay ) {
         /* left button */
         if( value < 20 ) {
-            if( adkeyboard.left == ButtonState::RELEASED ) {
+            if( adkeyboard.left == RELEASED ) {
                 leftButtonClick();
                 lastDebounceMillis = millis();
             }
@@ -96,7 +98,7 @@ void readADKeyboard() {
         
         /* right button */
         else if( 485 < value && value < 500 ) {
-            if( adkeyboard.right == ButtonState::RELEASED ) {
+            if( adkeyboard.right == RELEASED ) {
                 rightButtonClick();
                 lastDebounceMillis = millis();
             }
@@ -104,7 +106,7 @@ void readADKeyboard() {
 
         /* up button */
         else if( 140 < value && value < 160 ) {
-            if( adkeyboard.up == ButtonState::RELEASED ) {
+            if( adkeyboard.up == RELEASED ) {
                 upButtonClick();
                 lastDebounceMillis = millis();
             }
@@ -112,7 +114,7 @@ void readADKeyboard() {
 
         /* down button */
         else if( 295 < value && value < 325 ) {
-            if( adkeyboard.down == ButtonState::RELEASED ) {
+            if( adkeyboard.down == RELEASED ) {
                 downButtonClick();
                 lastDebounceMillis = millis();
             }
@@ -120,7 +122,7 @@ void readADKeyboard() {
 
         /* enter button */
         else if( 775 < value && value < 800 ) {
-            if( adkeyboard.enter == ButtonState::RELEASED ) {
+            if( adkeyboard.enter == RELEASED ) {
                 enterButtonClick();
                 lastDebounceMillis = millis();
             }

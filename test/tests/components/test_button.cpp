@@ -2,6 +2,8 @@
 #include "components/pins.h"
 #include "components/adkeyboard.h"
 #include "components/button.h"
+#include <Keypad.h>
+
 
 void test_emebutton_press(void) {
     TEST_MESSAGE("Press the emergency button");
@@ -51,7 +53,7 @@ void test_leds() {
     while( millis() < millis_start + 5000 ) {
         readADKeyboard();
 
-        if( adkeyboard.enter == ButtonState::PRESSED ) {
+        if( adkeyboard.enter == PRESSED ) {
             TEST_ASSERT_TRUE(true);
             return;
         }

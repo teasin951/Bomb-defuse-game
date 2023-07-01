@@ -7,6 +7,7 @@
 #include "components/relays.h"
 #include "components/matrix.h"
 #include "components/lcd.h"
+#include "components/keypad.h"
 
 
 Joystick joystick;  /**< Create joystick struct */
@@ -23,6 +24,8 @@ void setup() {
 void loop() {
   readADKeyboard();
   readJoystick(joystick, JOYSTICK_SW, JOYSTICK_X, JOYSTICK_Y);
+
+  Serial.println(keypad.getKey());
 
   delay(50);
 }

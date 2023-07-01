@@ -1,6 +1,7 @@
 #include "unity.h"
 #include "components/pins.h"
 #include "components/adkeyboard.h"
+#include <Keypad.h>
 
 
 void test_buzzer1() {
@@ -36,7 +37,7 @@ void test_buzzer1() {
     while( millis() < millis_start + 5000 ) {
         readADKeyboard();
 
-        if( adkeyboard.enter == ButtonState::PRESSED ) {
+        if( adkeyboard.enter == PRESSED ) {
             TEST_ASSERT_TRUE(true);
             return;
         }
@@ -78,7 +79,7 @@ void test_buzzer2() {
     while( millis() < millis_start + 5000 ) {
         readADKeyboard();
 
-        if( adkeyboard.enter == ButtonState::PRESSED ) {
+        if( adkeyboard.enter == PRESSED ) {
             TEST_ASSERT_TRUE(true);
             return;
         }

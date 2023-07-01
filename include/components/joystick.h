@@ -1,6 +1,7 @@
 #pragma once
 #include <Arduino.h>
 #include "game.h"
+#include <Keypad.h>
 
 /**
  * @file Everything needed for joystick
@@ -10,7 +11,7 @@
  * @brief Joystick state struct
 */
 struct Joystick {
-    uint8_t button = ButtonState::RELEASED;
+    uint8_t button = RELEASED;
     int16_t x = 0;
     int16_t y = 0;
 };
@@ -29,10 +30,10 @@ typedef struct Joystick Joystick;
 */
 Joystick & readJoystick( Joystick & joy, int p_button, int p_x, int p_y ) {
     if( analogRead(p_button) < 10 ) {
-        joy.button = ButtonState::PRESSED;
+        joy.button = PRESSED;
     }
     else {
-        joy.button = ButtonState::RELEASED;
+        joy.button = RELEASED;
     }
 
     joy.x = analogRead(p_x);
