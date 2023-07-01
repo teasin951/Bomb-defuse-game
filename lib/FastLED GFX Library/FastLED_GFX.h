@@ -134,7 +134,7 @@ public:
 private:
   FastLED_GFX *_gfx;
   int16_t _x, _y;
-  uint16_t _w, _h;
+  int16_t _w, _h;
   uint8_t _textsize;
   CRGB _outlinecolor, _fillcolor, _textcolor;
   char _label[10];

@@ -530,8 +530,8 @@ void FastLED_GFX::drawChar(int16_t x, int16_t y, unsigned char c,
 
     uint16_t bo = pgm_read_word(&glyph->bitmapOffset);
     uint8_t  w  = pgm_read_byte(&glyph->width),
-             h  = pgm_read_byte(&glyph->height),
-             xa = pgm_read_byte(&glyph->xAdvance);
+             h  = pgm_read_byte(&glyph->height);
+            //  xa = pgm_read_byte(&glyph->xAdvance);
     int8_t   xo = pgm_read_byte(&glyph->xOffset),
              yo = pgm_read_byte(&glyph->yOffset);
     uint8_t  xx, yy, bits, bit = 0;
