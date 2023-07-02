@@ -25,7 +25,8 @@ byte colPins[COLS] = {KEY_LEFT_COL, KEY_MID_COL, KEY_RIGHT_COL}; //connect to th
 //initialize an instance of class NewKeypad
 Keypad keypad = Keypad( makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS);
 
-void nada() {}  // just nothing, placeholder
+void nada() {}  // nothing, placeholder
+void cnada(char x) {}  // nothing, placeholder accepting char
 
 // Create a struct holding keypad info to verify sequences
 struct KeypadInfo {
@@ -35,7 +36,7 @@ struct KeypadInfo {
   char match_sequence[16];  /**< sequence to match */
   uint8_t match_length = 16;  /**< length of the sequence to match */
 
-  void (*pressed)(void) = nada;  /**< pointer to a function called when a button is pressed */
+  void (*pressed)(char) = cnada;  /**< pointer to a function called when a number is pressed, passes the pressed number */
   void (*matched)(void) = nada;  /**< pointer to a function called when sequences match */
   void (*noMatch)(void) = nada;  /**< pointer to a function called when sequences do not match */
   void (*clear)(void) = nada;  /**< pointer to a function called when the sequence is manually cleared */
@@ -104,7 +105,7 @@ void eventHandler( KeypadEvent x ) {
         k.sequence[k.length] = x;
         k.length += 1;
 
-        k.pressed();
+        k.pressed(x);
       }
 
       // We are out of space
@@ -132,7 +133,7 @@ void eventHandler( KeypadEvent x ) {
  * @param s_overflowed function to call when the user tries to enter a too long sequence
 */
 void setSequence( char * match, uint8_t size, 
-    void (*button_pressed)(void), void (*s_matched)(void), void (*s_did_not_match)(void), void (*s_cleared)(void), void (*s_overflowed)(void) ) {
+    void (*button_pressed)(char), void (*s_matched)(void), void (*s_did_not_match)(void), void (*s_cleared)(void), void (*s_overflowed)(void) ) {
 
   for( uint8_t i = 0; i < size; i++ ) {
     keypad_info.match_sequence[i] = match[i];

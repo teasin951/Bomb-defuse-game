@@ -15,7 +15,7 @@ Joystick joystick;  /**< Create joystick struct */
 /* Experiment */
 char test[2] = { '1', '2' };
 
-void playSound0() {
+void playSound0(char x) {
   tone(BUZZER_1, 200, 100);
 }
 void playSound1() {
