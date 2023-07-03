@@ -12,10 +12,14 @@ void passT() {
     t = true;
 }
 
+void cpassT(char x ) {
+    t = true;
+}
+
 void test_press() {
     char s[2] = { 1, 2 };
 
-    setSequence(s, 2, passT, failT, failT, failT, failT);
+    setSequence(s, 2, cpassT, failT, failT, failT, failT);
 
     TEST_MESSAGE("Press any number on the keypad");
 
@@ -35,7 +39,7 @@ void test_press() {
 void test_sequence_match() {
     char s[10] = { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
 
-    setSequence(s, 10, nada, passT, failT, failT, failT);
+    setSequence(s, 10, cnada, passT, failT, failT, failT);
 
     TEST_MESSAGE("Type: '1 2 3 4 5 6 7 8 9 0 #' on the keypad");
 
@@ -55,7 +59,7 @@ void test_sequence_match() {
 void test_sequence_no_match() {
     char s[10] = { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
 
-    setSequence(s, 10, nada, failT, passT, failT, failT);
+    setSequence(s, 10, cnada, failT, passT, failT, failT);
 
     TEST_MESSAGE("Type: '1 2 3 4 #' on the keypad");
 
@@ -75,7 +79,7 @@ void test_sequence_no_match() {
 void test_clear() {
     char s[2] = { '1', '2' };
 
-    setSequence(s, 2, nada, failT, failT, passT, failT);
+    setSequence(s, 2, cnada, failT, failT, passT, failT);
 
     TEST_MESSAGE("Type: '1 2 *' on the keypad");
 
@@ -95,7 +99,7 @@ void test_clear() {
 void test_overflow() {
     char s[2] = { '1', '2' };
 
-    setSequence(s, 2, nada, failT, failT, failT, passT);
+    setSequence(s, 2, cnada, failT, failT, failT, passT);
 
     TEST_MESSAGE("Type: '1 2 3' on the keypad");
 

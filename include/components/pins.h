@@ -37,6 +37,10 @@
 #define KEY_THIRD_ROW 39
 #define KEY_FORTH_ROW 40
 
+#define POTENCIOMETER1 A5
+#define POTENCIOMETER2 A6
+#define POTENCIOMETER3 A7
+
 
 /**
  * @brief Set all pins to their respective modes

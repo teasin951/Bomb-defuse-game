@@ -8,6 +8,7 @@
 #include "./tests/components/test_matrix.cpp"
 #include "./tests/components/test_lcd.cpp"
 #include "./tests/components/test_keypad.cpp"
+#include "./tests/components/test_potenciometers.cpp"
 
 
 void setUp(void) {
@@ -31,6 +32,7 @@ int runUnityTests() {
     runMatrixTest();
     runLCDTest();
     runKeypadTest();
+    runPotenciometeTest();
 
     return UNITY_END();
 }
