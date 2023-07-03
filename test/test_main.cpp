@@ -9,6 +9,8 @@
 #include "./tests/components/test_lcd.cpp"
 #include "./tests/components/test_keypad.cpp"
 #include "./tests/components/test_potenciometers.cpp"
+#include "./tests/components/test_switch.cpp"
+#include "./tests/components/test_rgbLed.cpp"
 
 
 void setUp(void) {
@@ -33,6 +35,8 @@ int runUnityTests() {
     runLCDTest();
     runKeypadTest();
     runPotenciometeTest();
+    runSwitchTests();
+    runRgbLedTests();
 
     return UNITY_END();
 }

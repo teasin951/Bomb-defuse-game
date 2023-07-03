@@ -41,6 +41,12 @@
 #define POTENCIOMETER2 A6
 #define POTENCIOMETER3 A7
 
+#define LED_R 5
+#define LED_G 6
+#define LED_B 7
+
+#define SWITCH 41
+
 
 /**
  * @brief Set all pins to their respective modes
@@ -48,11 +54,13 @@
  * You need to set the corrent amount of pins and list them accordingly
 */
 void pinSetup() {
-    const int INPIN = 5;
-    const int OUTPIN = 9;
+    const int INPIN = 8;
+    const int OUTPIN = 12;
 
-    int input_pin[INPIN] = { ADKEYBOARD, JOYSTICK_SW, JOYSTICK_X, JOYSTICK_Y, BUTTON_IN };  // fill input pins!!
-    int output_pin[OUTPIN] = { RELAY_1, RELAY_2, RELAY_3, RELAY_4, BUTTON_R, BUTTON_G, BUTTON_B, BUZZER_1, BUZZER_2 };  // fill output pins!!
+    int input_pin[INPIN] = { ADKEYBOARD, JOYSTICK_SW, JOYSTICK_X, JOYSTICK_Y, 
+                             BUTTON_IN, POTENCIOMETER1, POTENCIOMETER2, POTENCIOMETER3 };  // fill input pins!!
+    int output_pin[OUTPIN] = { RELAY_1, RELAY_2, RELAY_3, RELAY_4, BUTTON_R, BUTTON_G, BUTTON_B, BUZZER_1, BUZZER_2,
+                             LED_R, LED_G, LED_B };  // fill output pins!!
 
     // set pins
     for( int i = 0; i < INPIN; i++ ) {
