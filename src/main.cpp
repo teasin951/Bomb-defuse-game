@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include "components/pins.h"
-#include "game.h"
+#include "eventhandler.h"
 
 #include "components/adkeyboard.h"
 #include "components/joystick.h"
@@ -8,9 +8,9 @@
 #include "components/matrix.h"
 #include "components/lcd.h"
 #include "components/keypad.h"
+#include "components/buzzer.h"
 
 
-Joystick joystick;  /**< Create joystick struct */
 
 void setup() {
   Serial.begin(9600);
@@ -21,6 +21,8 @@ void setup() {
   setupKeypad();
   setupFastLED();
   lcd.init();
+
+  setupEventHandler();
 }
 
 void loop() {
@@ -28,5 +30,6 @@ void loop() {
   readJoystick(joystick, JOYSTICK_SW, JOYSTICK_X, JOYSTICK_Y);
   keypad.getKey();
 
-  delay(50);
+  checkEvents();
+  rtttl::play();
 }

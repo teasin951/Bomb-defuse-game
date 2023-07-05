@@ -3,6 +3,7 @@
 #include <tinyfsm.hpp>
 
 #include "game/events.h"
+#include "components/lcd.h"
 
 /**
  * @file State machine implementation of game one
@@ -33,8 +34,8 @@ public:
     virtual void react( KeypadOverflowed const & ) {};
 
     /* Emergency button */
-    virtual void react( EmergencyPressed const & ) {};
-    virtual void react( EmergencyReleased const & ) {};
+    virtual void react( EmergencyPressed const & ) {}
+    virtual void react( EmergencyReleased const & ) {}
 
     /* Potenciometers */
     virtual void react( Potenciometer1Moved const & ) {};
@@ -59,6 +60,12 @@ public:
     virtual void react( ADKeyboardEnterHeld const & ) {};
 
     /* Actions on entering/exiting a state */
-    virtual void enter() {};
+    virtual void entry() {};
     virtual void exit() {};
 };
+
+class UndefinedState1 : public GameOne {
+
+};
+
+FSM_INITIAL_STATE(GameOne, UndefinedState1);

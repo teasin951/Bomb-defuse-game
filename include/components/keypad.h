@@ -133,7 +133,9 @@ void eventHandler( KeypadEvent x ) {
  * @param s_overflowed function to call when the user tries to enter a too long sequence
 */
 void setSequence( char * match, uint8_t size, 
-    void (*button_pressed)(char), void (*s_matched)(void), void (*s_did_not_match)(void), void (*s_cleared)(void), void (*s_overflowed)(void) ) {
+    void (*button_pressed)(char) = keypad_info.pressed, void (*s_matched)(void) = keypad_info.matched, 
+    void (*s_did_not_match)(void) = keypad_info.noMatch, void (*s_cleared)(void) = keypad_info.clear, 
+    void (*s_overflowed)(void) = keypad_info.overflow ) {
 
   for( uint8_t i = 0; i < size; i++ ) {
     keypad_info.match_sequence[i] = match[i];

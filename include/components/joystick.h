@@ -17,6 +17,8 @@ struct Joystick {
 };
 typedef struct Joystick Joystick;
 
+Joystick joystick;  /**< Create joystick struct */
+
 
 /**
  * @brief Read joystick state
