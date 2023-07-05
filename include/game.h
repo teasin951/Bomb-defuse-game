@@ -2,8 +2,141 @@
 #include <Arduino.h>
 #include <tinyfsm.hpp>
 
+#include "game/events.h"
+#include "game/gameone.h"
+
 /**
  * @file Finite state machines running the game
  */
 
 
+/**
+ * @brief FSM class
+*/
+class Manager : public tinyfsm::Fsm<Manager> {
+public:
+    /* General update event */
+    virtual void react( Update const & ) {};
+
+    /* Keypad */
+    virtual void react( KeypadPressed const & ) {};
+    virtual void react( KeypadZeroPressed const & ) {};
+    virtual void react( KeypadOnePressed const & ) {};
+    virtual void react( KeypadTwoPressed const & ) {};
+    virtual void react( KeypadThreePressed const & ) {};
+    virtual void react( KeypadFourPressed const & ) {};
+    virtual void react( KeypadFivePressed const & ) {};
+    virtual void react( KeypadSixPressed const & ) {};
+    virtual void react( KeypadSevenPressed const & ) {};
+    virtual void react( KeypadEightPressed const & ) {};
+    virtual void react( KeypadNinePressed const & ) {};
+
+    virtual void react( KeypadMatched const & ) {};
+    virtual void react( KeypadNotMatched const & ) {};
+    virtual void react( KeypadCleared const & ) {};
+    virtual void react( KeypadOverflowed const & ) {};
+
+    /* Emergency button */
+    virtual void react( EmergencyPressed const & ) {};
+    virtual void react( EmergencyReleased const & ) {};
+
+    /* Potenciometers */
+    virtual void react( Potenciometer1Moved const & ) {};
+    virtual void react( Potenciometer2Moved const & ) {};
+    virtual void react( Potenciometer3Moved const & ) {};
+
+    /* Joystick */
+    virtual void react( JoystickMoved const & ) {};
+    virtual void react( JoystickPressed const & ) {};
+    
+    /* ADKeyboard */
+    virtual void react( ADKeyboardPressed const & ) {};
+    virtual void react( ADKeyboardLeftPressed const & ) {};
+    virtual void react( ADKeyboardRightPressed const & ) {};
+    virtual void react( ADKeyboardUpPressed const & ) {};
+    virtual void react( ADKeyboardDownPressed const & ) {};
+    virtual void react( ADKeyboardEnterPressed const & ) {};
+    virtual void react( ADKeyboardLeftHeld const & ) {};
+    virtual void react( ADKeyboardRightHeld const & ) {};
+    virtual void react( ADKeyboardUpHeld const & ) {};
+    virtual void react( ADKeyboardDownHeld const & ) {};
+    virtual void react( ADKeyboardEnterHeld const & ) {};
+
+    virtual void enter() = 0;  // every option has to implement this
+    void exit() {};
+};
+
+
+// ------------ Manager states --------------- //
+
+// TODO change this to void react (tinyfsm::Event const & ), with the proper change in Manager
+
+class PickGameOne : Manager {
+    void enter() {
+        GameOne::start();
+    }
+    /* General update event */
+    void react( Update const & e ) override { GameOne::dispatch(e); };
+
+    /* Keypad */
+    void react( KeypadPressed const & e ) override { GameOne::dispatch(e); }
+    void react( KeypadZeroPressed const & e ) override { GameOne::dispatch(e); };
+    void react( KeypadOnePressed const & e ) override { GameOne::dispatch(e); };
+    void react( KeypadTwoPressed const & e ) override { GameOne::dispatch(e); };
+    void react( KeypadThreePressed const & e ) override { GameOne::dispatch(e); };
+    void react( KeypadFourPressed const & e ) override { GameOne::dispatch(e); };
+    void react( KeypadFivePressed const & e ) override { GameOne::dispatch(e); };
+    void react( KeypadSixPressed const & e ) override { GameOne::dispatch(e); };
+    void react( KeypadSevenPressed const & e ) override { GameOne::dispatch(e); };
+    void react( KeypadEightPressed const & e ) override { GameOne::dispatch(e); };
+    void react( KeypadNinePressed const & e ) override { GameOne::dispatch(e); };
+
+    void react( KeypadMatched const & e ) override { GameOne::dispatch(e); };
+    void react( KeypadNotMatched const & e ) override { GameOne::dispatch(e); };
+    void react( KeypadCleared const & e ) override { GameOne::dispatch(e); };
+    void react( KeypadOverflowed const & e ) override { GameOne::dispatch(e); };
+
+    /* Emergency button */
+    void react( EmergencyPressed const & e ) override { GameOne::dispatch(e); };
+    void react( EmergencyReleased const & e ) override { GameOne::dispatch(e); };
+
+    /* Potenciometers */
+    void react( Potenciometer1Moved const & e ) override { GameOne::dispatch(e); };
+    void react( Potenciometer2Moved const & e ) override { GameOne::dispatch(e); };
+    void react( Potenciometer3Moved const & e ) override { GameOne::dispatch(e); };
+
+    /* Joystick */
+    void react( JoystickMoved const & e ) override { GameOne::dispatch(e); };
+    void react( JoystickPressed const & e ) override { GameOne::dispatch(e); };
+    
+    /* ADKeyboard */
+    void react( ADKeyboardPressed const & e ) override { GameOne::dispatch(e); };
+    void react( ADKeyboardLeftPressed const & e ) override { GameOne::dispatch(e); };
+    void react( ADKeyboardRightPressed const & e ) override { GameOne::dispatch(e); };
+    void react( ADKeyboardUpPressed const & e ) override { GameOne::dispatch(e); };
+    void react( ADKeyboardDownPressed const & e ) override { GameOne::dispatch(e); };
+    void react( ADKeyboardEnterPressed const & e ) override { GameOne::dispatch(e); };
+    void react( ADKeyboardLeftHeld const & e ) override { GameOne::dispatch(e); };
+    void react( ADKeyboardRightHeld const & e ) override { GameOne::dispatch(e); };
+    void react( ADKeyboardUpHeld const & e ) override { GameOne::dispatch(e); };
+    void react( ADKeyboardDownHeld const & e ) override { GameOne::dispatch(e); };
+    void react( ADKeyboardEnterHeld const & e ) override { GameOne::dispatch(e); };
+};
+
+/**
+ * @brief Choose state
+*/
+class Choose : public Manager {
+    void react( KeypadZeroPressed const & ) override {
+        transit<PickGameOne>();
+    }
+    void react( KeypadOnePressed const & ) override {};
+    void react( KeypadTwoPressed const & ) override {};
+    void react( KeypadThreePressed const & ) override {};
+    void react( KeypadFourPressed const & ) override {};
+    void react( KeypadFivePressed const & ) override {};
+    void react( KeypadSixPressed const & ) override {};
+    void react( KeypadSevenPressed const & ) override {};
+    void react( KeypadEightPressed const & ) override {};
+    void react( KeypadNinePressed const & ) override {};
+};
