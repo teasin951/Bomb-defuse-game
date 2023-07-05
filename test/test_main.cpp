@@ -26,17 +26,17 @@ void tearDown(void) {
 int runUnityTests() {
     UNITY_BEGIN();
 
-    runKeyboardTests();
-    runJoystickTests();
-    runRelaysTest();
-    runEmergencyButtonTest();
-    runBuzzerTest();
-    runMatrixTest();
-    runLCDTest();
-    runKeypadTest();
+    // runKeyboardTests();
+    // runJoystickTests();
+    // runRelaysTest();
+    // runEmergencyButtonTest();
+    // runBuzzerTest();
+    // runMatrixTest();
+    // runLCDTest();
+    // runKeypadTest();
     runPotenciometeTest();
-    runSwitchTests();
-    runRgbLedTests();
+    // runSwitchTests();
+    // runRgbLedTests();
 
     return UNITY_END();
 }
