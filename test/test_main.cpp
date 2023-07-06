@@ -31,10 +31,10 @@ int runUnityTests() {
     // runRelaysTest();
     // runEmergencyButtonTest();
     // runBuzzerTest();
-    // runMatrixTest();
+    runMatrixTest();
     // runLCDTest();
     // runKeypadTest();
-    runPotenciometeTest();
+    // runPotenciometeTest();
     // runSwitchTests();
     // runRgbLedTests();
 

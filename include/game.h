@@ -76,6 +76,8 @@ public:
 
 class PickGameTest : public Manager {
     void entry() {
+        char tmp[16] = {1};
+        setSequence(tmp, 16);
         resetDisplay();
         lcd.print("-- Game test! --");
 

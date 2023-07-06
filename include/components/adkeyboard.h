@@ -84,10 +84,11 @@ void buttonRelease() {
  * @brief read ADKeaboard, call periodically
 */
 void readADKeyboard() {
-    uint16_t value = analogRead(ADKEYBOARD);
-
     /* Debounce */
     if( millis() - lastDebounceMillis > debounceDelay ) {
+
+        uint16_t value = analogRead(ADKEYBOARD);
+
         /* left button */
         if( value < 20 ) {
             if( adkeyboard.left == RELEASED ) {
