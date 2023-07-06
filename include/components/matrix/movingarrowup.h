@@ -38,8 +38,13 @@ public:
         }
     }
 
+    void setColour( CRGB & x ) {
+        colour = x;
+    }
+
 private:
     bool (MovingArrowUp::*actions[MOVING_ARROW_UP_FRAMES])() = {&MovingArrowUp::moveLeft, &MovingArrowUp::resetAnimation}; 
+    CRGB colour = CRGB::Green;
 
 };
 

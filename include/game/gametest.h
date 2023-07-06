@@ -11,6 +11,7 @@
 #include "components/buzzer.h"
 
 #include "components/matrix/movingarrowup.h"
+#include "components/matrix/movingarrowleft.h"
 
 
 
@@ -41,6 +42,9 @@ public:
     void react( Update const & ) {
         if( display_up ) {
             moving_arrow_up.proceed();
+        }
+        else if( display_left ) {
+            moving_arrow_left.proceed();
         }
 
     };
@@ -160,14 +164,27 @@ public:
     void react( JoystickReleased const & ) {};
     
     /* ADKeyboard */
+    void stopOthersDisplaying() {        
+        display_up = false;
+        display_down = false;
+        display_right = false;
+        display_left = false;
+
+    }
     void react( ADKeyboardPressed const & ) {};
-    void react( ADKeyboardLeftPressed const & ) {};
+    void react( ADKeyboardLeftPressed const & ) {
+        stopOthersDisplaying();
+        tone(BUZZER_1, 400, 100);
+        moving_arrow_left.setAnimation();
+        display_left = true;
+    };
     void react( ADKeyboardLeftReleased const & ) {};
 
     void react( ADKeyboardRightPressed const & ) {};
     void react( ADKeyboardRightReleased const & ) {};
 
     void react( ADKeyboardUpPressed const & ) {
+        stopOthersDisplaying();
         tone(BUZZER_1, 400, 100);
         moving_arrow_up.setAnimation();
         display_up = true;
@@ -178,10 +195,7 @@ public:
     void react( ADKeyboardDownReleased const & ) {};
 
     void react( ADKeyboardEnterPressed const & ) {
-        display_up = false;
-        display_down = false;
-        display_right = false;
-        display_left = false;
+        stopOthersDisplaying();
         canvas.fillScreen(CRGB::Black);
         FastLED.show();
     };

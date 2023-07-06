@@ -15,9 +15,9 @@ public:
 
     bool resetAnimation() override {
         canvas.fillScreen(CRGB::Black);
-        canvas.drawLine(4, 0, 4, 7, CRGB::Green);
-        canvas.drawLine(7, 3, 4, 0, CRGB::Green);
-        canvas.drawLine(1, 3, 4, 0, CRGB::Green);
+        canvas.drawLine(0, 4, 7, 4, CRGB::Green);
+        canvas.drawLine(3, 1, 0, 4, CRGB::Green);
+        canvas.drawLine(3, 7, 0, 4, CRGB::Green);
 
         frame = 0;
         start_millis = millis();
@@ -38,8 +38,13 @@ public:
         }
     }
 
+    void setColour( CRGB & x ) {
+        colour = x;
+    }
+
 private:
     bool (MovingArrowLeft::*actions[MOVING_ARROW_LEFT_FRAMES])() = {&MovingArrowLeft::moveUp, &MovingArrowLeft::resetAnimation}; 
+    CRGB colour;
 
 };
 
