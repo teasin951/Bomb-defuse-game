@@ -15,7 +15,7 @@ struct EventHandlerInfo {
     int emergency_button = LOW;
 
     struct Joystick joy;
-    int joy_button = LOW;
+    uint8_t joy_button = RELEASED;
 
     int16_t pot1 = 4;
     int16_t pot2 = 4;
@@ -114,10 +114,10 @@ void checkEvents() {
         Manager::dispatch( JoystickMoved(joystick.x, joystick.y) );
     }
 
-    int joy_button_read = digitalRead(BUTTON_IN);
-    if( ehi.emergency_button != joy_button_read ) {
-        ehi.emergency_button = joy_button_read;
-        if( ehi.emergency_button == HIGH ) {
+    int joy_button_read = joystick.button;
+    if( ehi.joy_button != joy_button_read ) {
+        ehi.joy_button = joy_button_read;
+        if( ehi.joy_button == PRESSED ) {
             Manager::dispatch( JoystickPressed() );
         }
         else {
@@ -211,5 +211,5 @@ void checkEvents() {
         }
     }
 
-    // TODO UPDATE
+    Manager::dispatch( Update() );
 }

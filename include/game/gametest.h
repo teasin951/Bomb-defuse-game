@@ -6,10 +6,13 @@
 #include "components/adkeyboard.h"
 #include "components/joystick.h"
 #include "components/relays.h"
-#include "components/matrix.h"
 #include "components/lcd.h"
 #include "components/keypad.h"
 #include "components/buzzer.h"
+
+#include "components/matrix/movingarrowup.h"
+
+
 
 /**
  * @file State machine implementation of game one
@@ -21,6 +24,10 @@ public:
     void clearTests() {
         tone(BUZZER_2, 400, 20);
 
+        display_up = false;
+        display_down = false;
+        display_right = false;
+        display_left = false;
         fill_solid(canvas.m_LED, NUM_LEDS, CRGB::Black);
         FastLED.show();
 
@@ -31,7 +38,12 @@ public:
     }
 
     /* General update event */
-    void react( Update const & ) {};
+    void react( Update const & ) {
+        if( display_up ) {
+            moving_arrow_up.proceed();
+        }
+
+    };
 
     /* Keypad */
     void react( KeypadPressed const & ) {};
@@ -141,21 +153,40 @@ public:
         lcd.print(", y: ");
         lcd.print(e.y);
     }
-    void react( JoystickPressed const & ) {};
+    void react( JoystickPressed const & ) {
+        tone(BUZZER_2, 150, 200);
+        lcd.setBacklight(false);
+    };
     void react( JoystickReleased const & ) {};
     
     /* ADKeyboard */
     void react( ADKeyboardPressed const & ) {};
     void react( ADKeyboardLeftPressed const & ) {};
-    void react( ADKeyboardRightPressed const & ) {};
-    void react( ADKeyboardUpPressed const & ) {};
-    void react( ADKeyboardDownPressed const & ) {};
-    void react( ADKeyboardEnterPressed const & ) {};
     void react( ADKeyboardLeftReleased const & ) {};
+
+    void react( ADKeyboardRightPressed const & ) {};
     void react( ADKeyboardRightReleased const & ) {};
+
+    void react( ADKeyboardUpPressed const & ) {
+        tone(BUZZER_1, 400, 100);
+        moving_arrow_up.setAnimation();
+        display_up = true;
+    };
     void react( ADKeyboardUpReleased const & ) {};
+
+    void react( ADKeyboardDownPressed const & ) {};
     void react( ADKeyboardDownReleased const & ) {};
+
+    void react( ADKeyboardEnterPressed const & ) {
+        display_up = false;
+        display_down = false;
+        display_right = false;
+        display_left = false;
+        canvas.fillScreen(CRGB::Black);
+        FastLED.show();
+    };
     void react( ADKeyboardEnterReleased const & ) {};
+
 
     /* Actions on entering/exiting a state */
     void entry() {};
@@ -163,6 +194,11 @@ public:
 
     bool matrix = false;
     bool relays = false;
+
+    bool display_up = false;
+    bool display_down = false;
+    bool display_right = false;
+    bool display_left = false;
 };
 
 class UndefinedState : public TestGame {

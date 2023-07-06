@@ -18,6 +18,8 @@ struct Joystick {
 typedef struct Joystick Joystick;
 
 Joystick joystick;  /**< Create joystick struct */
+uint32_t last_joy_debounce = 0;
+const uint16_t joy_debounce_delay = 20;
 
 
 /**
@@ -31,11 +33,15 @@ Joystick joystick;  /**< Create joystick struct */
  * @param p_y Pin where the y axes is connected (analog)
 */
 Joystick & readJoystick( Joystick & joy, int p_button, int p_x, int p_y ) {
-    if( analogRead(p_button) < 10 ) {
-        joy.button = PRESSED;
-    }
-    else {
-        joy.button = RELEASED;
+    if( millis() - last_joy_debounce > joy_debounce_delay ) {
+        if( analogRead(p_button) < 20 ) {
+            joy.button = PRESSED;
+            last_joy_debounce = millis();
+        }
+        else {
+            joy.button = RELEASED;
+            last_joy_debounce = millis();
+        }
     }
 
     joy.x = analogRead(p_x);
