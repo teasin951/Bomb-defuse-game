@@ -53,11 +53,11 @@ public:
     virtual void react( ADKeyboardUpPressed const & ) {};
     virtual void react( ADKeyboardDownPressed const & ) {};
     virtual void react( ADKeyboardEnterPressed const & ) {};
-    virtual void react( ADKeyboardLeftHeld const & ) {};
-    virtual void react( ADKeyboardRightHeld const & ) {};
-    virtual void react( ADKeyboardUpHeld const & ) {};
-    virtual void react( ADKeyboardDownHeld const & ) {};
-    virtual void react( ADKeyboardEnterHeld const & ) {};
+    virtual void react( ADKeyboardLeftReleased const & ) {};
+    virtual void react( ADKeyboardRightReleased const & ) {};
+    virtual void react( ADKeyboardUpReleased const & ) {};
+    virtual void react( ADKeyboardDownReleased const & ) {};
+    virtual void react( ADKeyboardEnterReleased const & ) {};
 
     /* Actions on entering/exiting a state */
     virtual void entry() {};

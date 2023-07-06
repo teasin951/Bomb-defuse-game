@@ -142,6 +142,7 @@ public:
         lcd.print(e.y);
     }
     void react( JoystickPressed const & ) {};
+    void react( JoystickReleased const & ) {};
     
     /* ADKeyboard */
     void react( ADKeyboardPressed const & ) {};
@@ -150,11 +151,11 @@ public:
     void react( ADKeyboardUpPressed const & ) {};
     void react( ADKeyboardDownPressed const & ) {};
     void react( ADKeyboardEnterPressed const & ) {};
-    void react( ADKeyboardLeftHeld const & ) {};
-    void react( ADKeyboardRightHeld const & ) {};
-    void react( ADKeyboardUpHeld const & ) {};
-    void react( ADKeyboardDownHeld const & ) {};
-    void react( ADKeyboardEnterHeld const & ) {};
+    void react( ADKeyboardLeftReleased const & ) {};
+    void react( ADKeyboardRightReleased const & ) {};
+    void react( ADKeyboardUpReleased const & ) {};
+    void react( ADKeyboardDownReleased const & ) {};
+    void react( ADKeyboardEnterReleased const & ) {};
 
     /* Actions on entering/exiting a state */
     void entry() {};

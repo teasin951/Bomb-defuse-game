@@ -83,6 +83,7 @@ void eventHandler( KeypadEvent x ) {
   KeypadInfo & k = keypad_info;
 
   // Verify that it is a press
+  // TODO maybe pass also releases?
   if( keypad.isPressed(x) ) {
 
     // Enter pressed

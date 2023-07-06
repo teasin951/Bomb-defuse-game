@@ -8,7 +8,7 @@
 #include "matrix/animations.h"
 
 
-GFXcanvas canvas(NUM_X, NUM_Y);  /**< My modified version of the library always creates m_LED[64] */
+GFXcanvas canvas(NUM_X, NUM_Y);  /**< My modified version of the library, always creates m_LED[64] */
 
 /**
  * @brief Manage displaying a certain animation

@@ -161,6 +161,11 @@ struct JoystickMoved : tinyfsm::Event {
 */
 struct JoystickPressed : tinyfsm::Event {};
 
+/**
+ * @brief Joystick has been pressed
+*/
+struct JoystickReleased : tinyfsm::Event {};
+
 // ------------------------------------------------------------------- //
 
 /**
@@ -198,26 +203,26 @@ struct ADKeyboardEnterPressed : ADKeyboardPressed {};
 /**
  * @brief Left key on the ADKeyboard has been held
 */
-struct ADKeyboardLeftHeld : tinyfsm::Event {};
+struct ADKeyboardLeftReleased : tinyfsm::Event {};
 
 /**
  * @brief Right key on the ADKeyboard has been held
 */
-struct ADKeyboardRightHeld : tinyfsm::Event {};
+struct ADKeyboardRightReleased : tinyfsm::Event {};
 
 /**
  * @brief Up key on the ADKeyboard has been held
 */
-struct ADKeyboardUpHeld : tinyfsm::Event {};
+struct ADKeyboardUpReleased : tinyfsm::Event {};
 
 /**
  * @brief Down key on the ADKeyboard has been held
 */
-struct ADKeyboardDownHeld : tinyfsm::Event {};
+struct ADKeyboardDownReleased : tinyfsm::Event {};
 
 /**
  * @brief Enter key on the ADKeyboard has been held
 */
-struct ADKeyboardEnterHeld : tinyfsm::Event {};
+struct ADKeyboardEnterReleased : tinyfsm::Event {};
 
 // ------------------------------------------------------------------- //

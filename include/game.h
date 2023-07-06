@@ -51,6 +51,7 @@ public:
     /* Joystick */
     virtual void react( JoystickMoved const & ) {};
     virtual void react( JoystickPressed const & ) {};
+    virtual void react( JoystickReleased const & ) {};
     
     /* ADKeyboard */
     virtual void react( ADKeyboardPressed const & ) {};
@@ -59,11 +60,11 @@ public:
     virtual void react( ADKeyboardUpPressed const & ) {};
     virtual void react( ADKeyboardDownPressed const & ) {};
     virtual void react( ADKeyboardEnterPressed const & ) {};
-    virtual void react( ADKeyboardLeftHeld const & ) {};
-    virtual void react( ADKeyboardRightHeld const & ) {};
-    virtual void react( ADKeyboardUpHeld const & ) {};
-    virtual void react( ADKeyboardDownHeld const & ) {};
-    virtual void react( ADKeyboardEnterHeld const & ) {};
+    virtual void react( ADKeyboardLeftReleased const & ) {};
+    virtual void react( ADKeyboardRightReleased const & ) {};
+    virtual void react( ADKeyboardUpReleased const & ) {};
+    virtual void react( ADKeyboardDownReleased const & ) {};
+    virtual void react( ADKeyboardEnterReleased const & ) {};
 
     virtual void entry() = 0;  // every option has to implement this
     void exit() {};
@@ -116,6 +117,7 @@ class PickGameTest : public Manager {
     /* Joystick */
     void react( JoystickMoved const & e ) override { TestGame::dispatch(e); };
     void react( JoystickPressed const & e ) override { TestGame::dispatch(e); };
+    void react( JoystickReleased const & e ) override { TestGame::dispatch(e); };
     
     /* ADKeyboard */
     void react( ADKeyboardPressed const & e ) override { TestGame::dispatch(e); };
@@ -124,11 +126,11 @@ class PickGameTest : public Manager {
     void react( ADKeyboardUpPressed const & e ) override { TestGame::dispatch(e); };
     void react( ADKeyboardDownPressed const & e ) override { TestGame::dispatch(e); };
     void react( ADKeyboardEnterPressed const & e ) override { TestGame::dispatch(e); };
-    void react( ADKeyboardLeftHeld const & e ) override { TestGame::dispatch(e); };
-    void react( ADKeyboardRightHeld const & e ) override { TestGame::dispatch(e); };
-    void react( ADKeyboardUpHeld const & e ) override { TestGame::dispatch(e); };
-    void react( ADKeyboardDownHeld const & e ) override { TestGame::dispatch(e); };
-    void react( ADKeyboardEnterHeld const & e ) override { TestGame::dispatch(e); };
+    void react( ADKeyboardLeftReleased const & e ) override { TestGame::dispatch(e); };
+    void react( ADKeyboardRightReleased const & e ) override { TestGame::dispatch(e); };
+    void react( ADKeyboardUpReleased const & e ) override { TestGame::dispatch(e); };
+    void react( ADKeyboardDownReleased const & e ) override { TestGame::dispatch(e); };
+    void react( ADKeyboardEnterReleased const & e ) override { TestGame::dispatch(e); };
 };
 
 /**

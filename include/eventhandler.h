@@ -15,6 +15,7 @@ struct EventHandlerInfo {
     int emergency_button = LOW;
 
     struct Joystick joy;
+    int joy_button = LOW;
 
     int16_t pot1 = 4;
     int16_t pot2 = 4;
@@ -91,8 +92,9 @@ void setupEventHandler() {
 
 void checkEvents() {
     /* Emergency button */
-    if( ehi.emergency_button != digitalRead(BUTTON_IN) ) {
-        ehi.emergency_button = digitalRead(BUTTON_IN);
+    int eme_read = digitalRead(BUTTON_IN);
+    if( ehi.emergency_button != eme_read ) {
+        ehi.emergency_button = eme_read;
         if( ehi.emergency_button == HIGH ) {
             Manager::dispatch( EmergencyPressed() );
         }
@@ -107,15 +109,20 @@ void checkEvents() {
     uint16_t y_diff = abs(ehi.joy.y - joystick.y);
 
     if( x_diff > joystick_tolerance || y_diff > joystick_tolerance ) {
-        Serial.print(joystick.x);
-        Serial.print(", ");
-        Serial.print(ehi.joy.x);
-        Serial.print(": ");
-        Serial.println(x_diff);
-
         ehi.joy.x = joystick.x;
         ehi.joy.y = joystick.y;
         Manager::dispatch( JoystickMoved(joystick.x, joystick.y) );
+    }
+
+    int joy_button_read = digitalRead(BUTTON_IN);
+    if( ehi.emergency_button != joy_button_read ) {
+        ehi.emergency_button = joy_button_read;
+        if( ehi.emergency_button == HIGH ) {
+            Manager::dispatch( JoystickPressed() );
+        }
+        else {
+            Manager::dispatch( JoystickReleased() );
+        }
     }
 
     /* Potenciometers */
@@ -130,7 +137,6 @@ void checkEvents() {
 
     }
 
-    // Potencially decrease sample rate similar to debounce to avoid spam?
     int16_t pot2_read = analogRead(POTENCIOMETER2);
     uint16_t pot2_diff = abs(ehi.pot2 - pot2_read);
 
@@ -149,5 +155,61 @@ void checkEvents() {
 
     }
 
-    if(adkeyboard.left != )
+    /* ADKeyboard */
+    if(adkeyboard.left != ehi.key.left) {
+        ehi.key.left = adkeyboard.left;
+
+        if(ehi.key.left == PRESSED ) {
+            Manager::dispatch( ADKeyboardLeftPressed() );
+        }
+        else {
+            Manager::dispatch( ADKeyboardLeftReleased() );
+        }
+    }
+
+    if(adkeyboard.right != ehi.key.right) {
+        ehi.key.right = adkeyboard.right;
+
+        if(ehi.key.right == PRESSED ) {
+            Manager::dispatch( ADKeyboardRightPressed() );
+        }
+        else {
+            Manager::dispatch( ADKeyboardRightReleased() );
+        }
+    }
+
+    if(adkeyboard.up != ehi.key.up) {
+        ehi.key.up = adkeyboard.up;
+
+        if(ehi.key.up == PRESSED ) {
+            Manager::dispatch( ADKeyboardUpPressed() );
+        }
+        else {
+            Manager::dispatch( ADKeyboardUpReleased() );
+        }
+    }
+
+    if(adkeyboard.down != ehi.key.down) {
+        ehi.key.down = adkeyboard.down;
+
+        if(ehi.key.down == PRESSED ) {
+            Manager::dispatch( ADKeyboardDownPressed() );
+        }
+        else {
+            Manager::dispatch( ADKeyboardDownReleased() );
+        }
+    }
+
+    if(adkeyboard.enter != ehi.key.enter) {
+        ehi.key.enter = adkeyboard.enter;
+
+        if(ehi.key.enter == PRESSED ) {
+            Manager::dispatch( ADKeyboardEnterPressed() );
+        }
+        else {
+            Manager::dispatch( ADKeyboardEnterReleased() );
+        }
+    }
+
+    // TODO UPDATE
 }
