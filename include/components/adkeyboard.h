@@ -90,7 +90,7 @@ void readADKeyboard() {
         uint16_t value = analogRead(ADKEYBOARD);
 
         /* left button */
-        if( value < 20 ) {
+        if( value <= 75 ) {
             if( adkeyboard.left == RELEASED ) {
                 leftButtonClick();
                 lastDebounceMillis = millis();
@@ -98,7 +98,7 @@ void readADKeyboard() {
         }
         
         /* right button */
-        else if( 485 < value && value < 500 ) {
+        else if( 400 < value && value <= 635 ) {
             if( adkeyboard.right == RELEASED ) {
                 rightButtonClick();
                 lastDebounceMillis = millis();
@@ -106,7 +106,7 @@ void readADKeyboard() {
         }
 
         /* up button */
-        else if( 140 < value && value < 160 ) {
+        else if( 75 < value && value <= 230 ) {
             if( adkeyboard.up == RELEASED ) {
                 upButtonClick();
                 lastDebounceMillis = millis();
@@ -114,7 +114,7 @@ void readADKeyboard() {
         }
 
         /* down button */
-        else if( 295 < value && value < 325 ) {
+        else if( 230 < value && value <= 400 ) {
             if( adkeyboard.down == RELEASED ) {
                 downButtonClick();
                 lastDebounceMillis = millis();
@@ -122,7 +122,7 @@ void readADKeyboard() {
         }
 
         /* enter button */
-        else if( 775 < value && value < 800 ) {
+        else if( 635 < value && value <= 900 ) {
             if( adkeyboard.enter == RELEASED ) {
                 enterButtonClick();
                 lastDebounceMillis = millis();
