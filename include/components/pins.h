@@ -57,7 +57,7 @@ void pinSetup() {
     const int INPIN = 8;
     const int OUTPIN = 12;
 
-    int input_pin[INPIN] = { ADKEYBOARD, JOYSTICK_SW, JOYSTICK_X, JOYSTICK_Y, 
+    int input_pin[INPIN] = { ADKEYBOARD, JOYSTICK_X, JOYSTICK_Y, 
                              BUTTON_IN, POTENCIOMETER1, POTENCIOMETER2, POTENCIOMETER3 };  // fill input pins!!
     int output_pin[OUTPIN] = { RELAY_1, RELAY_2, RELAY_3, RELAY_4, BUTTON_R, BUTTON_G, BUTTON_B, BUZZER_1, BUZZER_2,
                              LED_R, LED_G, LED_B };  // fill output pins!!
@@ -71,6 +71,10 @@ void pinSetup() {
         pinMode(output_pin[i], OUTPUT);
     }
 
+    pinMode(JOYSTICK_SW, INPUT_PULLUP);
+
+
+    // Set relays to off
     digitalWrite(RELAY_1, HIGH);
     digitalWrite(RELAY_2, HIGH);
     digitalWrite(RELAY_3, HIGH);

@@ -9,9 +9,12 @@
 #include "components/lcd.h"
 #include "components/keypad.h"
 #include "components/buzzer.h"
+#include "components/button.h"
 
 #include "components/matrix/movingarrowup.h"
 #include "components/matrix/movingarrowleft.h"
+#include "components/matrix/movingarrowright.h"
+#include "components/matrix/movingarrowdown.h"
 
 
 
@@ -45,6 +48,12 @@ public:
         }
         else if( display_left ) {
             moving_arrow_left.proceed();
+        }
+        else if( display_right ) {
+            moving_arrow_right.proceed();
+        }
+        else if( display_down ) {
+            moving_arrow_down.proceed();
         }
 
     };
@@ -171,6 +180,13 @@ public:
         display_left = false;
 
     }
+
+    void clearMatrix() {
+        stopOthersDisplaying();
+        canvas.fillScreen(CRGB::Black);
+        FastLED.show();
+    }
+
     void react( ADKeyboardPressed const & ) {};
     void react( ADKeyboardLeftPressed const & ) {
         stopOthersDisplaying();
@@ -178,29 +194,46 @@ public:
         moving_arrow_left.setAnimation();
         display_left = true;
     };
-    void react( ADKeyboardLeftReleased const & ) {};
+    void react( ADKeyboardLeftReleased const & ) {
+        clearMatrix();
+    };
 
-    void react( ADKeyboardRightPressed const & ) {};
-    void react( ADKeyboardRightReleased const & ) {};
+    void react( ADKeyboardRightPressed const & ) {
+        stopOthersDisplaying();
+        tone(BUZZER_1, 400, 100);
+        moving_arrow_right.setAnimation();
+        display_right = true;
+    };
+    void react( ADKeyboardRightReleased const & ) {
+        clearMatrix();
+    };
 
     void react( ADKeyboardUpPressed const & ) {
         stopOthersDisplaying();
         tone(BUZZER_1, 400, 100);
         moving_arrow_up.setAnimation();
         display_up = true;
-    };
-    void react( ADKeyboardUpReleased const & ) {};
+    }
+    void react( ADKeyboardUpReleased const & ) {
+        clearMatrix();
+    }
 
-    void react( ADKeyboardDownPressed const & ) {};
-    void react( ADKeyboardDownReleased const & ) {};
+    void react( ADKeyboardDownPressed const & ) {
+        stopOthersDisplaying();
+        tone(BUZZER_1, 400, 100);
+        moving_arrow_down.setAnimation();
+        display_down = true;
+    }
+    void react( ADKeyboardDownReleased const & ) {
+        clearMatrix();
+    }
 
     void react( ADKeyboardEnterPressed const & ) {
-        stopOthersDisplaying();
-        canvas.fillScreen(CRGB::Black);
-        FastLED.show();
+        setButtonLEDs(255, 0, 255);
     };
-    void react( ADKeyboardEnterReleased const & ) {};
-
+    void react( ADKeyboardEnterReleased const & ) {
+        setButtonLEDs(0, 0, 0);
+    };
 
     /* Actions on entering/exiting a state */
     void entry() {};

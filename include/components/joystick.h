@@ -34,7 +34,7 @@ const uint16_t joy_debounce_delay = 20;
 */
 Joystick & readJoystick( Joystick & joy, int p_button, int p_x, int p_y ) {
     if( millis() - last_joy_debounce > joy_debounce_delay ) {
-        if( analogRead(p_button) < 20 ) {
+        if( digitalRead(p_button) == LOW ) {
             joy.button = PRESSED;
             last_joy_debounce = millis();
         }

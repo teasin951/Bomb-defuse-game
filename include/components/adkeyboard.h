@@ -114,8 +114,6 @@ void readADKeyboard() {
         /* enter button */
         if( 635 < value && value <= 900 && ( button_pressed == 0 || button_pressed == 5 ) ) {
             if( adkeyboard.enter == RELEASED ) {
-                Serial.print("Enter: ");
-                Serial.println(value);
                 enterButtonClick();
                 lastDebounceMillis = millis();
             }
@@ -124,8 +122,6 @@ void readADKeyboard() {
         /* right button */
         else if( 400 < value && value <= 635 && ( button_pressed == 0 || button_pressed == 2 ) ) {
             if( adkeyboard.right == RELEASED ) {
-                Serial.print("Right: ");
-                Serial.println(value);
                 rightButtonClick();
                 lastDebounceMillis = millis();
             }
