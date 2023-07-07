@@ -31,15 +31,17 @@ struct Keyboard adkeyboard;
 uint16_t lastDebounceMillis = 0;
 const uint16_t debounceDelay = 50;
 
-uint16_t lastSampleMillis = 0;
-const uint16_t sampleDelay = 80;
-
-
 /* 
  * To prevent ex. left button release
  * trigger right button due to parasitic capacitance 
  */
 uint8_t button_pressed = 0;  /**< A button was down last reading 0 - nothing, 1 - left, ...*/
+
+/**
+ * To decrease the likelyhood of sampeling before a button pulls the value low enough
+ * Used to take two debounced samples before calling the click function
+*/
+uint8_t button_read = 0;  /**< A button was down last reading 0 - nothing, 1 - left, ...*/
 
   
 void leftButtonClick() {
@@ -107,14 +109,19 @@ void buttonRelease() {
 */
 void readADKeyboard() {
     /* Debounce */
-    if( millis() - lastDebounceMillis > debounceDelay && millis() - lastSampleMillis > sampleDelay ) {
+    if( millis() - lastDebounceMillis > debounceDelay ) {
 
         uint16_t value = analogRead(ADKEYBOARD);
 
         /* enter button */
         if( 635 < value && value <= 900 && ( button_pressed == 0 || button_pressed == 5 ) ) {
             if( adkeyboard.enter == RELEASED ) {
-                enterButtonClick();
+                if( button_read == 5 ) {
+                    enterButtonClick();
+                }
+                else {
+                    button_read = 5;
+                }
                 lastDebounceMillis = millis();
             }
         }
@@ -122,7 +129,12 @@ void readADKeyboard() {
         /* right button */
         else if( 400 < value && value <= 635 && ( button_pressed == 0 || button_pressed == 2 ) ) {
             if( adkeyboard.right == RELEASED ) {
-                rightButtonClick();
+                if( button_read == 2 ) {
+                    rightButtonClick();
+                }
+                else {
+                    button_read = 2;
+                }
                 lastDebounceMillis = millis();
             }
         }
@@ -130,7 +142,12 @@ void readADKeyboard() {
         /* down button */
         else if( 230 < value && value <= 400 && ( button_pressed == 0 || button_pressed == 4 ) ) {
             if( adkeyboard.down == RELEASED ) {
-                downButtonClick();
+                if( button_read == 4 ) {
+                    downButtonClick();
+                }
+                else {
+                    button_read = 4;
+                }
                 lastDebounceMillis = millis();
             }
         }
@@ -138,7 +155,12 @@ void readADKeyboard() {
         /* up button */
         else if( 75 < value && value <= 230 && ( button_pressed == 0 || button_pressed == 3 ) ) {
             if( adkeyboard.up == RELEASED ) {
-                upButtonClick();
+                if( button_read == 3 ) {
+                    upButtonClick();
+                }
+                else {
+                    button_read = 3;
+                }
                 lastDebounceMillis = millis();
             }
         }
@@ -146,16 +168,24 @@ void readADKeyboard() {
         /* left button */
         else if( value <= 75 && ( button_pressed == 0 || button_pressed == 1 ) ) {
             if( adkeyboard.left == RELEASED ) {
-                leftButtonClick();
+                if( button_read == 1 ) {
+                    leftButtonClick();
+                }
+                else {
+                    button_read = 1;
+                }
                 lastDebounceMillis = millis();
             }
         }
 
         else if( 900 < value && !(button_pressed == 0) ) {
-            buttonRelease();
+            if( button_read == 0 ) {
+                buttonRelease();
+            }
+            else {
+                button_read = 0;
+            }
             lastDebounceMillis = millis();
         }
-
-        lastSampleMillis = millis();
     }
 }

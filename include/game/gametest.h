@@ -39,6 +39,8 @@ public:
 
         matrix = false;
         relays = false;
+
+        rtttl::stop();
     }
 
     /* General update event */
