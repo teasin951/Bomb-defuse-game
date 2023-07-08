@@ -150,8 +150,7 @@ class G1Task1 : public GameOne {
 class G1Detonated : public GameOne {
     void entry() override {
         rtttl::stop();
-        rtttl::begin(BUZZER_1, bomb_exploded);
-        rtttl::begin(BUZZER_2, bomb_exploded);
+
 
         game_is_live = false;
         game_time.minutes = 0;

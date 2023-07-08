@@ -156,8 +156,11 @@ public:
         canvas.drawLine(1, 6, 6, 0, CRGB::Red);
 
         FastLED.show();
-    };
-    void react( KeypadSevenPressed const & ) {};
+    }
+
+    void react( KeypadSevenPressed const & ) {
+    }
+
     void react( KeypadEightPressed const & ) {};
     void react( KeypadNinePressed const & ) {};
 

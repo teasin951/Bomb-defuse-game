@@ -1,4 +1,5 @@
 #include <Arduino.h>
+
 #include "components/pins.h"
 #include "eventhandler.h"
 
@@ -9,7 +10,6 @@
 #include "components/lcd.h"
 #include "components/keypad.h"
 #include "components/buzzer.h"
-
 
 
 void setup() {
