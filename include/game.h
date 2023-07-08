@@ -77,6 +77,7 @@ public:
 
 class PickGameOne : public Manager {
     void entry() {
+        rtttl::begin(BUZZER_1, game_pick);
         resetDisplay();
         GameOne::start();
     }

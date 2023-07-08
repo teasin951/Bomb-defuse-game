@@ -11,9 +11,21 @@
 /**
  * @brief Event where displayed stuff shall be made up to date
  * 
- * This event should be called periodically from the main()
+ * This event should be called periodically
 */
 struct Update : tinyfsm::Event {};
+
+/**
+ * @brief The same as Update but for individual tasks
+ * 
+ * Task states in games should listen for this one and not Update
+*/
+struct UpdateTask : tinyfsm::Event {};
+
+/**
+ * @brief For Games to advance stages
+*/
+struct Advance : tinyfsm::Event {};
 
 // ------------------------------------------------------------------- //
 
