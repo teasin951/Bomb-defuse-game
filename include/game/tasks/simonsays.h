@@ -20,7 +20,7 @@ struct SimonInfo {
     uint8_t in_pos = 0;
     uint8_t pos = 0;
 
-    static const int max_sequence = 6;  /**< maximal length of the sequence */
+    static const int max_sequence = 8;  /**< maximal length of the sequence */
     uint8_t input[max_sequence] = { 0 };  /**< Inputed sequence for comparison */
     uint8_t seq[max_sequence] = {63};  /**< Expected sequence */
 
@@ -332,6 +332,7 @@ class ResetSimon : public SimonSays {
     }
 
     void entry() {
+        game_countdown_amount -= 30000;  // penalize the mistaky -30s
         tone(BUZZER_1, 200, 300);
         
         drawCross();
