@@ -3,14 +3,6 @@
 #include "components/pins.h"
 #include "eventhandler.h"
 
-#include "components/adkeyboard.h"
-#include "components/joystick.h"
-#include "components/relays.h"
-#include "components/matrix.h"
-#include "components/lcd.h"
-#include "components/keypad.h"
-#include "components/buzzer.h"
-
 
 void setup() {
   Serial.begin(9600);
@@ -21,6 +13,7 @@ void setup() {
   setupKeypad();
   setupFastLED();
   lcd.init();
+  randomSeed(analogRead(A15));
 
   setupEventHandler();
 }

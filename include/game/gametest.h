@@ -159,9 +159,14 @@ public:
     }
 
     void react( KeypadSevenPressed const & ) {
+        canvas.fillTriangle(0, 5, 6, 5, 3, 2, CRGB::Red);
+        FastLED.show();
     }
 
-    void react( KeypadEightPressed const & ) {};
+    void react( KeypadEightPressed const & ) {
+        canvas.fillCircle(3, 3, 2, CRGB::Blue);
+        FastLED.show();
+    };
     void react( KeypadNinePressed const & ) {};
 
     void react( KeypadMatched const & ) {

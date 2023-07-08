@@ -154,6 +154,10 @@ protected:
 
 //------------------------- API ---------------------------------
 
+void clearMatrix() {
+    canvas.fillScreen(CRGB::Black);
+    FastLED.show();
+}
 
 /**
  * @brief Set up FastLED as needed
@@ -162,6 +166,8 @@ void setupFastLED() {
     FastLED.addLeds<WS2812B, MATRIX, GRB>(canvas.m_LED, NUM_LEDS).setCorrection(TypicalSMD5050);
     FastLED.setBrightness(BRIGHTNESS);
     FastLED.setMaxPowerInVoltsAndMilliamps(5, 400);
+
+    clearMatrix();
 }
 
 //----------------------------------------------------------------

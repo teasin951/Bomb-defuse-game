@@ -14,7 +14,6 @@ uint32_t game_countdown_amount = 900000;  /**< How long for a game, default: 15 
  * GameXXX checks for it, and advances
 */
 bool task_completed = false;
-
 bool game_is_live = true;
 
 
@@ -22,6 +21,7 @@ typedef struct GameTime {
     uint8_t minutes;
     uint8_t seconds;
 } GAMETIME;
+GAMETIME game_time;
 
 // Reset the arduino function
 void(* resetArduino) (void) = 0;

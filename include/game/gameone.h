@@ -3,9 +3,13 @@
 #include <tinyfsm.hpp>
 
 #include "components/buzzer.h"
+#include "components/relays.h"
+#include "components/matrix.h"
+#include "components/keypad.h"
 #include "game/events.h"
 #include "components/lcd.h"
 #include "variables.h"
+
 
 
 /**
@@ -13,7 +17,7 @@
 */
 
 /* Forward declaration of stages */
-class G1Task1;
+class G1SimonSays;
 class G1Detonated;
 
 /* ----------------------- State machine ------------------------- */
@@ -55,6 +59,11 @@ public:
             printTime();
             if( game_time.minutes <= 0 && game_time.seconds <= 0 ) {
                 transit<G1Detonated>();
+            }
+
+            if( game_time.seconds != last_second_buzzer ) {
+                tone(BUZZER_2, 4000, 20);
+                last_second_buzzer = game_time.seconds;
             }
         }
 
@@ -118,38 +127,206 @@ public:
     virtual void exit() {};
 
 protected:
-    GAMETIME game_time;
     uint32_t last_time_update = 0;
     const uint32_t time_update_delay = 250;
+    uint8_t last_second_buzzer = 0;
 };
 
 
 /* ---------------------- States ---------------------- */
-/* First task of the game one */
-class G1Task1 : public GameOne {
-    void react( Advance const & ) {
-        // transit<G1Task2>();
-        transit<G1Detonated>();
+/* First task: Simon says */
+// Possibly templatable later
+/**
+ * Each sequence entry is encoded like so:
+ * 
+ * ADKeyboard = 10
+ * Keypad = 20
+ * Joystick = 30
+ * 
+ * Left = 1
+ * Right = 2
+ * Up = 3
+ * Down = 4
+*/
+class G1SimonSays : public GameOne {
+
+    /**
+     * @brief Generate a random new entry and save to seq[]
+    */
+    void genEntry() {
+        seq[pos] = random(1, 4) * 10 + random(1, 5);
     }
 
+    CRGB decideADKeyboardColour( uint8_t x ) {
+        switch(x) {
+            case 1:
+                return CRGB::Green;
+            case 2:
+                return CRGB::Yellow;
+            case 3:
+                return CRGB::Blue;
+            case 4:
+                return CRGB::Red;
+        }
+        return CRGB::Black;
+    }
+
+    CRGB decideKeypadColour( uint8_t x ) {
+        switch(x) {
+            case 1:
+                return CRGB::Green;
+            case 2:
+                return CRGB::Blue;
+            case 3:
+                return CRGB::Red;
+            case 4:
+                return CRGB::Yellow;
+        }
+        return CRGB::Black;
+    }
+
+    CRGB decideJoystickColour( uint8_t x ) {
+        switch(x) {
+            case 1:
+                return CRGB::Red;
+            case 2:
+                return CRGB::Green;
+            case 3:
+                return CRGB::Yellow;
+            case 4:
+                return CRGB::Blue;
+        }
+        return CRGB::Black;
+    }
+
+    void displayCurrentSymbol() {
+        uint8_t first = seq[pos] / 10;
+        uint8_t second = seq[pos] % 10;
+
+        switch(first) {
+            case 1:
+                canvas.fillRect(2, 2, 4, 4, decideADKeyboardColour(second));
+                break;
+
+            case 2:
+                canvas.fillTriangle(0, 5, 6, 5, 3, 2, decideKeypadColour(second));
+                break;
+
+            case 3:
+                canvas.fillCircle(3, 3, 2, decideJoystickColour(second));
+                break;
+        }
+
+        FastLED.show();
+    }
+
+    void resetSimon() {
+        tone(BUZZER_1, 200, 200);
+        canvas.fillScreen(CRGB::Black);
+        canvas.drawLine(1, 1, 6, 6, CRGB::Red);
+        canvas.drawLine(1, 6, 6, 1, CRGB::Red);
+        FastLED.show();
+        delay(200);
+
+        clearMatrix();
+
+        for( uint8_t i = 0; i < max_sequence; i++ ) {
+            input[i] = 0;
+            seq[i] = 63;
+        }
+
+        pos = 0;
+        genEntry();
+        displayCurrentSymbol();
+    }
+
+    bool compareSequences() {
+        for( uint8_t i = 0; i < pos + 1; i++ ) {
+            if( seq[i] != input[i] ) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    void checkSequence() {
+        if( !compareSequences() ) {
+            resetSimon();
+        }
+        else {
+            pos++;
+            if( pos == seq_length ) {
+                //DONE
+                tone(BUZZER_1, 400, 200);
+            }
+
+            genEntry();
+            clearMatrix();
+            displayCurrentSymbol();
+        }
+    }
+
+    void react( KeypadTwoPressed const & ) {
+        clearSequence();
+        input[pos] = 23;
+        checkSequence();
+    }
+
+    /* Setup the game */
+    void entry() override {
+        setRelays(0, 0, 1, 1);
+        seq_length = random(lower_seq_bound, high_seq_bound + 1);
+
+        genEntry();
+        displayCurrentSymbol();
+    }
+
+private:
+    /* config */
+    static const int lower_seq_bound = 3;  /**< The shortest possible sequence */
+    static const int high_seq_bound = 4;  /**< The longest possible sequence */
+    // ------ //
+
+    uint8_t seq_length = 3;  /**< The actuall length of the sequence for the user */
+    uint8_t pos = 0;
+
+    static const int max_sequence = 6;  /**< maximal length of the sequence */
+    uint8_t input[max_sequence] = { 0 };  /**< Inputed sequence for comparison */
+    uint8_t seq[max_sequence] = {63};  /**< Expected sequence */
+};
+
+
+/* Initialize the game */
+class G1Init : public GameOne {
     void entry() override {
         /* Start the game */
         game_time.minutes = 0;
-        game_time.seconds = 0;
-        game_countdown_amount = game_time.minutes * 60000;
+        game_time.seconds = 30;
+        game_countdown_amount = game_time.minutes * 60000 + game_time.seconds * 1000;
 
         resetDisplay();
         printTime();
 
+        delay(3000);  // wait a bit
+
         game_start_millis = millis();
     }
-};
 
+    void react( UpdateTask const & ) override {
+
+        transit<G1SimonSays>();
+    }
+};
 
 /* The bomb has exploded */
 class G1Detonated : public GameOne {
     void entry() override {
         rtttl::stop();
+        setRelays(0,0,0,0);
+        clearMatrix();
+
+        noTone(BUZZER_1);
+        tone(BUZZER_1, 4000, 3000);
 
 
         game_is_live = false;
@@ -178,4 +355,5 @@ class G1Detonated : public GameOne {
     }
 };
 
-FSM_INITIAL_STATE(GameOne, G1Task1);
+
+FSM_INITIAL_STATE(GameOne, G1Init);
