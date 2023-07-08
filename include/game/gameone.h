@@ -4,6 +4,8 @@
 
 #include "game/events.h"
 #include "components/lcd.h"
+#include "variables.h"
+
 
 /**
  * @file State machine implementation of game one
@@ -64,8 +66,16 @@ public:
     virtual void exit() {};
 };
 
-class UndefinedState1 : public GameOne {
 
+/* First task of the game one */
+class G1Task1 : public GameOne {
+
+    /* Start the game */
+    void entry() override {
+        game_start_millis = millis();
+        transit<G1Task1>();
+    }
 };
 
-FSM_INITIAL_STATE(GameOne, UndefinedState1);
+
+FSM_INITIAL_STATE(GameOne, G1Task1);

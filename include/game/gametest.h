@@ -43,6 +43,12 @@ public:
         rtttl::stop();
     }
 
+    void clearMatrix() {
+        stopOthersDisplaying();
+        canvas.fillScreen(CRGB::Black);
+        FastLED.show();
+    }
+
     /* General update event */
     void react( Update const & ) {
         if( display_up ) {
@@ -93,9 +99,64 @@ public:
             relays = false;
         }
     };
-    void react( KeypadFourPressed const & ) {};
-    void react( KeypadFivePressed const & ) {};
-    void react( KeypadSixPressed const & ) {};
+    void react( KeypadFourPressed const & ) {
+        clearMatrix();
+
+        CRGB terminal_colour = CRGB::Amethyst;
+
+        canvas.drawPixel(0, 0, terminal_colour);
+        canvas.drawPixel(0, 3, terminal_colour);
+        canvas.drawPixel(0, 6, terminal_colour);
+        canvas.drawPixel(7, 0, terminal_colour);
+        canvas.drawPixel(7, 3, terminal_colour);
+        canvas.drawPixel(7, 6, terminal_colour);
+
+        canvas.drawLine(1, 0, 6, 6, CRGB::Yellow);
+        canvas.drawLine(1, 3, 6, 6, CRGB::Blue);
+        canvas.drawLine(1, 6, 6, 0, CRGB::Red);
+
+        FastLED.show();
+    };
+    void react( KeypadFivePressed const & ) {
+        clearMatrix();
+
+        CRGB terminal_colour = CRGB::Amethyst;
+
+        canvas.drawPixel(0, 0, terminal_colour);
+        canvas.drawPixel(0, 3, terminal_colour);
+        canvas.drawPixel(0, 6, terminal_colour);
+        canvas.drawPixel(7, 0, terminal_colour);
+        canvas.drawPixel(7, 3, terminal_colour);
+        canvas.drawPixel(7, 6, terminal_colour);
+
+        canvas.drawLine(1, 0, 6, 6, CRGB::Yellow);
+        // canvas.drawLine(1, 3, 6, 6, CRGB::Blue);
+        canvas.drawPixel(1, 3, CRGB::Blue);
+        canvas.drawPixel(6, 6, CRGB::Blue);
+        canvas.drawLine(1, 6, 6, 0, CRGB::Red);
+
+        FastLED.show();
+    };
+    void react( KeypadSixPressed const & ) {
+        clearMatrix();
+
+        CRGB terminal_colour = CRGB::Amethyst;
+
+        canvas.drawPixel(0, 0, terminal_colour);
+        canvas.drawPixel(0, 3, terminal_colour);
+        canvas.drawPixel(0, 6, terminal_colour);
+        canvas.drawPixel(7, 0, terminal_colour);
+        canvas.drawPixel(7, 3, terminal_colour);
+        canvas.drawPixel(7, 6, terminal_colour);
+
+        // canvas.drawLine(1, 0, 6, 6, CRGB::Yellow);
+        canvas.drawPixel(1, 0, CRGB::Yellow);
+        canvas.drawPixel(6, 6, CRGB::Yellow);
+        canvas.drawLine(1, 3, 6, 6, CRGB::Blue);
+        canvas.drawLine(1, 6, 6, 0, CRGB::Red);
+
+        FastLED.show();
+    };
     void react( KeypadSevenPressed const & ) {};
     void react( KeypadEightPressed const & ) {};
     void react( KeypadNinePressed const & ) {};
@@ -181,12 +242,6 @@ public:
         display_right = false;
         display_left = false;
 
-    }
-
-    void clearMatrix() {
-        stopOthersDisplaying();
-        canvas.fillScreen(CRGB::Black);
-        FastLED.show();
     }
 
     void react( ADKeyboardPressed const & ) {};

@@ -75,6 +75,60 @@ public:
 
 // TODO change this to void react (tinyfsm::Event const & ), with the proper change in Manager
 
+class PickGameOne : public Manager {
+    void entry() {
+        resetDisplay();
+        GameOne::start();
+    }
+    /* General update event */
+    void react( Update const & e ) override { GameOne::dispatch(e); };
+
+    /* Keypad */
+    void react( KeypadPressed const & e ) override { GameOne::dispatch(e); }
+    void react( KeypadZeroPressed const & e ) override { GameOne::dispatch(e); };
+    void react( KeypadOnePressed const & e ) override { GameOne::dispatch(e); };
+    void react( KeypadTwoPressed const & e ) override { GameOne::dispatch(e); };
+    void react( KeypadThreePressed const & e ) override { GameOne::dispatch(e); };
+    void react( KeypadFourPressed const & e ) override { GameOne::dispatch(e); };
+    void react( KeypadFivePressed const & e ) override { GameOne::dispatch(e); };
+    void react( KeypadSixPressed const & e ) override { GameOne::dispatch(e); };
+    void react( KeypadSevenPressed const & e ) override { GameOne::dispatch(e); };
+    void react( KeypadEightPressed const & e ) override { GameOne::dispatch(e); };
+    void react( KeypadNinePressed const & e ) override { GameOne::dispatch(e); };
+
+    void react( KeypadMatched const & e ) override { GameOne::dispatch(e); };
+    void react( KeypadNotMatched const & e ) override { GameOne::dispatch(e); };
+    void react( KeypadCleared const & e ) override { GameOne::dispatch(e); };
+    void react( KeypadOverflowed const & e ) override { GameOne::dispatch(e); };
+
+    /* Emergency button */
+    void react( EmergencyPressed const & e ) override { GameOne::dispatch(e); };
+    void react( EmergencyReleased const & e ) override { GameOne::dispatch(e); };
+
+    /* Potenciometers */
+    void react( Potenciometer1Moved const & e ) override { GameOne::dispatch(e); };
+    void react( Potenciometer2Moved const & e ) override { GameOne::dispatch(e); };
+    void react( Potenciometer3Moved const & e ) override { GameOne::dispatch(e); };
+
+    /* Joystick */
+    void react( JoystickMoved const & e ) override { GameOne::dispatch(e); };
+    void react( JoystickPressed const & e ) override { GameOne::dispatch(e); };
+    void react( JoystickReleased const & e ) override { GameOne::dispatch(e); };
+    
+    /* ADKeyboard */
+    void react( ADKeyboardPressed const & e ) override { GameOne::dispatch(e); };
+    void react( ADKeyboardLeftPressed const & e ) override { GameOne::dispatch(e); };
+    void react( ADKeyboardRightPressed const & e ) override { GameOne::dispatch(e); };
+    void react( ADKeyboardUpPressed const & e ) override { GameOne::dispatch(e); };
+    void react( ADKeyboardDownPressed const & e ) override { GameOne::dispatch(e); };
+    void react( ADKeyboardEnterPressed const & e ) override { GameOne::dispatch(e); };
+    void react( ADKeyboardLeftReleased const & e ) override { GameOne::dispatch(e); };
+    void react( ADKeyboardRightReleased const & e ) override { GameOne::dispatch(e); };
+    void react( ADKeyboardUpReleased const & e ) override { GameOne::dispatch(e); };
+    void react( ADKeyboardDownReleased const & e ) override { GameOne::dispatch(e); };
+    void react( ADKeyboardEnterReleased const & e ) override { GameOne::dispatch(e); };
+};
+
 class PickGameTest : public Manager {
     void entry() {
         char tmp[16] = {1};
@@ -133,6 +187,7 @@ class PickGameTest : public Manager {
     void react( ADKeyboardEnterReleased const & e ) override { TestGame::dispatch(e); };
 };
 
+
 /**
  * @brief Choose state
 */
@@ -147,7 +202,11 @@ class Choose : public Manager {
         transit<PickGameTest>();
     }
 
-    void react( KeypadOnePressed const & ) override {};
+    void react( KeypadOnePressed const & ) override {
+        tone(BUZZER_1, 400, 50);
+        transit<PickGameOne>();
+    }
+    
     void react( KeypadTwoPressed const & ) override {};
     void react( KeypadThreePressed const & ) override {};
     void react( KeypadFourPressed const & ) override {};
