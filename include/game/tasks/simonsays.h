@@ -4,18 +4,381 @@
 #include "../variables.h"
 #include "../events.h"
 #include "components/pins.h"
+#include "components/matrix.h"
+#include "components/relays.h"
+#include "components/buzzer.h"
+#include "components/keypad.h"
 
 
+struct SimonInfo {
+    /* config */
+    static const int lower_seq_bound = 3;  /**< The shortest possible sequence */
+    static const int high_seq_bound = 5;  /**< The longest possible sequence */
+    // ------ //
+
+    uint8_t seq_length = 3;  /**< The actual length of the sequence for the user */
+    uint8_t in_pos = 0;
+    uint8_t pos = 0;
+
+    static const int max_sequence = 6;  /**< maximal length of the sequence */
+    uint8_t input[max_sequence] = { 0 };  /**< Inputed sequence for comparison */
+    uint8_t seq[max_sequence] = {63};  /**< Expected sequence */
+
+};
+struct SimonInfo simon_info;
+
+
+class BasicInput;
+class ResetSimon;
+class InitSimon;
+class SimonCompleted;
+
+/**
+ * Each sequence entry is encoded like so:
+ * 
+ * ADKeyboard = 10
+ * Keypad = 20
+ * Joystick = 30
+ * 
+ * Left = 1
+ * Right = 2
+ * Up = 3
+ * Down = 4
+*/
 class SimonSays : public tinyfsm::Fsm<SimonSays> {
-    virtual void react( KeypadThreePressed const & ) {
-        tone(BUZZER_1, 400, 200);
+public:
+    /**
+     * @brief Generate a random new entry and save to seq[]
+    */
+    void genEntry() {
+        simon_info.seq[simon_info.pos] = random(1, 4) * 10 + random(1, 5);
     }
+
+    CRGB decideADKeyboardColour( uint8_t x ) {
+        switch(x) {
+            case 1:
+                return CRGB::Green;
+            case 2:
+                return CRGB::Yellow;
+            case 3:
+                return CRGB::Blue;
+            case 4:
+                return CRGB::Red;
+        }
+        return CRGB::Black;
+    }
+
+    CRGB decideKeypadColour( uint8_t x ) {
+        switch(x) {
+            case 1:
+                return CRGB::Green;
+            case 2:
+                return CRGB::Blue;
+            case 3:
+                return CRGB::Red;
+            case 4:
+                return CRGB::Yellow;
+        }
+        return CRGB::Black;
+    }
+
+    CRGB decideJoystickColour( uint8_t x ) {
+        switch(x) {
+            case 1:
+                return CRGB::Red;
+            case 2:
+                return CRGB::Green;
+            case 3:
+                return CRGB::Yellow;
+            case 4:
+                return CRGB::Blue;
+        }
+        return CRGB::Black;
+    }
+
+    void displayCurrentSymbol() {
+        uint8_t first = simon_info.seq[simon_info.pos] / 10;
+        uint8_t second = simon_info.seq[simon_info.pos] % 10;
+
+        canvas.fillScreen(CRGB::Black);
+
+        switch(first) {
+            case 1:
+                canvas.fillRect(2, 2, 4, 4, decideADKeyboardColour(second));
+                break;
+
+            case 2:
+                canvas.fillTriangle(0, 5, 6, 5, 3, 2, decideKeypadColour(second));
+                break;
+
+            case 3:
+                canvas.fillCircle(3, 3, 2, decideJoystickColour(second));
+                break;
+        }
+
+        FastLED.show();
+    }
+
+    bool compareSequences() {
+        for( uint8_t i = 0; i < simon_info.in_pos + 1; i++ ) {
+            if( simon_info.seq[i] != simon_info.input[i] ) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    void checkSequence() {
+        if( !compareSequences() ) {
+            transit<ResetSimon>();
+            return;
+        }
+
+        if( simon_info.in_pos == simon_info.pos ) {
+            simon_info.in_pos = 0;
+            simon_info.pos++;
+
+            if( simon_info.pos == simon_info.seq_length ) {
+                transit<SimonCompleted>();
+            }
+            else {
+                genEntry();
+                clearMatrix();
+                displayCurrentSymbol();
+            }
+        }
+        else {
+            simon_info.in_pos++;
+        }
+    }
+
+    /* General update event */
+    virtual void react( Update const & ) {}
+
+    /* Keypad */
+    virtual void react( KeypadZeroPressed const & ) {};
+    virtual void react( KeypadOnePressed const & ) {};
+    virtual void react( KeypadTwoPressed const & ) {};
+    virtual void react( KeypadThreePressed const & ) {};
+    virtual void react( KeypadFourPressed const & ) {};
+    virtual void react( KeypadFivePressed const & ) {};
+    virtual void react( KeypadSixPressed const & ) {};
+    virtual void react( KeypadSevenPressed const & ) {};
+    virtual void react( KeypadEightPressed const & ) {};
+    virtual void react( KeypadNinePressed const & ) {};
+
+    /* Emergency button */
+    virtual void react( EmergencyPressed const & ) {}
+    virtual void react( EmergencyReleased const & ) {}
+
+    /* Potenciometers */
+    virtual void react( Potenciometer1Moved const & ) {};
+    virtual void react( Potenciometer2Moved const & ) {};
+    virtual void react( Potenciometer3Moved const & ) {};
+
+    /* Joystick */
+    virtual void react( JoystickMoved const & ) {};
+    virtual void react( JoystickPressed const & ) {};
+    virtual void react( JoystickReleased const & ) {};
+    
+    /* ADKeyboard */
+    virtual void react( ADKeyboardPressed const & ) {};
+    virtual void react( ADKeyboardLeftPressed const & ) {};
+    virtual void react( ADKeyboardRightPressed const & ) {};
+    virtual void react( ADKeyboardUpPressed const & ) {};
+    virtual void react( ADKeyboardDownPressed const & ) {};
+    virtual void react( ADKeyboardEnterPressed const & ) {};
+    virtual void react( ADKeyboardLeftReleased const & ) {};
+    virtual void react( ADKeyboardRightReleased const & ) {};
+    virtual void react( ADKeyboardUpReleased const & ) {};
+    virtual void react( ADKeyboardDownReleased const & ) {};
+    virtual void react( ADKeyboardEnterReleased const & ) {};
+
+    /* Actions on entering/exiting a state */
+    virtual void entry() {};
+    virtual void exit() {};
 
 };
 
 
-class InitSimon : public SimonSays {
+class BasicInput : public SimonSays {
+    /* Keypad */
+    void react( KeypadZeroPressed const & ) override {
+        clearSequence();
+        transit<ResetSimon>(); 
+    }
+    void react( KeypadOnePressed const & ) override {
+        clearSequence();
+        transit<ResetSimon>(); 
+    }
+    void react( KeypadTwoPressed const & ) override {
+        clearSequence();
+        simon_info.input[simon_info.in_pos] = 23;
+        checkSequence();
+    }
+    void react( KeypadThreePressed const & ) override {
+        clearSequence();
+        transit<ResetSimon>(); 
+    }
+    void react( KeypadFourPressed const & ) override {
+        clearSequence();
+        simon_info.input[simon_info.in_pos] = 21;
+        checkSequence();
+    }
+    void react( KeypadFivePressed const & ) override {
+        clearSequence();
+        transit<ResetSimon>(); 
+    }
+    void react( KeypadSixPressed const & ) override {
+        clearSequence();
+        simon_info.input[simon_info.in_pos] = 22;
+        checkSequence();
+    }
+    void react( KeypadSevenPressed const & ) override {
+        clearSequence();
+        transit<ResetSimon>(); 
+    }
+    void react( KeypadEightPressed const & ) override {
+        clearSequence();
+        simon_info.input[simon_info.in_pos] = 24;
+        checkSequence();
+    }
+    void react( KeypadNinePressed const & ) override {
+        clearSequence();
+        transit<ResetSimon>(); 
+    }
 
+    /* Joystick */
+    void react( JoystickMoved const & e ) override {
+        /* Left */
+        if( e.x > 1000 && e.y < 600 && e.y > 400 ) {
+            simon_info.input[simon_info.in_pos] = 31;
+            checkSequence();
+        }
+        /* Right */
+        else if( e.x < 40 && e.y < 600 && e.y > 400 ) {
+            simon_info.input[simon_info.in_pos] = 32;
+            checkSequence();
+        }
+        /* Up */
+        else if( e.y > 1000 && e.x < 600 && e.x > 400 ) {
+            simon_info.input[simon_info.in_pos] = 33;
+            checkSequence();
+        }
+        /* Down */
+        else if( e.y < 40 && e.x < 600 && e.x > 400 ) {
+            simon_info.input[simon_info.in_pos] = 34;
+            checkSequence();
+        }
+    }
+    
+    /* ADKeyboard */
+    void react( ADKeyboardLeftPressed const & ) override {
+        simon_info.input[simon_info.in_pos] = 11;
+        checkSequence();
+    }
+    void react( ADKeyboardRightPressed const & ) override {
+        simon_info.input[simon_info.in_pos] = 12;
+        checkSequence();
+    }
+    void react( ADKeyboardUpPressed const & ) override {
+        simon_info.input[simon_info.in_pos] = 13;
+        checkSequence();
+    }
+    void react( ADKeyboardDownPressed const & ) override {
+        simon_info.input[simon_info.in_pos] = 14;
+        checkSequence();
+    }
+};
+
+class InitSimon : public SimonSays {
+public:    
+    /* Setup the game */
+    void entry() override {
+
+        setRelays(0, 0, 1, 1);
+        clearSequence();
+
+        simon_info.seq_length = random(simon_info.lower_seq_bound, simon_info.high_seq_bound + 1);
+
+        genEntry();
+        displayCurrentSymbol();
+    }
+
+    void react( Update const & ) {
+        transit<BasicInput>();
+    }
+
+};
+
+class ResetSimon : public SimonSays {
+    void drawCross() {
+        canvas.fillScreen(CRGB::Black);
+        canvas.drawLine(1, 1, 6, 6, CRGB::Red);
+        canvas.drawLine(1, 6, 6, 1, CRGB::Red);
+        FastLED.show();
+    }
+
+
+    void react( Update const & ) {
+        if( millis() - start_millis > hide_delay && !hidden) {
+            clearMatrix();
+        }
+
+        if( millis() - start_millis > restart_delay ) {
+            transit<BasicInput>();
+        }
+
+    }
+
+    void entry() {
+        tone(BUZZER_1, 200, 300);
+        
+        drawCross();
+        start_millis = millis();
+
+        for( uint8_t i = 0; i < simon_info.max_sequence; i++ ) {
+            simon_info.input[i] = 0;
+            simon_info.seq[i] = 63;
+        }
+
+        simon_info.pos = 0;
+        simon_info.in_pos = 0;
+    }
+
+    void exit() {
+        hidden = false;
+        genEntry();
+        tone(BUZZER_1, 400, 100);
+        displayCurrentSymbol();
+    }
+
+private:
+    uint32_t start_millis = 0;
+    const uint32_t restart_delay = 500;
+    const uint32_t hide_delay = 300;
+    bool hidden = false;
+
+};
+
+class SimonCompleted : public SimonSays {
+public:
+    void entry() {
+        clearMatrix();
+        setRelays(0,0,0,0);
+        rtttl::begin(BUZZER_1, task_finished);
+        start_millis = millis();
+    }
+
+    void react( Update const & ) {
+        if( millis() - start_millis > finish_delay ) {
+            task_completed = true;
+        }
+    }
+
+private:
+    uint32_t start_millis = 0;
+    const uint32_t finish_delay = 500;
 };
 
 FSM_INITIAL_STATE(SimonSays, InitSimon);

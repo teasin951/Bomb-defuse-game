@@ -11,6 +11,9 @@
 #include "variables.h"
 
 
+#include "tasks/simonsays.h"
+
+
 
 /**
  * @file State machine implementation of game one
@@ -134,165 +137,53 @@ protected:
 
 
 /* ---------------------- States ---------------------- */
-/* First task: Simon says */
-// Possibly templatable later
-/**
- * Each sequence entry is encoded like so:
- * 
- * ADKeyboard = 10
- * Keypad = 20
- * Joystick = 30
- * 
- * Left = 1
- * Right = 2
- * Up = 3
- * Down = 4
-*/
+
 class G1SimonSays : public GameOne {
-
-    /**
-     * @brief Generate a random new entry and save to seq[]
-    */
-    void genEntry() {
-        seq[pos] = random(1, 4) * 10 + random(1, 5);
+    void entry() {
+        SimonSays::start();
     }
 
-    CRGB decideADKeyboardColour( uint8_t x ) {
-        switch(x) {
-            case 1:
-                return CRGB::Green;
-            case 2:
-                return CRGB::Yellow;
-            case 3:
-                return CRGB::Blue;
-            case 4:
-                return CRGB::Red;
-        }
-        return CRGB::Black;
-    }
+    /* General update event */
+    void react( UpdateTask const & e ) override { SimonSays::dispatch( Update() ); };
 
-    CRGB decideKeypadColour( uint8_t x ) {
-        switch(x) {
-            case 1:
-                return CRGB::Green;
-            case 2:
-                return CRGB::Blue;
-            case 3:
-                return CRGB::Red;
-            case 4:
-                return CRGB::Yellow;
-        }
-        return CRGB::Black;
-    }
+    /* Keypad */
+    void react( KeypadZeroPressed const & e ) override { SimonSays::dispatch(e); };
+    void react( KeypadOnePressed const & e ) override { SimonSays::dispatch(e); };
+    void react( KeypadTwoPressed const & e ) override { SimonSays::dispatch(e); };
+    void react( KeypadThreePressed const & e ) override { SimonSays::dispatch(e); };
+    void react( KeypadFourPressed const & e ) override { SimonSays::dispatch(e); };
+    void react( KeypadFivePressed const & e ) override { SimonSays::dispatch(e); };
+    void react( KeypadSixPressed const & e ) override { SimonSays::dispatch(e); };
+    void react( KeypadSevenPressed const & e ) override { SimonSays::dispatch(e); };
+    void react( KeypadEightPressed const & e ) override { SimonSays::dispatch(e); };
+    void react( KeypadNinePressed const & e ) override { SimonSays::dispatch(e); };
 
-    CRGB decideJoystickColour( uint8_t x ) {
-        switch(x) {
-            case 1:
-                return CRGB::Red;
-            case 2:
-                return CRGB::Green;
-            case 3:
-                return CRGB::Yellow;
-            case 4:
-                return CRGB::Blue;
-        }
-        return CRGB::Black;
-    }
+    /* Emergency button */
+    void react( EmergencyPressed const & e ) override { SimonSays::dispatch(e); };
+    void react( EmergencyReleased const & e ) override { SimonSays::dispatch(e); };
 
-    void displayCurrentSymbol() {
-        uint8_t first = seq[pos] / 10;
-        uint8_t second = seq[pos] % 10;
+    /* Potenciometers */
+    void react( Potenciometer1Moved const & e ) override { SimonSays::dispatch(e); };
+    void react( Potenciometer2Moved const & e ) override { SimonSays::dispatch(e); };
+    void react( Potenciometer3Moved const & e ) override { SimonSays::dispatch(e); };
 
-        switch(first) {
-            case 1:
-                canvas.fillRect(2, 2, 4, 4, decideADKeyboardColour(second));
-                break;
-
-            case 2:
-                canvas.fillTriangle(0, 5, 6, 5, 3, 2, decideKeypadColour(second));
-                break;
-
-            case 3:
-                canvas.fillCircle(3, 3, 2, decideJoystickColour(second));
-                break;
-        }
-
-        FastLED.show();
-    }
-
-    void resetSimon() {
-        tone(BUZZER_1, 200, 200);
-        canvas.fillScreen(CRGB::Black);
-        canvas.drawLine(1, 1, 6, 6, CRGB::Red);
-        canvas.drawLine(1, 6, 6, 1, CRGB::Red);
-        FastLED.show();
-        delay(200);
-
-        clearMatrix();
-
-        for( uint8_t i = 0; i < max_sequence; i++ ) {
-            input[i] = 0;
-            seq[i] = 63;
-        }
-
-        pos = 0;
-        genEntry();
-        displayCurrentSymbol();
-    }
-
-    bool compareSequences() {
-        for( uint8_t i = 0; i < pos + 1; i++ ) {
-            if( seq[i] != input[i] ) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    void checkSequence() {
-        if( !compareSequences() ) {
-            resetSimon();
-        }
-        else {
-            pos++;
-            if( pos == seq_length ) {
-                //DONE
-                tone(BUZZER_1, 400, 200);
-            }
-
-            genEntry();
-            clearMatrix();
-            displayCurrentSymbol();
-        }
-    }
-
-    void react( KeypadTwoPressed const & ) {
-        clearSequence();
-        input[pos] = 23;
-        checkSequence();
-    }
-
-    /* Setup the game */
-    void entry() override {
-        setRelays(0, 0, 1, 1);
-        seq_length = random(lower_seq_bound, high_seq_bound + 1);
-
-        genEntry();
-        displayCurrentSymbol();
-    }
-
-private:
-    /* config */
-    static const int lower_seq_bound = 3;  /**< The shortest possible sequence */
-    static const int high_seq_bound = 4;  /**< The longest possible sequence */
-    // ------ //
-
-    uint8_t seq_length = 3;  /**< The actuall length of the sequence for the user */
-    uint8_t pos = 0;
-
-    static const int max_sequence = 6;  /**< maximal length of the sequence */
-    uint8_t input[max_sequence] = { 0 };  /**< Inputed sequence for comparison */
-    uint8_t seq[max_sequence] = {63};  /**< Expected sequence */
+    /* Joystick */
+    void react( JoystickMoved const & e ) override { SimonSays::dispatch(e); };
+    void react( JoystickPressed const & e ) override { SimonSays::dispatch(e); };
+    void react( JoystickReleased const & e ) override { SimonSays::dispatch(e); };
+    
+    /* ADKeyboard */
+    void react( ADKeyboardPressed const & e ) override { SimonSays::dispatch(e); };
+    void react( ADKeyboardLeftPressed const & e ) override { SimonSays::dispatch(e); };
+    void react( ADKeyboardRightPressed const & e ) override { SimonSays::dispatch(e); };
+    void react( ADKeyboardUpPressed const & e ) override { SimonSays::dispatch(e); };
+    void react( ADKeyboardDownPressed const & e ) override { SimonSays::dispatch(e); };
+    void react( ADKeyboardEnterPressed const & e ) override { SimonSays::dispatch(e); };
+    void react( ADKeyboardLeftReleased const & e ) override { SimonSays::dispatch(e); };
+    void react( ADKeyboardRightReleased const & e ) override { SimonSays::dispatch(e); };
+    void react( ADKeyboardUpReleased const & e ) override { SimonSays::dispatch(e); };
+    void react( ADKeyboardDownReleased const & e ) override { SimonSays::dispatch(e); };
+    void react( ADKeyboardEnterReleased const & e ) override { SimonSays::dispatch(e); };
 };
 
 
@@ -300,9 +191,9 @@ private:
 class G1Init : public GameOne {
     void entry() override {
         /* Start the game */
-        game_time.minutes = 0;
-        game_time.seconds = 30;
-        game_countdown_amount = game_time.minutes * 60000 + game_time.seconds * 1000;
+        game_time.minutes = 15;
+        game_time.seconds = 0;
+        game_countdown_amount = game_time.minutes * 60000;
 
         resetDisplay();
         printTime();
@@ -313,7 +204,6 @@ class G1Init : public GameOne {
     }
 
     void react( UpdateTask const & ) override {
-
         transit<G1SimonSays>();
     }
 };

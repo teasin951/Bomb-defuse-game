@@ -14,3 +14,4 @@ const char * test_overflow = "t:d=4,o=5,b=120:16a4,32p,16a4,32p,4a4";
 
 const char * game_pick = "g:d=4,o=4,b=140:16g#5,16d#6,16g#6";
 const char * bomb_exploded = "g:d=4,o=4,b=20:c6";
+const char * task_finished = "f:d=4,o=4,b=130:16c6,16a5,8c7";
