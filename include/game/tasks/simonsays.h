@@ -332,6 +332,7 @@ class ResetSimon : public SimonSays {
     }
 
     void entry() {
+        bomb_beep = false;
         game_countdown_amount -= 30000;  // penalize the mistaky -30s
         tone(BUZZER_1, 200, 300);
         
@@ -348,6 +349,7 @@ class ResetSimon : public SimonSays {
     }
 
     void exit() {
+        bomb_beep = true;
         hidden = false;
         genEntry();
         tone(BUZZER_1, 400, 100);
@@ -365,6 +367,7 @@ private:
 class SimonCompleted : public SimonSays {
 public:
     void entry() {
+        bomb_beep = false;
         clearMatrix();
         setRelays(0,0,0,0);
         rtttl::begin(BUZZER_1, task_finished);
@@ -373,6 +376,7 @@ public:
 
     void react( Update const & ) {
         if( millis() - start_millis > finish_delay ) {
+            bomb_beep = true;
             task_completed = true;
         }
     }

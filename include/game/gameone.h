@@ -67,8 +67,10 @@ public:
             }
 
             if( game_time.seconds != last_second_buzzer ) {
-                tone(BUZZER_2, 4000, 20);
-                last_second_buzzer = game_time.seconds;
+                if( bomb_beep ) {
+                    tone(BUZZER_2, 4000, 20);
+                    last_second_buzzer = game_time.seconds;
+                }
             }
         }
 

@@ -10,15 +10,6 @@
 #include "components/keypad.h"
 #include "components/joystick.h"
 
-/**
- * Transition points for x:
- * <=16 -> 0
- * 
- * 
- * 
- * 
- * 
-*/
 
 uint8_t maze_difficulty = 1; // Game should change this, 1 - easy, 2 - medium, 3 - hard
 uint8_t maze_number = 0;
@@ -117,22 +108,30 @@ public:
         }
 
         else if( joystick.x > 510 && joystick.x < 640 && joystick.y < 896 && joystick.y > 767 ) {
-            tone( BUZZER_1, 600 , 100);
+            transit<CompletedMaze>();
         }
     }
 
     void checkMaze2() {
+        // Serial.print( joystick.x );
+        // Serial.print( ": ");
+        // Serial.print( map(joystick.x - 126, 898, 0, 0, 7) );
+        // Serial.print( ", " );
+        // Serial.print( joystick.y );
+        // Serial.print( ": ");
+        // Serial.println( map(joystick.y - 126, 898, 0, 0, 7) );
+
         if( !(
             ( joystick.x < 768 && joystick.x > 510 && joystick.y < 640 && joystick.y > 510 ) ||
             ( joystick.x < 768 && joystick.x > 639 && joystick.y > 510 ) ||
             ( joystick.x < 768 && joystick.x > 254 && joystick.y > 895 ) ||
-            ( joystick.x < 383 && joystick.x > 294 && joystick.y > 382 )
+            ( joystick.x < 383 && joystick.x > 254 && joystick.y > 382 )
         ) ) {
             transit<MistakeMaze>();
         }
 
         else if( joystick.x < 383 && joystick.x > 254 && joystick.y < 511 && joystick.y > 382 ) {
-            tone( BUZZER_1, 600 , 100);
+            transit<CompletedMaze>();
         }
     }
 
@@ -150,7 +149,23 @@ public:
         }
 
         else if( joystick.x < 768 && joystick.x > 639 && joystick.y < 383 && joystick.y > 254 ) {
-            tone( BUZZER_1, 600 , 100);
+            transit<CompletedMaze>();
+        }
+    }
+
+    void checkMaze4() {
+        if( !(
+            ( joystick.x < 768 && joystick.x > 510 && joystick.y < 640 && joystick.y > 510 ) || 
+            ( joystick.x < 768 && joystick.x > 639 && joystick.y < 640 && joystick.y > 254 ) ||
+            ( joystick.x < 768 && joystick.x > 254 && joystick.y < 383 && joystick.y > 254 ) ||
+            ( joystick.x < 383 && joystick.x > 254 && joystick.y < 768 && joystick.y > 254 ) || 
+            ( joystick.x < 383 && joystick.x > 126 && joystick.y < 768 && joystick.y > 639 )
+        ) ) {
+            transit<MistakeMaze>();
+        }
+
+        else if( joystick.x < 255 && joystick.x > 126 && joystick.y < 768 && joystick.y > 639 ) {
+            transit<CompletedMaze>();
         }
     }
 
@@ -186,7 +201,7 @@ public:
 
     void react( JoystickMoved const & ) {
         displayPlayer();
-        checkMaze();
+        checkMaze4();
     }
 
 };
@@ -198,14 +213,13 @@ public:
 class MistakeMaze : public Maze {
 public:
     void entry() override {
-        rtttl::begin(BUZZER_1, fail_waiting);
+        bomb_beep = false;
         game_countdown_amount -= 15000;
     }
 
     void react( Update const & ) {
-        last_second_buzzer
         if( !rtttl::isPlaying() ) {
-            rtttl::begin(BUZZER_2, fail_waiting);
+            rtttl::begin(BUZZER_1, fail_waiting);
         }
     }
 
@@ -217,9 +231,9 @@ public:
     }
 
     void exit() {
-        tone(BUZZER_1, 800, 50);
+        bomb_beep = true;
+        tone(BUZZER_1, 800, 100);
     }
-
 };
 
 
@@ -228,7 +242,22 @@ public:
 */
 class CompletedMaze : public Maze {
 public:
+    void entry() {
+        clearMatrix();
+        setRelays(0,0,0,0);
+        rtttl::begin(BUZZER_1, task_finished);
+        start_millis = millis();
+    }
 
+    void react( Update const & ) {
+        if( millis() - start_millis > finish_delay ) {
+            task_completed = true;
+        }
+    }
+
+private:
+    uint32_t start_millis = 0;
+    const uint32_t finish_delay = 1000;
 };
 
 
