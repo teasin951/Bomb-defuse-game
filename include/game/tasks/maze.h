@@ -11,7 +11,7 @@
 #include "components/joystick.h"
 
 
-uint8_t maze_difficulty = 1; // Game should change this, 1 - easy, 2 - medium, 3 - hard
+uint8_t maze_difficulty = 2; // Game should change this, 1 - easy, 2 - medium, 3 - hard
 uint8_t maze_number = 0;
 
 
@@ -81,10 +81,13 @@ public:
                 checkMaze3();
                 break;
             case 4:
+                checkMaze4();
                 break;
             case 5:
+                checkMaze5();
                 break;
             case 6:
+                checkMaze6();
                 break;
             case 7:
                 break;
@@ -169,6 +172,37 @@ public:
         }
     }
 
+    void checkMaze5() {
+        if( !(
+            ( joystick.x < 640 && joystick.x > 126 && joystick.y < 640 && joystick.y > 510 ) || 
+            ( joystick.x < 255 && joystick.x > 126 && joystick.y < 640 && joystick.y > 126 ) ||
+            ( joystick.x < 511 && joystick.x > 126 && joystick.y < 255 && joystick.y > 126 ) ||
+            ( joystick.x < 511 && joystick.x > 382 && joystick.y < 383 && joystick.y > 126 ) ||
+            ( joystick.x < 640 && joystick.x > 382 && joystick.y < 383 && joystick.y > 254 )
+        ) ) {
+            transit<MistakeMaze>();
+        }
+
+        else if( joystick.x < 640 && joystick.x > 510 && joystick.y < 383 && joystick.y > 254 ) {
+            transit<CompletedMaze>();
+        }
+    }
+
+    void checkMaze6() {
+        if( !(
+            ( joystick.x < 640 && joystick.x > 510 && joystick.y < 640 && joystick.y > 254 ) ||
+            ( joystick.x < 640 && joystick.x > 126 && joystick.y < 383 && joystick.y > 254 ) ||
+            ( joystick.x < 255 && joystick.x > 126 && joystick.y < 896 && joystick.y > 254 ) ||
+            ( joystick.x < 896 && joystick.x > 126 && joystick.y < 896 && joystick.y > 767 )
+        ) ) {
+            transit<MistakeMaze>();
+        }
+
+        else if( joystick.x < 896 && joystick.x > 767 && joystick.y < 896 && joystick.y > 767 ) {
+            transit<CompletedMaze>();
+        }
+    }
+
     void displayPlayer() {
         drawMaze();
         /* https://www.geogebra.org/calculator/pfzc5w4c */
@@ -201,7 +235,7 @@ public:
 
     void react( JoystickMoved const & ) {
         displayPlayer();
-        checkMaze4();
+        checkMaze();
     }
 
 };
