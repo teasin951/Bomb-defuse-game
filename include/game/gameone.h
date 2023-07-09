@@ -22,9 +22,11 @@
 */
 
 /* Forward declaration of stages */
+class G1Patterns;
 class G1Maze;
 class G1SimonSays;
 class G1Detonated;
+class G1Defused;
 
 /* ----------------------- State machine ------------------------- */
 class GameOne : public tinyfsm::Fsm<GameOne> {
@@ -151,7 +153,7 @@ class G1Patterns : public GameOne {
     }
 
     void react( Advance const & e ) {
-        // transit<>();
+        transit<G1Defused>();
     }
 
     /* General update event */
@@ -253,7 +255,7 @@ class G1Init : public GameOne {
     }
 
     void react( UpdateTask const & ) override {
-        transit<G1Patterns>();  // TODO INCORRECT!
+        transit<G1SimonSays>();  // TODO INCORRECT!
     }
 };
 
@@ -277,6 +279,41 @@ class G1Detonated : public GameOne {
 
         lcd.setCursor(0,0);
         lcd.print("   You failed   ");
+    }
+
+    void resetEverything() {
+        tone(BUZZER_1, 800, 1000);
+        delay(1200);
+        resetArduino();
+    }
+
+    void react( KeypadMatched const & ) {
+        resetEverything();
+    }
+
+    void react( KeypadNotMatched const & ) {
+        resetEverything();
+    }
+};
+
+
+/* The bomb has been defused */
+class G1Defused : public GameOne {
+    void entry() override {
+        rtttl::stop();
+        setRelays(0,0,0,0);
+        clearMatrix();
+
+        noTone(BUZZER_1);
+
+        game_is_live = false;
+        resetDisplay();
+        printTime();
+
+        lcd.setCursor(0,0);
+        lcd.print("  Bomb defused  ");
+
+        rtttl::begin(BUZZER_1, bomb_defused);
     }
 
     void resetEverything() {

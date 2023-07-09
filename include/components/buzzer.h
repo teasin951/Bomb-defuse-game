@@ -16,3 +16,4 @@ const char * game_pick = "g:d=4,o=4,b=140:16g#5,16d#6,16g#6";
 const char * bomb_exploded = "g:d=4,o=4,b=20:c6";
 const char * task_finished = "f:d=4,o=4,b=130:16c6,16a5,8c7";
 const char * fail_waiting = "g:d=4,o=4,b=120:c#4,p";
+const char * bomb_defused = "w:d=4,o=4,b=130:32p,8a6,16g6,16p,16e6,16p,16g6,16p,8f6,8a6,16d7,16a7,16g7,16a7";
