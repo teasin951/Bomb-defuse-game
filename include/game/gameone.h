@@ -321,7 +321,7 @@ class G1Init : public GameOne {
     }
 
     void react( UpdateTask const & ) override {
-        transit<G1Button>();  // TODO INCORRECT!
+        transit<G1SimonSays>();
     }
 };
 
