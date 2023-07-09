@@ -277,6 +277,7 @@ public:
 class CompletedMaze : public Maze {
 public:
     void entry() {
+        bomb_beep = false;
         clearMatrix();
         setRelays(0,0,0,0);
         rtttl::begin(BUZZER_1, task_finished);
@@ -285,6 +286,7 @@ public:
 
     void react( Update const & ) {
         if( millis() - start_millis > finish_delay ) {
+            bomb_beep = true;
             task_completed = true;
         }
     }
