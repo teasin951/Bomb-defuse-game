@@ -209,7 +209,7 @@ public:
 
     void entry() {
         bomb_beep = false;
-        game_countdown_amount -= 60000;  // penalize the mistaky -30s
+        game_countdown_amount -= 90000;  // penalize the mistaky -30s
         tone(BUZZER_1, 200, 300);
         
         drawCross();

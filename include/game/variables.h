@@ -8,6 +8,8 @@
 
 uint32_t game_start_millis = 0;  /**< When did the game start */
 uint32_t game_countdown_amount = 900000;  /**< How long for a game, default: 15 min*/
+uint32_t game_countdown_penalty = 0;  /**< To make the countdown faster, this will be subtracted from time every second */
+uint8_t mistakes_count = 0;
 
 /**
  * When a task is finished, this should be set to true,

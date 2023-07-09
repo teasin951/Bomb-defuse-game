@@ -14,6 +14,7 @@
 #include "tasks/simonsays.h"
 #include "tasks/maze.h"
 #include "tasks/patterns.h"
+#include "tasks/button.h"
 
 
 
@@ -46,6 +47,7 @@ public:
     }
 
     void updateGameTime() {
+        game_countdown_amount -= game_countdown_penalty;
         uint32_t time_remaining = game_countdown_amount - (millis() - game_start_millis);
         game_time.minutes = time_remaining / 60000;
         game_time.seconds = time_remaining / 1000 - game_time.minutes * 60;
@@ -60,6 +62,10 @@ public:
         if( task_completed ) {
             task_completed = false;
             GameOne::dispatch( Advance() );
+        }
+
+        if( mistakes_count >= 3 ) {
+            transit<G1Detonated>();
         }
 
         if( millis() - last_time_update > time_update_delay ) {
@@ -86,10 +92,7 @@ public:
 
     /* Keypad */
     virtual void react( KeypadPressed const & ) {};
-    virtual void react( KeypadZeroPressed const & ) {
-        updateGameTime();
-        printTime();
-    };
+    virtual void react( KeypadZeroPressed const & ) {};
     virtual void react( KeypadOnePressed const & ) {};
     virtual void react( KeypadTwoPressed const & ) {};
     virtual void react( KeypadThreePressed const & ) {};
@@ -145,6 +148,65 @@ protected:
 
 /* ---------------------- States ---------------------- */
 
+class Button;
+
+class G1Button : public GameOne {
+    void entry() {
+        Button::start();
+    }
+
+    void react( Advance const & e ) {
+        transit<G1Defused>();
+    }
+
+    /* General update event */
+    void react( UpdateTask const & e ) override { Button::dispatch( Update() ); };
+
+    /* Keypad */
+    void react( KeypadZeroPressed const & e ) override { Button::dispatch(e); };
+    void react( KeypadOnePressed const & e ) override { Button::dispatch(e); };
+    void react( KeypadTwoPressed const & e ) override { Button::dispatch(e); };
+    void react( KeypadThreePressed const & e ) override { Button::dispatch(e); };
+    void react( KeypadFourPressed const & e ) override { Button::dispatch(e); };
+    void react( KeypadFivePressed const & e ) override { Button::dispatch(e); };
+    void react( KeypadSixPressed const & e ) override { Button::dispatch(e); };
+    void react( KeypadSevenPressed const & e ) override { Button::dispatch(e); };
+    void react( KeypadEightPressed const & e ) override { Button::dispatch(e); };
+    void react( KeypadNinePressed const & e ) override { Button::dispatch(e); };
+    void react( KeypadMatched const & e ) override { Button::dispatch(e); };
+    void react( KeypadNotMatched const & e ) override { Button::dispatch(e); };
+    void react( KeypadOverflowed const & e ) override { Button::dispatch(e); };
+    void react( KeypadCleared const & e ) override { Button::dispatch(e); };
+
+    /* Emergency button */
+    void react( EmergencyPressed const & e ) override { Button::dispatch(e); };
+    void react( EmergencyReleased const & e ) override { Button::dispatch(e); };
+
+    /* Potenciometers */
+    void react( Potenciometer1Moved const & e ) override { Button::dispatch(e); };
+    void react( Potenciometer2Moved const & e ) override { Button::dispatch(e); };
+    void react( Potenciometer3Moved const & e ) override { Button::dispatch(e); };
+
+    /* Joystick */
+    void react( JoystickMoved const & e ) override { Button::dispatch(e); };
+    void react( JoystickPressed const & e ) override { Button::dispatch(e); };
+    void react( JoystickReleased const & e ) override { Button::dispatch(e); };
+    
+    /* ADKeyboard */
+    void react( ADKeyboardPressed const & e ) override { Button::dispatch(e); };
+    void react( ADKeyboardLeftPressed const & e ) override { Button::dispatch(e); };
+    void react( ADKeyboardRightPressed const & e ) override { Button::dispatch(e); };
+    void react( ADKeyboardUpPressed const & e ) override { Button::dispatch(e); };
+    void react( ADKeyboardDownPressed const & e ) override { Button::dispatch(e); };
+    void react( ADKeyboardEnterPressed const & e ) override { Button::dispatch(e); };
+    void react( ADKeyboardLeftReleased const & e ) override { Button::dispatch(e); };
+    void react( ADKeyboardRightReleased const & e ) override { Button::dispatch(e); };
+    void react( ADKeyboardUpReleased const & e ) override { Button::dispatch(e); };
+    void react( ADKeyboardDownReleased const & e ) override { Button::dispatch(e); };
+    void react( ADKeyboardEnterReleased const & e ) override { Button::dispatch(e); };
+};
+
+
 class Patterns;
 
 class G1Patterns : public GameOne {
@@ -153,7 +215,7 @@ class G1Patterns : public GameOne {
     }
 
     void react( Advance const & e ) {
-        transit<G1Defused>();
+        transit<G1Button>();
     }
 
     /* General update event */
@@ -241,6 +303,10 @@ class G1SimonSays : public GameOne {
 /* Initialize the game */
 class G1Init : public GameOne {
     void entry() override {
+        while( digitalRead(BUTTON_IN) == HIGH ) {
+            lcd.print(" Release button ");
+        }
+
         /* Start the game */
         game_time.minutes = 15;
         game_time.seconds = 0;
@@ -255,7 +321,7 @@ class G1Init : public GameOne {
     }
 
     void react( UpdateTask const & ) override {
-        transit<G1SimonSays>();  // TODO INCORRECT!
+        transit<G1Button>();  // TODO INCORRECT!
     }
 };
 

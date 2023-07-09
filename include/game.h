@@ -195,6 +195,8 @@ class PickGameTest : public Manager {
 class Choose : public Manager {
     void entry() { 
         resetDisplay();
+        setButtonLEDs(0,0,0);
+        clearMatrix();
         lcd.print("Choose game mode");
     }
 
