@@ -379,7 +379,7 @@ public:
 
 private:
     uint32_t start_millis = 0;
-    const uint32_t finish_delay = 500;
+    const uint32_t finish_delay = 1000;
 };
 
 FSM_INITIAL_STATE(SimonSays, InitSimon);

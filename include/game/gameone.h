@@ -12,6 +12,7 @@
 
 
 #include "tasks/simonsays.h"
+#include "tasks/maze.h"
 
 
 
@@ -20,6 +21,7 @@
 */
 
 /* Forward declaration of stages */
+class G1Maze;
 class G1SimonSays;
 class G1Detonated;
 
@@ -138,9 +140,67 @@ protected:
 
 /* ---------------------- States ---------------------- */
 
+class Maze;
+
+class G1Maze : public GameOne {
+    void entry() {
+        Maze::start();
+    }
+
+    void react( Advance const & e ) {
+        // transit<>();
+    }
+
+    /* General update event */
+    void react( UpdateTask const & e ) override { Maze::dispatch( Update() ); };
+
+    /* Keypad */
+    void react( KeypadZeroPressed const & e ) override { Maze::dispatch(e); };
+    void react( KeypadOnePressed const & e ) override { Maze::dispatch(e); };
+    void react( KeypadTwoPressed const & e ) override { Maze::dispatch(e); };
+    void react( KeypadThreePressed const & e ) override { Maze::dispatch(e); };
+    void react( KeypadFourPressed const & e ) override { Maze::dispatch(e); };
+    void react( KeypadFivePressed const & e ) override { Maze::dispatch(e); };
+    void react( KeypadSixPressed const & e ) override { Maze::dispatch(e); };
+    void react( KeypadSevenPressed const & e ) override { Maze::dispatch(e); };
+    void react( KeypadEightPressed const & e ) override { Maze::dispatch(e); };
+    void react( KeypadNinePressed const & e ) override { Maze::dispatch(e); };
+
+    /* Emergency button */
+    void react( EmergencyPressed const & e ) override { Maze::dispatch(e); };
+    void react( EmergencyReleased const & e ) override { Maze::dispatch(e); };
+
+    /* Potenciometers */
+    void react( Potenciometer1Moved const & e ) override { Maze::dispatch(e); };
+    void react( Potenciometer2Moved const & e ) override { Maze::dispatch(e); };
+    void react( Potenciometer3Moved const & e ) override { Maze::dispatch(e); };
+
+    /* Joystick */
+    void react( JoystickMoved const & e ) override { Maze::dispatch(e); };
+    void react( JoystickPressed const & e ) override { Maze::dispatch(e); };
+    void react( JoystickReleased const & e ) override { Maze::dispatch(e); };
+    
+    /* ADKeyboard */
+    void react( ADKeyboardPressed const & e ) override { Maze::dispatch(e); };
+    void react( ADKeyboardLeftPressed const & e ) override { Maze::dispatch(e); };
+    void react( ADKeyboardRightPressed const & e ) override { Maze::dispatch(e); };
+    void react( ADKeyboardUpPressed const & e ) override { Maze::dispatch(e); };
+    void react( ADKeyboardDownPressed const & e ) override { Maze::dispatch(e); };
+    void react( ADKeyboardEnterPressed const & e ) override { Maze::dispatch(e); };
+    void react( ADKeyboardLeftReleased const & e ) override { Maze::dispatch(e); };
+    void react( ADKeyboardRightReleased const & e ) override { Maze::dispatch(e); };
+    void react( ADKeyboardUpReleased const & e ) override { Maze::dispatch(e); };
+    void react( ADKeyboardDownReleased const & e ) override { Maze::dispatch(e); };
+    void react( ADKeyboardEnterReleased const & e ) override { Maze::dispatch(e); };
+};
+
 class G1SimonSays : public GameOne {
     void entry() {
         SimonSays::start();
+    }
+
+    void react( Advance const & e ) {
+        transit<G1Maze>();
     }
 
     /* General update event */
@@ -204,7 +264,7 @@ class G1Init : public GameOne {
     }
 
     void react( UpdateTask const & ) override {
-        transit<G1SimonSays>();
+        transit<G1Maze>();  // TODO INCORRECT!
     }
 };
 
