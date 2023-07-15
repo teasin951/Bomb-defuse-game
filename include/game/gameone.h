@@ -48,7 +48,7 @@ public:
 
     void updateGameTime() {
         game_countdown_amount -= game_countdown_penalty;
-        uint32_t time_remaining = game_countdown_amount - (millis() - game_start_millis);
+        int32_t time_remaining = game_countdown_amount - (millis() - game_start_millis);
         game_time.minutes = time_remaining / 60000;
         game_time.seconds = time_remaining / 1000 - game_time.minutes * 60;
     }
@@ -71,15 +71,17 @@ public:
         if( millis() - last_time_update > time_update_delay ) {
             updateGameTime();
             printTime();
-            if( game_time.minutes <= 0 && game_time.seconds <= 0 ) {
-                transit<G1Detonated>();
-            }
 
             if( game_time.seconds != last_second_buzzer ) {
                 if( bomb_beep ) {
                     tone(BUZZER_2, 4000, 20);
                     last_second_buzzer = game_time.seconds;
                 }
+            }
+
+            // transit<>() should be at the end of react() call
+            if( game_time.minutes <= 0 && game_time.seconds <= 0 ) {
+                transit<G1Detonated>();
             }
         }
 
