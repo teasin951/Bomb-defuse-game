@@ -73,8 +73,6 @@ public:
 
 // ------------ Manager states --------------- //
 
-// TODO change this to void react (tinyfsm::Event const & ), with the proper change in Manager
-
 class PickGameOne : public Manager {
     void entry() {
         rtttl::begin(BUZZER_1, game_pick);
@@ -202,11 +200,13 @@ class Choose : public Manager {
 
     void react( KeypadZeroPressed const & ) override {
         tone(BUZZER_1, 400, 50);
+        clearSequence();
         transit<PickGameTest>();
     }
 
     void react( KeypadOnePressed const & ) override {
         tone(BUZZER_1, 400, 50);
+        clearSequence();
         transit<PickGameOne>();
     }
     

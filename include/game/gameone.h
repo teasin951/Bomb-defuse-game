@@ -22,7 +22,7 @@
  * @file State machine implementation of game one
 */
 
-/* Forward declaration of stages */
+/* Forward declaration of states */
 class G1Patterns;
 class G1Maze;
 class G1SimonSays;
@@ -32,6 +32,10 @@ class G1Defused;
 /* ----------------------- State machine ------------------------- */
 class GameOne : public tinyfsm::Fsm<GameOne> {
 public:
+
+    /**
+     * @brief Print current remaining time to the LCD
+    */
     void printTime() {
         lcd.setCursor(6,1);
         lcd.print(game_time.minutes);
@@ -46,32 +50,49 @@ public:
         lcd.print("  ");
     }
 
+    /**
+     * @brief Calculate and save the current time
+    */
     void updateGameTime() {
-        game_countdown_amount -= game_countdown_penalty;
+        game_countdown_amount -= game_countdown_penalty;  // to speed up countdown
         int32_t time_remaining = game_countdown_amount - (millis() - game_start_millis);
         game_time.minutes = time_remaining / 60000;
         game_time.seconds = time_remaining / 1000 - game_time.minutes * 60;
     }
 
-    /* General update event */
+    /**
+     * @brief reset Arduino with a beep
+    */
+    void resetEverything() {
+        tone(BUZZER_1, 800, 1000);
+        delay(1200);
+        resetArduino();
+    }
+
+    /**
+     * @brief Event called in a loop to generally update everything
+     */
     void react( Update const & ) {
         // Check if we need to do anything
         if( !game_is_live ) { return; }
 
-        // check for completed tasks
+        // Check for completed tasks
         if( task_completed ) {
             task_completed = false;
             GameOne::dispatch( Advance() );
         }
 
+        // Certain games can tolerate only certain number of mistakes
         if( mistakes_count >= 3 ) {
             transit<G1Detonated>();
         }
 
+        // Update time
         if( millis() - last_time_update > time_update_delay ) {
             updateGameTime();
             printTime();
 
+            // Beep every second
             if( game_time.seconds != last_second_buzzer ) {
                 if( bomb_beep ) {
                     tone(BUZZER_2, 4000, 20);
@@ -85,7 +106,7 @@ public:
             }
         }
 
-        // update the current task as well
+        // Update the current task as well
         GameOne::dispatch( UpdateTask() );
     }
 
@@ -150,8 +171,10 @@ protected:
 
 /* ---------------------- States ---------------------- */
 
+/* Forward declare the game class */
 class Button;
 
+/* Button game state */
 class G1Button : public GameOne {
     void entry() {
         Button::start();
@@ -209,8 +232,10 @@ class G1Button : public GameOne {
 };
 
 
+/* Forward declare the game class */
 class Patterns;
 
+/* Patterns game state */
 class G1Patterns : public GameOne {
     void entry() {
         Patterns::start();
@@ -231,8 +256,10 @@ class G1Patterns : public GameOne {
 };
 
 
+/* Forward declare the game class */
 class Maze;
 
+/* Maze game state */
 class G1Maze : public GameOne {
     void entry() {
         Maze::start();
@@ -249,6 +276,8 @@ class G1Maze : public GameOne {
     void react( JoystickMoved const & e ) override { Maze::dispatch(e); };
 };
 
+
+/* Simon Says game state */
 class G1SimonSays : public GameOne {
     void entry() {
         SimonSays::start();
@@ -305,6 +334,7 @@ class G1SimonSays : public GameOne {
 /* Initialize the game */
 class G1Init : public GameOne {
     void entry() override {
+        /* Wait for emergency button release */
         while( digitalRead(BUTTON_IN) == HIGH ) {
             lcd.print(" Release button ");
         }
@@ -349,12 +379,6 @@ class G1Detonated : public GameOne {
         lcd.print("   You failed   ");
     }
 
-    void resetEverything() {
-        tone(BUZZER_1, 800, 1000);
-        delay(1200);
-        resetArduino();
-    }
-
     void react( KeypadMatched const & ) {
         resetEverything();
     }
@@ -382,12 +406,6 @@ class G1Defused : public GameOne {
         lcd.print("  Bomb defused  ");
 
         rtttl::begin(BUZZER_1, bomb_defused);
-    }
-
-    void resetEverything() {
-        tone(BUZZER_1, 800, 1000);
-        delay(1200);
-        resetArduino();
     }
 
     void react( KeypadMatched const & ) {
