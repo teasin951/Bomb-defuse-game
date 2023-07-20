@@ -14,7 +14,7 @@
 
 
 /**
- * @brief FSM class
+ * @brief FSM class managing the bomb
 */
 class Manager : public tinyfsm::Fsm<Manager> {
 public:
@@ -73,6 +73,9 @@ public:
 
 // ------------ Manager states --------------- //
 
+/**
+ * @brief Manager state, first level
+ */
 class PickGameOne : public Manager {
     void entry() {
         rtttl::begin(BUZZER_1, game_pick);
@@ -128,6 +131,9 @@ class PickGameOne : public Manager {
     void react( ADKeyboardEnterReleased const & e ) override { GameOne::dispatch(e); };
 };
 
+/**
+ * @brief Game test manager state 
+ */
 class PickGameTest : public Manager {
     void entry() {
         char tmp[16] = {1};

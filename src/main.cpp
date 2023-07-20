@@ -9,7 +9,6 @@ void setup() {
   Wire.begin();
 
   pinSetup();
-  setupFastLED();
   setupKeypad();
   setupFastLED();
   lcd.init();
@@ -19,11 +18,12 @@ void setup() {
 }
 
 void loop() {
+  /* Read periferies */
   readADKeyboard();
   readJoystick(joystick, JOYSTICK_SW, JOYSTICK_X, JOYSTICK_Y);
   keypad.getKey();
 
+  /* Action */
   checkEvents();
   rtttl::play();
-
 }

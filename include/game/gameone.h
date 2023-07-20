@@ -30,6 +30,10 @@ class G1Detonated;
 class G1Defused;
 
 /* ----------------------- State machine ------------------------- */
+
+/**
+ * @brief Game One FSM class 
+*/
 class GameOne : public tinyfsm::Fsm<GameOne> {
 public:
 
@@ -69,9 +73,6 @@ public:
         resetArduino();
     }
 
-    /**
-     * @brief Event called in a loop to generally update everything
-     */
     void react( Update const & ) {
         // Check if we need to do anything
         if( !game_is_live ) { return; }
@@ -174,7 +175,9 @@ protected:
 /* Forward declare the game class */
 class Button;
 
-/* Button game state */
+/**
+ * @brief Button game state 
+ */
 class G1Button : public GameOne {
     void entry() {
         Button::start();
@@ -235,7 +238,9 @@ class G1Button : public GameOne {
 /* Forward declare the game class */
 class Patterns;
 
-/* Patterns game state */
+/**
+ * @brief Patterns game state 
+ */
 class G1Patterns : public GameOne {
     void entry() {
         Patterns::start();
@@ -259,7 +264,9 @@ class G1Patterns : public GameOne {
 /* Forward declare the game class */
 class Maze;
 
-/* Maze game state */
+/**
+ * @brief Maze game state 
+ */
 class G1Maze : public GameOne {
     void entry() {
         Maze::start();
@@ -277,7 +284,9 @@ class G1Maze : public GameOne {
 };
 
 
-/* Simon Says game state */
+/**
+ * @brief Simon Says game state 
+ */
 class G1SimonSays : public GameOne {
     void entry() {
         SimonSays::start();
@@ -331,7 +340,9 @@ class G1SimonSays : public GameOne {
 };
 
 
-/* Initialize the game */
+/**
+ * @brief State initializing the game 
+ */
 class G1Init : public GameOne {
     void entry() override {
         /* Wait for emergency button release */
@@ -357,7 +368,9 @@ class G1Init : public GameOne {
     }
 };
 
-/* The bomb has exploded */
+/**
+ * @brief The bomb has exploded state
+ */
 class G1Detonated : public GameOne {
     void entry() override {
         rtttl::stop();
@@ -389,7 +402,9 @@ class G1Detonated : public GameOne {
 };
 
 
-/* The bomb has been defused */
+/** 
+ * @brief The bomb has been defused state 
+ */
 class G1Defused : public GameOne {
     void entry() override {
         rtttl::stop();

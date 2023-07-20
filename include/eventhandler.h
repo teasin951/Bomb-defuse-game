@@ -11,6 +11,9 @@
 #include "components/keypad.h"
 
 
+/**
+ * @brief All info needed for EventHandler to operate
+*/
 struct EventHandlerInfo {
     int emergency_button = LOW;
 
@@ -27,6 +30,9 @@ struct EventHandlerInfo {
 struct EventHandlerInfo ehi;
 
 
+/**
+ * @brief Even raising function for Keypad pattern matching
+*/
 void raiseKeypadPressed( const char x ) {
     switch(x) {
         case '1':
@@ -65,23 +71,38 @@ void raiseKeypadPressed( const char x ) {
     }
 }
 
+/**
+ * @brief Even raising function for Keypad pattern matching
+*/
 void raiseKeypadMatch() {
     Manager::dispatch( KeypadMatched() );
 }
 
+/**
+ * @brief Even raising function for Keypad pattern matching
+*/
 void raiseKeypadNoMatch() {
     Manager::dispatch( KeypadNotMatched() );
 }
 
+/**
+ * @brief Even raising function for Keypad pattern matching
+*/
 void raiseKeypadCleared() {
     Manager::dispatch( KeypadCleared() );
 }
 
+/**
+ * @brief Even raising function for Keypad pattern matching
+*/
 void raiseKeypadOverflowed() {
     Manager::dispatch( KeypadOverflowed() );
 }
 
 
+/**
+ * @brief Set up Event Handler for operation
+*/
 void setupEventHandler() {
     Manager::start();
 
@@ -90,6 +111,9 @@ void setupEventHandler() {
 }
 
 
+/**
+ * @brief Check for changes on periferies and issue events
+ */
 void checkEvents() {
     /* Emergency button */
     int eme_read = digitalRead(BUTTON_IN);
