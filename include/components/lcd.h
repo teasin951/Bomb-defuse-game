@@ -9,7 +9,9 @@
 LiquidCrystal_I2C lcd(0x27,16,2);
 
 
-/* Clear display of everything */
+/**
+ * @brief Clear the LCD
+*/
 void resetDisplay() {
   lcd.backlight();
   lcd.clear();

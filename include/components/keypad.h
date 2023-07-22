@@ -5,28 +5,29 @@
 #include "pins.h"
 
 /**
- * @brief Simplify keypad handeling
+ * @file Simplify keypad handeling
  * 
  * setupKeypad() has to be called once and keypad.getKey() periodically
 */
 
-const uint8_t ROWS = 4; //four rows
-const uint8_t COLS = 3; //four columns
-//define the cymbols on the buttons of the keypads
+const uint8_t ROWS = 4;  // Four rows
+const uint8_t COLS = 3;  // Three columns
+
+// Define the symbols on the buttons of the keypads
 char hexaKeys[ROWS][COLS] = {
   {'1','2','3'},
   {'4','5','6'},
   {'7','8','9'},
   {'*','0','#'}
 };
-byte rowPins[ROWS] = {KEY_FIRST_ROW, KEY_SECOND_ROW, KEY_THIRD_ROW, KEY_FORTH_ROW}; //connect to the row pinouts of the keypad
-byte colPins[COLS] = {KEY_LEFT_COL, KEY_MID_COL, KEY_RIGHT_COL}; //connect to the column pinouts of the keypad
+byte rowPins[ROWS] = {KEY_FIRST_ROW, KEY_SECOND_ROW, KEY_THIRD_ROW, KEY_FORTH_ROW};  // Connect to the row pinouts of the keypad
+byte colPins[COLS] = {KEY_LEFT_COL, KEY_MID_COL, KEY_RIGHT_COL};  // Connect to the column pinouts of the keypad
 
-//initialize an instance of class NewKeypad
+// Initialize an instance of class NewKeypad
 Keypad keypad = Keypad( makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS);
 
-void nada() {}  // nothing, placeholder
-void cnada(char x) {}  // nothing, placeholder accepting char
+void nada() {}  // Nothing, placeholder
+void cnada(char x) {}  // Nothing, placeholder accepting char
 
 // Create a struct holding keypad info to verify sequences
 struct KeypadInfo {
@@ -151,6 +152,9 @@ void setSequence( const char * match, const uint8_t size,
 }
 
 
+/**
+ * @brief Setup the Keypad
+*/
 void setupKeypad() {
   keypad.addEventListener(eventHandler);
   clearSequence();

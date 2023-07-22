@@ -5,6 +5,9 @@
 #define MOVING_ARROW_DOWN_FRAMES 2
 
 
+/**
+ * @brief Moving arrow down animation class
+*/
 class MovingArrowDown : public Animation {
 public:
     MovingArrowDown( GFXcanvas & x ) : Animation(x) {

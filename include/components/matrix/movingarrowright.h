@@ -5,6 +5,9 @@
 #define MOVING_ARROW_RIGHT_FRAMES 2
 
 
+/**
+ * @brief Moving arrow right animation class
+*/
 class MovingArrowRight : public Animation {
 public:
     MovingArrowRight( GFXcanvas & x ) : Animation(x) {

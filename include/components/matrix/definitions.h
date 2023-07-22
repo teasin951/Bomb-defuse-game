@@ -1,6 +1,11 @@
 #pragma once
 #include <Arduino.h>
 
+
+/**
+ * @file Definitions for Matrix
+*/
+
 const uint8_t NUM_X = 8;
 const uint8_t NUM_Y = 8;
 const uint8_t DATA_PIN = 8;

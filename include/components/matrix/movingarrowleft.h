@@ -5,6 +5,9 @@
 #define MOVING_ARROW_LEFT_FRAMES 2
 
 
+/**
+ * @brief Moving arrow left animation class
+*/
 class MovingArrowLeft : public Animation {
 public:
     MovingArrowLeft( GFXcanvas & x ) : Animation(x) {

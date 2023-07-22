@@ -5,6 +5,9 @@
 #define MOVING_ARROW_UP_FRAMES 2
 
 
+/**
+ * @brief Moving arrow up animation class
+*/
 class MovingArrowUp : public Animation {
 public:
     MovingArrowUp( GFXcanvas & x ) : Animation(x) {
