@@ -19,12 +19,15 @@
 
 
 /**
- * @file State machine implementation of game one
+ * @file TestGame is there to test all the periferies, that they work as they should
 */
 
 
 class TestGame : public tinyfsm::Fsm<TestGame> {
 public:
+    /**
+     * @brief Reset everything tested
+    */
     void clearTests() {
         tone(BUZZER_2, 400, 20);
 
@@ -43,6 +46,9 @@ public:
         rtttl::stop();
     }
 
+    /**
+     * @brief Make the matrix empty
+    */
     void clearMatrix() {
         stopOthersDisplaying();
         canvas.fillScreen(CRGB::Black);

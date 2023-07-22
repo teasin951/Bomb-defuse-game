@@ -3,7 +3,7 @@
 
 
 /**
- * @file Global variables needed in basically every game for different purposes
+ * @file Global variables needed in basically every game
 */
 
 uint32_t game_start_millis = 0;  /**< When did the game start */
@@ -16,10 +16,14 @@ uint8_t mistakes_count = 0;  /**< For games that count mistakes, should be check
  * GameXXX checks for it, and advances
 */
 bool task_completed = false;
-bool game_is_live = true;
-bool bomb_beep = true;
+
+bool game_is_live = true;  /**< The game is on going */
+bool bomb_beep = true;  /**< The bomb should beep*/
 
 
+/**
+ * @brief Game time structure parsed to minutes and seconds
+*/
 typedef struct GameTime {
     int8_t minutes;
     int8_t seconds;
@@ -27,5 +31,7 @@ typedef struct GameTime {
 GAMETIME game_time;
 
 
-// Reset the arduino function
+/**
+ * @brief Reset the arduino function
+*/
 void(* resetArduino) (void) = 0;

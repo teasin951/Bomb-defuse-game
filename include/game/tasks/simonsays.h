@@ -10,6 +10,14 @@
 #include "components/keypad.h"
 
 
+/**
+ * @file The SimonSays task implementation
+*/
+
+
+/**
+ * @brief Struct holding all info needed for Simon Says
+*/
 struct SimonInfo {
     /* config */
     static const int lower_seq_bound = 3;  /**< The shortest possible sequence */
@@ -17,8 +25,8 @@ struct SimonInfo {
     // ------ //
 
     uint8_t seq_length = 3;  /**< The actual length of the sequence for the user */
-    uint8_t in_pos = 0;
-    uint8_t pos = 0;
+    uint8_t in_pos = 0;  /**< Input position */
+    uint8_t pos = 0;  /**< Position in the expected sequence */
 
     static const int max_sequence = 8;  /**< maximal length of the sequence */
     uint8_t input[max_sequence] = { 0 };  /**< Inputed sequence for comparison */
@@ -28,10 +36,12 @@ struct SimonInfo {
 struct SimonInfo simon_info;
 
 
+/* Forward declaration */
 class BasicInput;
 class ResetSimon;
 class InitSimon;
 class SimonCompleted;
+
 
 /**
  * Each sequence entry is encoded like so:
@@ -54,6 +64,9 @@ public:
         simon_info.seq[simon_info.pos] = random(1, 4) * 10 + random(1, 5);
     }
 
+    /**
+     * @brief Based on the sequence entry, decide the colour for the ADKeyboard symbol
+    */
     CRGB decideADKeyboardColour( uint8_t x ) {
         switch(x) {
             case 1:
@@ -68,6 +81,9 @@ public:
         return CRGB::Black;
     }
 
+    /**
+     * @brief Based on the sequence entry, decide the colour for the Keypad symbol
+    */
     CRGB decideKeypadColour( uint8_t x ) {
         switch(x) {
             case 1:
@@ -82,6 +98,9 @@ public:
         return CRGB::Black;
     }
 
+    /**
+     * @brief Based on the sequence entry, decide the colour for the Joystick symbol
+    */
     CRGB decideJoystickColour( uint8_t x ) {
         switch(x) {
             case 1:
@@ -96,12 +115,16 @@ public:
         return CRGB::Black;
     }
 
+    /**
+     * @brief Display the symbol that should be currently added to the input sequence
+    */
     void displayCurrentSymbol() {
         uint8_t first = simon_info.seq[simon_info.pos] / 10;
         uint8_t second = simon_info.seq[simon_info.pos] % 10;
 
         canvas.fillScreen(CRGB::Black);
 
+        /* Draw the expected symbol */
         switch(first) {
             case 1:
                 canvas.fillRect(2, 2, 4, 4, decideADKeyboardColour(second));
@@ -119,6 +142,11 @@ public:
         FastLED.show();
     }
 
+    /**
+     * @brief Compare the inputed and expected sequence
+     * 
+     * @return bool They match or do not
+    */
     bool compareSequences() {
         for( uint8_t i = 0; i < simon_info.in_pos + 1; i++ ) {
             if( simon_info.seq[i] != simon_info.input[i] ) {
@@ -128,6 +156,9 @@ public:
         return true;
     }
 
+    /**
+     * @brief Check the inputed and expected sequences and perform actions based on the results and the current state of the game
+    */
     void checkSequence() {
         if( !compareSequences() ) {
             transit<ResetSimon>();
@@ -200,7 +231,11 @@ public:
 
 };
 
+//------------------ States ------------------//
 
+/**
+ * @brief Wait and react to input from user
+*/
 class BasicInput : public SimonSays {
     /* Keypad */
     void react( KeypadZeroPressed const & ) override {
@@ -291,6 +326,9 @@ class BasicInput : public SimonSays {
     }
 };
 
+/**
+ * @brief Set up Simon Says
+*/
 class InitSimon : public SimonSays {
 public:    
     /* Setup the game */
@@ -311,7 +349,13 @@ public:
 
 };
 
+/**
+ * @brief The user inputed sequence was incorrect, reset 
+*/
 class ResetSimon : public SimonSays {
+    /**
+     * @brief Draw a cross to matrix
+    */
     void drawCross() {
         canvas.fillScreen(CRGB::Black);
         canvas.drawLine(1, 1, 6, 6, CRGB::Red);
@@ -364,6 +408,9 @@ private:
 
 };
 
+/**
+ * @brief The sequence has been inputed correctly
+*/
 class SimonCompleted : public SimonSays {
 public:
     void entry() {
