@@ -11,9 +11,12 @@
 #include "components/joystick.h"
 
 
-uint8_t maze_difficulty = 2; // Game should change this, 1 - easy, 2 - medium, 3 - hard
-uint8_t maze_number = 0;
+/**
+ * @file Maze task implementation
+*/
 
+uint8_t maze_difficulty = 2; // Game should change this, 1 - easy, 2 - medium, 3 - hard
+uint8_t maze_number = 0;  /**< Maze to conquer */
 
 /* Forward state declaration */
 class InitMaze;
@@ -22,10 +25,15 @@ class MistakeMaze;
 class CompletedMaze;
 
 
+/**
+ * @brief Maze task FSM
+*/
 class Maze : public tinyfsm::Fsm<Maze> {
 public:
 
-    // Would love to seperate to .cpp but it stops working
+    /**
+     * @brief Draw the indication dots for the maze
+    */
     void drawMaze() {
         canvas.fillScreen(CRGB::Black);
 
@@ -69,6 +77,9 @@ public:
         }
     }
 
+    /**
+     * @brief call checkMazeX() according to the maze_number
+    */
     void checkMaze() {
         switch(maze_number) {
             case 1:
@@ -99,6 +110,8 @@ public:
     }
 
     /**
+     * @brief Checks if the player is in the boundries of the maze 1
+     * 
      * Each bracket defines boundries of a coridor
     */
     void checkMaze1() {
@@ -115,6 +128,9 @@ public:
         }
     }
 
+    /**
+     * @brief Checks if the player is in the boundries of the maze 2
+    */
     void checkMaze2() {
         // Serial.print( joystick.x );
         // Serial.print( ": ");
@@ -138,6 +154,9 @@ public:
         }
     }
 
+    /**
+     * @brief Checks if the player is in the boundries of the maze 3
+    */
     void checkMaze3() {
         if( !(
             ( joystick.x < 640 && joystick.y < 640 && joystick.y > 510 ) || 
@@ -156,6 +175,9 @@ public:
         }
     }
 
+    /**
+     * @brief Checks if the player is in the boundries of the maze 4
+    */
     void checkMaze4() {
         if( !(
             ( joystick.x < 768 && joystick.x > 510 && joystick.y < 640 && joystick.y > 510 ) || 
@@ -172,6 +194,9 @@ public:
         }
     }
 
+    /**
+     * @brief Checks if the player is in the boundries of the maze 5
+    */
     void checkMaze5() {
         if( !(
             ( joystick.x < 640 && joystick.x > 126 && joystick.y < 640 && joystick.y > 510 ) || 
@@ -188,6 +213,9 @@ public:
         }
     }
 
+    /**
+     * @brief Checks if the player is in the boundries of the maze 6
+    */
     void checkMaze6() {
         if( !(
             ( joystick.x < 640 && joystick.x > 510 && joystick.y < 640 && joystick.y > 254 ) ||
@@ -203,6 +231,9 @@ public:
         }
     }
 
+    /**
+     * @brief Draw the player on the matrix
+    */
     void displayPlayer() {
         drawMaze();
         /* https://www.geogebra.org/calculator/pfzc5w4c */
@@ -259,6 +290,8 @@ public:
 
     void react( JoystickMoved const & ) {
         displayPlayer();
+
+        /* Wait for the joystick to return to neutral position */
         if( joystick.x < 640 && joystick.x > 510 && joystick.y < 640 && joystick.y > 510 ) {
             transit<PlayMaze>();
         }

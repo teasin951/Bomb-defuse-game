@@ -12,6 +12,11 @@
 #include "components/button.h"
 
 
+/**
+ * @file Button task implementation
+*/
+
+/* Set specifiers */
 bool first_is_true;
 bool second_is_true;
 bool third_is_true;
@@ -25,8 +30,12 @@ class MistakeButton;
 class CompletedButton;
 
 
+/**
+ * @brief Button task FSM
+*/
 class Button : public tinyfsm::Fsm<Button> {
 public:
+    /* Variables for the Button task */
     int16_t first_pot = 250;
     int16_t second_pot = 250;
     int16_t third_pot = 250;
@@ -36,6 +45,11 @@ public:
     bool right_pressed = false;
 
 
+    /**
+     * @brief Check if the first test conditions are met and set the button LEDs accordingly
+     * 
+     * @return bool Conditions are met or not
+    */
     bool checkFirst() {
         if( third_pot > 1000 && first_pot < 40 ) {
             if(first_is_true) {
@@ -51,6 +65,11 @@ public:
         }
     }
 
+    /**
+     * @brief Check if the second test conditions are met and set the button LEDs accordingly
+     * 
+     * @return bool Conditions are met or not
+    */
     bool checkSecond() {
         if( joystick_is_pressed ) {
             if(second_is_true) {
@@ -66,6 +85,11 @@ public:
         }
     }
 
+    /**
+     * @brief Check if the third test conditions are met and set the button LEDs accordingly
+     * 
+     * @return bool Conditions are met or not
+    */
     bool checkThird() {
         if( first_pot > 430 && first_pot < 580 && second_pot > 430 && second_pot < 580 ) {
             if(third_is_true) {
@@ -81,6 +105,11 @@ public:
         }
     }
 
+    /**
+     * @brief Check if the fourth test conditions are met and set the button LEDs accordingly
+     * 
+     * @return bool Conditions are met or not
+    */
     bool checkFourth() {
         if( joystick_is_left && right_pressed ) {
             if(fourth_is_true) {
@@ -96,6 +125,9 @@ public:
         }
     }
 
+    /**
+     * @brief Set the button LEDs according to the bomb state
+    */
     void displayColour() {
         if( checkFirst() ) {
             return;
@@ -118,6 +150,7 @@ public:
     void react( tinyfsm::Event const & ) {};
 
     /* Keypad */
+    /* Bomb is in a sensitive state, Keypad should not be used */
     virtual void react( KeypadPressed const & ) {
         tone(BUZZER_1, 200, 100);
         game_countdown_penalty += 10;
@@ -155,6 +188,7 @@ public:
     virtual void react( JoystickReleased const & ) {};
     
     /* ADKeyboard */
+    /* Bomb is in a sensitive state, ADKeyboard should not be used, apart from the right button */
     virtual void react( ADKeyboardPressed const & ) {
         tone(BUZZER_1, 200, 100);
         game_countdown_penalty += 10;
@@ -219,7 +253,11 @@ public:
         displayColour();
     }
 
-    /* Return if the answer is C */
+    /**
+     * @brief Check if the correct answer is C
+     * 
+     * @return bool C is correct
+    */
     bool isC() {
         if( (!first_is_true && !second_is_true && !third_is_true && !fourth_is_true ) ||
             (!first_is_true && third_is_true && fourth_is_true ) || 
@@ -230,6 +268,11 @@ public:
             return false;
     }
 
+    /**
+     * @brief Check if the correct answer is D
+     * 
+     * @return bool D is correct
+    */
     bool isD() {
         if( ( !first_is_true && !second_is_true && third_is_true && !fourth_is_true ) || 
             ( first_is_true && !second_is_true && third_is_true && fourth_is_true ) ||
@@ -240,6 +283,11 @@ public:
         return false;
     }
 
+    /**
+     * @brief Check if the correct answer is S
+     * 
+     * @return bool S is correct
+    */
     bool isS() {
         if( ((!first_is_true && second_is_true && !third_is_true && fourth_is_true) || 
 			(!first_is_true && second_is_true && third_is_true && !fourth_is_true) || 
@@ -250,6 +298,11 @@ public:
         return false;
     }
 
+    /**
+     * @brief Check if the correct answer is P
+     * 
+     * @return bool P is correct
+    */
     bool isP() {
         if( ((!first_is_true && second_is_true && !third_is_true && !fourth_is_true) ||
 			(first_is_true && second_is_true && fourth_is_true)) 
@@ -259,6 +312,11 @@ public:
         return false;
     }
 
+    /**
+     * @brief Check if the correct answer is B
+     * 
+     * @return bool B is correct
+    */
     bool isB() {
         if( ((!second_is_true && !third_is_true && fourth_is_true) ||
 			(first_is_true && !second_is_true && third_is_true && !fourth_is_true)) ) {
@@ -269,6 +327,7 @@ public:
 
     /* Emergency button */
     void react( EmergencyPressed const & ) override {
+        /* Check if it was pressed at the right time */
         if( isC() ) {
             if( game_time.seconds / 10 == 5 ) {
                 transit<CompletedButton>();
@@ -398,7 +457,7 @@ public:
 
         /* generate random configuration */
         first_is_true = random(0, 2);
-        second_is_true = random(0, 3);
+        second_is_true = random(0, 3);  // 3 gives a higher chance of this being true
         third_is_true = random(0, 2);
         fourth_is_true = random(0, 3);
 

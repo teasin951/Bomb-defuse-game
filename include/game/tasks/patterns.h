@@ -10,6 +10,10 @@
 #include "components/adkeyboard.h"
 
 
+/**
+ * @file Implementation of the Pattern task
+*/
+
 /* pattern_number % 5 -> left - 1; right - 2; up - 3; down - 4 */
 uint8_t pattern_number = 0;  /**< specific number for a pattern, modulo 5 gives the direction */
 
@@ -21,9 +25,15 @@ class MistakePatterns;
 class CompletedPatterns;
 
 
+/**
+ * @brief FSM for Patterns task
+*/
 class Patterns : public tinyfsm::Fsm<Patterns> {
 public:
 
+    /**
+     * @brief Display one of the patterns
+    */
     void displayPattern() {
         CRGB col = CRGB::Magenta;
         canvas.fillScreen( CRGB::Black );
@@ -131,6 +141,9 @@ public:
         FastLED.show();
     }
 
+    /**
+     * @brief Compare expected input to user input and transit accordingly
+    */
     void checkEntry( uint8_t in ) {
         if( in == ( pattern_number % 5 ) ) {
             transit<CompletedPatterns>();
@@ -138,7 +151,6 @@ public:
         else {
             transit<MistakePatterns>();
         }
-
     }
 
     /* General update event */
@@ -158,7 +170,7 @@ public:
 
 
 /**
- * @brief The player is trying to go through the maze
+ * @brief Waiting for the user input
 */
 class PlayPatterns : public Patterns {
 public:
@@ -188,6 +200,9 @@ public:
 class MistakePatterns : public Patterns {
 public:
 
+    /**
+     * @brief Draw a cross to the matrix
+    */
     void drawCross() {
         canvas.fillScreen(CRGB::Black);
         canvas.drawLine(1, 1, 6, 6, CRGB::Red);
@@ -209,7 +224,7 @@ public:
 
     void entry() {
         bomb_beep = false;
-        game_countdown_amount -= 90000;  // penalize the mistaky -30s
+        game_countdown_amount -= 90000;  // penalize the mistake -30s
         tone(BUZZER_1, 200, 300);
         
         drawCross();
