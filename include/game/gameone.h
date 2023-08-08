@@ -89,7 +89,7 @@ public:
         }
 
         // Update time
-        if( millis() - last_time_update > time_update_delay ) {
+        if( millis() - last_time_update > time_update_delay && update_time ) {
             updateGameTime();
             printTime();
 
@@ -181,6 +181,7 @@ class Button;
 class G1Button : public GameOne {
     void entry() {
         Button::start();
+        last_task = true;
     }
 
     void react( Advance const & e ) {

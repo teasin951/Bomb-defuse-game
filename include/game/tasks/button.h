@@ -430,6 +430,11 @@ public:
         setButtonLEDs(0, 0, 0);
         rtttl::begin(BUZZER_1, task_finished);
         start_millis = millis();
+
+        // if this is the last task, stop the timer
+        if( last_task ) {
+            update_time = false;
+        }
     }
 
     void react( Update const & ) {

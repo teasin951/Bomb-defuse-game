@@ -19,6 +19,8 @@ bool task_completed = false;
 
 bool game_is_live = true;  /**< The game is on going */
 bool bomb_beep = true;  /**< The bomb should beep*/
+bool update_time = true;  /**< Games can set if the time should advance */
+bool last_task = false;  /**< Should be set to true if this is the last task of the game */
 
 
 /**
