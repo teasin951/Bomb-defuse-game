@@ -101,10 +101,13 @@ public:
                 checkMaze6();
                 break;
             case 7:
+                checkMaze7();
                 break;
             case 8:
+                checkMaze8();
                 break;
             case 9:
+                checkMaze9();
                 break;
         }
     }
@@ -227,6 +230,65 @@ public:
         }
 
         else if( joystick.x < 896 && joystick.x > 767 && joystick.y < 896 && joystick.y > 767 ) {
+            transit<CompletedMaze>();
+        }
+    }
+
+    /**
+     * @brief Checks if the player is in the boundries of the maze 7
+    */
+    void checkMaze7() {
+        if( !(
+            ( joystick.x < 640 && joystick.x > 382 && joystick.y < 640 && joystick.y > 510 ) ||
+            ( joystick.x < 511 && joystick.x > 382 && joystick.y < 640 && joystick.y > 382 ) ||
+            ( joystick.x < 511 && joystick.x > 254 && joystick.y < 511 && joystick.y > 382 ) ||
+            ( joystick.x < 383 && joystick.x > 254 && joystick.y < 511 && joystick.y > 254 ) ||
+            ( joystick.x < 383 && joystick.x > 126 && joystick.y < 383 && joystick.y > 254 ) ||
+            ( joystick.x < 255 && joystick.x > 156 && joystick.y < 383 && joystick.y > 126 )
+        ) ) {
+            transit<MistakeMaze>();
+        }
+
+        else if( joystick.x < 255 && joystick.x > 126 && joystick.y < 255 && joystick.y > 126 ) {
+            transit<CompletedMaze>();
+        }
+    }
+
+    /**
+     * @brief Checks if the player is in the boundries of the maze 8
+    */
+    void checkMaze8() {
+        if( !(
+            ( joystick.x < 640 && joystick.x > 510 && joystick.y < 768 && joystick.y > 510 ) ||
+            ( joystick.x < 640 && joystick.x > 382 && joystick.y < 768 && joystick.y > 639 ) ||
+            ( joystick.x < 511 && joystick.x > 382 && joystick.y > 639 ) ||
+            ( joystick.x < 511 && joystick.x > 126 && joystick.y > 895 ) ||
+            ( joystick.x < 255 && joystick.x > 126 && joystick.y > 382 ) ||
+            ( joystick.x < 383 && joystick.x > 126 && joystick.y < 511 && joystick.y > 382 ) ||
+            ( joystick.x < 383 && joystick.x > 254 && joystick.y < 511 && joystick.y > 254 )
+        ) ) {
+            transit<MistakeMaze>();
+        }
+
+        else if( joystick.x < 383 && joystick.x > 254 && joystick.y < 383 && joystick.y > 254 ) {
+            transit<CompletedMaze>();
+        }
+    }
+
+    /**
+     * @brief Checks if the player is in the boundries of the maze 9
+    */
+    void checkMaze9() {
+        if( !(
+            ( joystick.x < 768 && joystick.x > 510 && joystick.y < 640 && joystick.y > 510 ) ||
+            ( joystick.x < 768 && joystick.x > 639 && joystick.y < 640 && joystick.y > 254 ) ||
+            ( joystick.x < 768 && joystick.x > 382 && joystick.y < 383 && joystick.y > 254 ) ||
+            ( joystick.x < 511 && joystick.x > 382 && joystick.y < 383 && joystick.y > 126 )
+        ) ) {
+            transit<MistakeMaze>();
+        }
+
+        else if( joystick.x < 511 && joystick.x > 382 && joystick.y < 255 && joystick.y > 126 ) {
             transit<CompletedMaze>();
         }
     }
