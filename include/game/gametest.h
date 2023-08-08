@@ -176,10 +176,10 @@ public:
     void react( KeypadNinePressed const & ) {};
 
     void react( KeypadMatched const & ) {
-        clearTests();
+        resetArduino();
     };
     void react( KeypadNotMatched const & ) {
-        clearTests();
+        resetArduino();
     };
     void react( KeypadCleared const & ) {
         clearTests();
