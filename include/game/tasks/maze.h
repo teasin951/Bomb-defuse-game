@@ -15,7 +15,6 @@
  * @file Maze task implementation
 */
 
-uint8_t maze_difficulty = 2; // Game should change this, 1 - easy, 2 - medium, 3 - hard
 uint8_t maze_number = 0;  /**< Maze to conquer */
 
 /* Forward state declaration */
@@ -403,7 +402,7 @@ public:
         clearMatrix();
 
         // decide what maze it will be based on difficulty
-        maze_number = random(1, maze_difficulty*3 + 1);
+        maze_number = random(1, 10);
     }
 
     void react( Update const & ) {

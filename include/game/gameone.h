@@ -84,7 +84,7 @@ public:
         }
 
         // Certain games can tolerate only certain number of mistakes
-        if( mistakes_count >= 3 ) {
+        if( mistakes_count >= 2 ) {  // THIS IS LOCALY SET TOLERANCE for global variable
             transit<G1Detonated>();
         }
 
