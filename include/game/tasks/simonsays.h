@@ -160,25 +160,34 @@ public:
      * @brief Check the inputed and expected sequences and perform actions based on the results and the current state of the game
     */
     void checkSequence() {
+        // The entered sequence is wrong
         if( !compareSequences() ) {
             transit<ResetSimon>();
             return;
         }
 
+        // The currently entered sequence is as long as the displayed one
         if( simon_info.in_pos == simon_info.pos ) {
             simon_info.in_pos = 0;
             simon_info.pos++;
 
+            // The entire task sequence has been entered correctly
             if( simon_info.pos == simon_info.seq_length ) {
                 transit<SimonCompleted>();
             }
+            
+            // We are not at the end of the task yet
             else {
+                tone(BUZZER_1, 400, 50);  // indicate correct entry
+
                 genEntry();
                 clearMatrix();
                 displayCurrentSymbol();
             }
         }
+        // Another correct symbol of the given sequence
         else {
+            tone(BUZZER_1, 400, 50);  // indicate correct entry
             simon_info.in_pos++;
         }
     }
