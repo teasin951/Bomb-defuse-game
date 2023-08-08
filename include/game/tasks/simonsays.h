@@ -32,6 +32,7 @@ struct SimonInfo {
     uint8_t input[max_sequence] = { 0 };  /**< Inputed sequence for comparison */
     uint8_t seq[max_sequence] = {63};  /**< Expected sequence */
 
+    bool joystick_used = false;  /**< Check if the joystick has returned to the default position after move */
 };
 struct SimonInfo simon_info;
 
@@ -294,25 +295,40 @@ class BasicInput : public SimonSays {
 
     /* Joystick */
     void react( JoystickMoved const & e ) override {
-        /* Left */
-        if( e.x > 1000 && e.y < 600 && e.y > 400 ) {
-            simon_info.input[simon_info.in_pos] = 31;
-            checkSequence();
+        if( !simon_info.joystick_used ) {
+
+            /* Left */
+            if( e.x > 1000 && e.y < 600 && e.y > 400 ) {
+                simon_info.input[simon_info.in_pos] = 31;
+                checkSequence();
+
+                simon_info.joystick_used = true;
+            }
+            /* Right */
+            else if( e.x < 40 && e.y < 600 && e.y > 400 ) {
+                simon_info.input[simon_info.in_pos] = 32;
+                checkSequence();
+
+                simon_info.joystick_used = true;
+            }
+            /* Up */
+            else if( e.y > 1000 && e.x < 600 && e.x > 400 ) {
+                simon_info.input[simon_info.in_pos] = 33;
+                checkSequence();
+
+                simon_info.joystick_used = true;
+            }
+            /* Down */
+            else if( e.y < 40 && e.x < 600 && e.x > 400 ) {
+                simon_info.input[simon_info.in_pos] = 34;
+                checkSequence();
+
+                simon_info.joystick_used = true;
+            }
+
         }
-        /* Right */
-        else if( e.x < 40 && e.y < 600 && e.y > 400 ) {
-            simon_info.input[simon_info.in_pos] = 32;
-            checkSequence();
-        }
-        /* Up */
-        else if( e.y > 1000 && e.x < 600 && e.x > 400 ) {
-            simon_info.input[simon_info.in_pos] = 33;
-            checkSequence();
-        }
-        /* Down */
-        else if( e.y < 40 && e.x < 600 && e.x > 400 ) {
-            simon_info.input[simon_info.in_pos] = 34;
-            checkSequence();
+        else if( e.x < 600 && e.x > 400 && e.y < 600 && e.y > 400 ) {
+            simon_info.joystick_used = false;
         }
     }
     
