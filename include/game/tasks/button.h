@@ -116,7 +116,7 @@ public:
                 setButtonLEDs(0, 0, 255);
             }
             else {
-                setButtonLEDs(0, 255, 255);
+                setButtonLEDs(255, 255, 60);
             }
             return true;
         }        
@@ -329,7 +329,7 @@ public:
     void react( EmergencyPressed const & ) override {
         /* Check if it was pressed at the right time */
         if( isC() ) {
-            if( game_time.seconds / 10 == 5 ) {
+            if( game_time.seconds % 10 == 5 ) {
                 transit<CompletedButton>();
             }
             else {
@@ -337,7 +337,7 @@ public:
             }
         }
         else if( isD() ) {
-            if( game_time.seconds / 10 == 1 ) {
+            if( game_time.seconds % 10 == 1 ) {
                 transit<CompletedButton>();
             }
             else {
@@ -345,7 +345,7 @@ public:
             }
         }
         else if( isS() ) {
-            if( game_time.seconds / 10 == 0 ) {
+            if( game_time.seconds % 10 == 0 ) {
                 transit<CompletedButton>();
             }
             else {
@@ -353,7 +353,7 @@ public:
             }
         }
         else if( isP() ) {
-            if( game_time.seconds / 10 == 3 ) {
+            if( game_time.seconds % 10 == 3 ) {
                 transit<CompletedButton>();
             }
             else {
@@ -361,7 +361,7 @@ public:
             }
         }
         else if( isB() ) {
-            if( game_time.seconds / 10 == 2 ) {
+            if( game_time.seconds % 10 == 2 ) {
                 transit<CompletedButton>();
             }
             else {
@@ -464,7 +464,7 @@ public:
         first_is_true = random(0, 2);
         second_is_true = random(0, 3);  // 3 gives a higher chance of this being true
         third_is_true = random(0, 2);
-        fourth_is_true = random(0, 3);
+        fourth_is_true = random(0, 2);
 
         setButtonLEDs(0, 255, 0);
     }
