@@ -39,6 +39,15 @@ class GameTwo : public tinyfsm::Fsm<GameTwo> {
 public:
 
     /**
+     * @brief Clear everything off the bomb
+    */
+    void clearBomb() {
+        clearMatrix();
+        setRelays(0,0,0,0);
+        setButtonLEDs(0,0,0);
+    }
+
+    /**
      * @brief Makes a transit to a state dictated by x
     */
     void transitByNumber( uint8_t x ) {
@@ -67,7 +76,7 @@ public:
      * Prevent playing a task more than twice and button more than once
     */
     uint8_t genNext() {
-        const uint8_t max = 5;  // TODO!!!! only four tasks
+        const uint8_t max = 5;
 
         uint8_t next = random(0, max);
 
@@ -94,9 +103,40 @@ public:
             }
 
             uint8_t next = genNext();
-            (times_played[next])++;
+            times_played[next] += 1;
 
             transitByNumber( next );
+        }
+    }
+
+    void handleTaskCompleted() {
+        const uint32_t finish_delay = 1000;
+
+        if( !handeling_task_completed ) {
+            if( last_task ) {
+                update_time = false;
+            }
+
+            clearBomb();
+            
+            bomb_beep = false;
+            clearMatrix();
+            setRelays(0,0,0,0);
+            rtttl::begin(BUZZER_1, task_finished);
+            start_millis = millis();
+
+            handeling_task_completed = true;
+        }
+
+        // Wait a sec
+        if( millis() - start_millis > finish_delay ) {
+            bomb_beep = true;
+            handeling_task_completed = false;
+
+            tasks_finished++;
+            task_completed = false;
+
+            makeTransit();
         }
     }
 
@@ -142,9 +182,7 @@ public:
 
         // Check for completed tasks
         if( task_completed ) {
-            tasks_finished++;
-            task_completed = false;
-            GameTwo::dispatch( Advance() );
+            handleTaskCompleted();
         }
 
         // Certain games can tolerate only certain number of mistakes
@@ -232,7 +270,9 @@ protected:
     const uint32_t time_update_delay = 250;
     uint8_t last_second_buzzer = 0;
 
-    uint8_t times_played[5] = {0, 0, 0, 0, 0};
+    uint32_t start_millis = 0;
+    bool handeling_task_completed = false;
+
 };
 
 
@@ -247,11 +287,6 @@ class Button;
 class G2Button : public GameTwo {
     void entry() {
         Button::start();
-        last_task = true;
-    }
-
-    void react( Advance const & e ) {
-        makeTransit();
     }
 
     /* General update event */
@@ -313,10 +348,6 @@ class G2Patterns : public GameTwo {
         Patterns::start();
     }
 
-    void react( Advance const & e ) {
-        makeTransit();
-    }
-
     /* General update event */
     void react( UpdateTask const & e ) override { Patterns::dispatch( Update() ); };
     
@@ -339,10 +370,6 @@ class G2Maze : public GameTwo {
         Maze::start();
     }
 
-    void react( Advance const & e ) {
-        makeTransit();
-    }
-
     /* General update event */
     void react( UpdateTask const & e ) override { Maze::dispatch( Update() ); };
 
@@ -357,10 +384,6 @@ class G2Maze : public GameTwo {
 class G2SimonSays : public GameTwo {
     void entry() {
         SimonSays::start();
-    }
-
-    void react( Advance const & e ) {
-        makeTransit();
     }
 
     /* General update event */
@@ -421,6 +444,7 @@ class G2Init : public GameTwo {
         game_time.minutes = 8;
         game_time.seconds = 0;
         game_countdown_amount = game_time.minutes * 60000;
+        for(int i = 0; i < 5; i++) { times_played[i] = 0; }
 
         resetDisplay();
         printTime();

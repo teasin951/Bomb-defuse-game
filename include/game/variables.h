@@ -23,6 +23,8 @@ bool bomb_beep = true;  /**< The bomb should beep*/
 bool update_time = true;  /**< Games can set if the time should advance */
 bool last_task = false;  /**< Should be set to true if this is the last task of the game */
 
+uint8_t times_played[20];  /**< How many times has each task been played, MAX NUMBER OF DIFFERENT TASKS == 20 !! */
+
 
 /**
  * @brief Game time structure parsed to minutes and seconds

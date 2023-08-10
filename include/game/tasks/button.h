@@ -425,28 +425,8 @@ private:
 class CompletedButton : public Button {
 public:
     void entry() {
-        bomb_beep = false;
-        setRelays(0,0,0,0);
-        setButtonLEDs(0, 0, 0);
-        rtttl::begin(BUZZER_1, task_finished);
-        start_millis = millis();
-
-        // if this is the last task, stop the timer
-        if( last_task ) {
-            update_time = false;
-        }
+        task_completed = true;
     }
-
-    void react( Update const & ) {
-        if( millis() - start_millis > finish_delay ) {
-            bomb_beep = true;
-            task_completed = true;
-        }
-    }
-
-private:
-    uint32_t start_millis = 0;
-    const uint32_t finish_delay = 1000;
 };
 
 
