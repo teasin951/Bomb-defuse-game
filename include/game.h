@@ -4,6 +4,7 @@
 
 #include "game/events.h"
 #include "game/gameone.h"
+#include "game/gametwo.h"
 #include "game/gametest.h"
 
 #include "components/lcd.h"
@@ -132,6 +133,64 @@ class PickGameOne : public Manager {
 };
 
 /**
+ * @brief Manager state, second level
+ */
+class PickGameTwo : public Manager {
+    void entry() {
+        rtttl::begin(BUZZER_1, game_pick);
+        resetDisplay();
+        GameTwo::start();
+    }
+    /* General update event */
+    void react( Update const & e ) override { GameTwo::dispatch(e); };
+
+    /* Keypad */
+    void react( KeypadPressed const & e ) override { GameTwo::dispatch(e); }
+    void react( KeypadZeroPressed const & e ) override { GameTwo::dispatch(e); };
+    void react( KeypadOnePressed const & e ) override { GameTwo::dispatch(e); };
+    void react( KeypadTwoPressed const & e ) override { GameTwo::dispatch(e); };
+    void react( KeypadThreePressed const & e ) override { GameTwo::dispatch(e); };
+    void react( KeypadFourPressed const & e ) override { GameTwo::dispatch(e); };
+    void react( KeypadFivePressed const & e ) override { GameTwo::dispatch(e); };
+    void react( KeypadSixPressed const & e ) override { GameTwo::dispatch(e); };
+    void react( KeypadSevenPressed const & e ) override { GameTwo::dispatch(e); };
+    void react( KeypadEightPressed const & e ) override { GameTwo::dispatch(e); };
+    void react( KeypadNinePressed const & e ) override { GameTwo::dispatch(e); };
+
+    void react( KeypadMatched const & e ) override { GameTwo::dispatch(e); };
+    void react( KeypadNotMatched const & e ) override { GameTwo::dispatch(e); };
+    void react( KeypadCleared const & e ) override { GameTwo::dispatch(e); };
+    void react( KeypadOverflowed const & e ) override { GameTwo::dispatch(e); };
+
+    /* Emergency button */
+    void react( EmergencyPressed const & e ) override { GameTwo::dispatch(e); };
+    void react( EmergencyReleased const & e ) override { GameTwo::dispatch(e); };
+
+    /* Potenciometers */
+    void react( Potenciometer1Moved const & e ) override { GameTwo::dispatch(e); };
+    void react( Potenciometer2Moved const & e ) override { GameTwo::dispatch(e); };
+    void react( Potenciometer3Moved const & e ) override { GameTwo::dispatch(e); };
+
+    /* Joystick */
+    void react( JoystickMoved const & e ) override { GameTwo::dispatch(e); };
+    void react( JoystickPressed const & e ) override { GameTwo::dispatch(e); };
+    void react( JoystickReleased const & e ) override { GameTwo::dispatch(e); };
+    
+    /* ADKeyboard */
+    void react( ADKeyboardPressed const & e ) override { GameTwo::dispatch(e); };
+    void react( ADKeyboardLeftPressed const & e ) override { GameTwo::dispatch(e); };
+    void react( ADKeyboardRightPressed const & e ) override { GameTwo::dispatch(e); };
+    void react( ADKeyboardUpPressed const & e ) override { GameTwo::dispatch(e); };
+    void react( ADKeyboardDownPressed const & e ) override { GameTwo::dispatch(e); };
+    void react( ADKeyboardEnterPressed const & e ) override { GameTwo::dispatch(e); };
+    void react( ADKeyboardLeftReleased const & e ) override { GameTwo::dispatch(e); };
+    void react( ADKeyboardRightReleased const & e ) override { GameTwo::dispatch(e); };
+    void react( ADKeyboardUpReleased const & e ) override { GameTwo::dispatch(e); };
+    void react( ADKeyboardDownReleased const & e ) override { GameTwo::dispatch(e); };
+    void react( ADKeyboardEnterReleased const & e ) override { GameTwo::dispatch(e); };
+};
+
+/**
  * @brief Game test manager state 
  */
 class PickGameTest : public Manager {
@@ -216,7 +275,12 @@ class Choose : public Manager {
         transit<PickGameOne>();
     }
     
-    void react( KeypadTwoPressed const & ) override {};
+    void react( KeypadTwoPressed const & ) override {
+        tone(BUZZER_1, 400, 50);
+        clearSequence();
+        transit<PickGameTwo>();
+    };
+
     void react( KeypadThreePressed const & ) override {};
     void react( KeypadFourPressed const & ) override {};
     void react( KeypadFivePressed const & ) override {};
