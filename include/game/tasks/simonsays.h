@@ -358,6 +358,7 @@ class InitSimon : public SimonSays {
 public:    
     /* Setup the game */
     void entry() override {
+        simon_info = SimonInfo();
 
         setRelays(0, 0, 1, 1);
         clearSequence();
