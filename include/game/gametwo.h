@@ -15,6 +15,7 @@
 #include "tasks/maze.h"
 #include "tasks/patterns.h"
 #include "tasks/button.h"
+#include "tasks/discretetones.h"
 
 
 
@@ -23,6 +24,7 @@
 */
 
 /* Forward declaration of states */
+class G2Discrete;
 class G2Button;
 class G2Patterns;
 class G2Maze;
@@ -65,7 +67,7 @@ public:
                 transit<G2Button>();
                 break;
             case 4:
-                // transit<G2DiscreteTones>();
+                transit<G2Discrete>();
                 break;
         }
     }
@@ -91,20 +93,21 @@ public:
      * Note: Game two has random tasks
     */
     void makeTransit() {
-        if( tasks_finished >= number_of_tasks ) {
-            transit<G2Defused>();
-        }
-        else {
-            // Set last_task
-            if( tasks_finished == number_of_tasks - 1 ) {
-                last_task = true;
-            }
+        transitByNumber(4);
+        // if( tasks_finished >= number_of_tasks ) {
+        //     transit<G2Defused>();
+        // }
+        // else {
+        //     // Set last_task
+        //     if( tasks_finished == number_of_tasks - 1 ) {
+        //         last_task = true;
+        //     }
 
-            uint8_t next = genNext();
-            times_played[next] += 1;
+        //     uint8_t next = genNext();
+        //     times_played[next] += 1;
 
-            transitByNumber( next );
-        }
+        //     transitByNumber( next );
+        // }
     }
 
     void handleTaskCompleted() {
@@ -274,6 +277,36 @@ protected:
 
 
 /* ---------------------- States ---------------------- */
+
+/* Forward declare the game class */
+class Discrete;
+
+/**
+ * @brief Button game state 
+ */
+class G2Discrete : public GameTwo {
+    void entry() {
+        Discrete::start();
+    }
+
+    /* General update event */
+    void react( UpdateTask const & e ) override { Discrete::dispatch( Update() ); };
+
+    /* Keypad */
+    void react( KeypadZeroPressed const & e ) override { Discrete::dispatch(e); };
+    void react( KeypadOnePressed const & e ) override { Discrete::dispatch(e); };
+    void react( KeypadTwoPressed const & e ) override { Discrete::dispatch(e); };
+    void react( KeypadThreePressed const & e ) override { Discrete::dispatch(e); };
+    void react( KeypadFourPressed const & e ) override { Discrete::dispatch(e); };
+    void react( KeypadFivePressed const & e ) override { Discrete::dispatch(e); };
+    void react( KeypadSixPressed const & e ) override { Discrete::dispatch(e); };
+    void react( KeypadSevenPressed const & e ) override { Discrete::dispatch(e); };
+    void react( KeypadEightPressed const & e ) override { Discrete::dispatch(e); };
+    void react( KeypadNinePressed const & e ) override { Discrete::dispatch(e); };
+
+    void react( ADKeyboardEnterPressed const & e ) override { Discrete::dispatch(e); };
+    void react( ADKeyboardEnterReleased const & e ) override { Discrete::dispatch(e); };
+};
 
 /* Forward declare the game class */
 class Button;

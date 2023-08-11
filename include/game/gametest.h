@@ -180,7 +180,7 @@ public:
     }
 
     void react( KeypadEightPressed const & ) {
-        canvas.fillCircle(3, 3, 2, CRGB::Blue);
+        canvas.drawChar(1, 1, '8', CRGB::DarkOliveGreen, CRGB::Black, 1);
         FastLED.show();
     };
     void react( KeypadNinePressed const & ) {};
