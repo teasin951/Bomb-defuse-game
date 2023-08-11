@@ -76,12 +76,10 @@ public:
      * Prevent playing a task more than twice and button more than once
     */
     uint8_t genNext() {
-        const uint8_t max = 5;
-
-        uint8_t next = random(0, max);
+        uint8_t next = random(0, number_of_tasks);
 
         while( times_played[next] > 1 || ( times_played[next] > 0 && next == 3 ) ) {
-            next = random(0, max);
+            next = random(0, number_of_tasks);
         }
 
         return next;
@@ -93,12 +91,12 @@ public:
      * Note: Game two has random tasks
     */
     void makeTransit() {
-        if( tasks_finished >= 5 ) {
+        if( tasks_finished >= number_of_tasks ) {
             transit<G2Defused>();
         }
         else {
             // Set last_task
-            if( tasks_finished == 4 ) {
+            if( tasks_finished == number_of_tasks - 1 ) {
                 last_task = true;
             }
 
@@ -110,7 +108,6 @@ public:
     }
 
     void handleTaskCompleted() {
-        const uint32_t finish_delay = 1000;
 
         if( !handeling_task_completed ) {
             if( last_task ) {
@@ -214,7 +211,6 @@ public:
     }
 
     virtual void react( UpdateTask const & ) {};
-    virtual void react( Advance const & ) {};
 
     /* Keypad */
     virtual void react( KeypadPressed const & ) {};
@@ -270,9 +266,10 @@ protected:
     const uint32_t time_update_delay = 250;
     uint8_t last_second_buzzer = 0;
 
-    uint32_t start_millis = 0;
     bool handeling_task_completed = false;
-
+    const uint8_t number_of_tasks = 5;
+    uint32_t start_millis = 0;
+    const uint32_t finish_delay = 1000;
 };
 
 

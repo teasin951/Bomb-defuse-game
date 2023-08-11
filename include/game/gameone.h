@@ -23,6 +23,7 @@
 */
 
 /* Forward declaration of states */
+class G1Button;
 class G1Patterns;
 class G1Maze;
 class G1SimonSays;
@@ -36,6 +37,83 @@ class G1Defused;
 */
 class GameOne : public tinyfsm::Fsm<GameOne> {
 public:
+
+    /**
+     * @brief Clear everything off the bomb
+    */
+    void clearBomb() {
+        clearMatrix();
+        setRelays(0,0,0,0);
+        setButtonLEDs(0,0,0);
+    }
+
+    /**
+     * @brief Makes a transit to a state dictated by x
+    */
+    void transitByNumber( uint8_t x ) {
+        switch(x) {
+            case 0:
+                transit<G1SimonSays>();
+                break;
+            case 1:
+                transit<G1Maze>();
+                break;
+            case 2:
+                transit<G1Patterns>();
+                break;
+            case 3:
+                transit<G1Button>();
+                break;
+        }
+    }
+
+    /**
+     * @brief Make a transit to a state based on game state
+    */
+    void makeTransit() {
+        if( tasks_finished >= number_of_tasks ) {
+            transit<G1Defused>();
+        }
+        else {
+            // Set last_task
+            if( tasks_finished == number_of_tasks - 1 ) {
+                last_task = true;
+            }
+
+            transitByNumber( tasks_finished );
+        }
+    }
+
+    void handleTaskCompleted() {
+
+        if( !handeling_task_completed ) {
+            if( last_task ) {
+                update_time = false;
+            }
+
+            clearBomb();
+            
+            bomb_beep = false;
+            clearMatrix();
+            setRelays(0,0,0,0);
+            rtttl::begin(BUZZER_1, task_finished);
+            start_millis = millis();
+
+            handeling_task_completed = true;
+        }
+
+        // Wait a sec
+        if( millis() - start_millis > finish_delay ) {
+            bomb_beep = true;
+            handeling_task_completed = false;
+
+            tasks_finished++;
+            task_completed = false;
+
+            makeTransit();
+        }
+    }
+
 
     /**
      * @brief Print current remaining time to the LCD
@@ -79,8 +157,7 @@ public:
 
         // Check for completed tasks
         if( task_completed ) {
-            task_completed = false;
-            GameOne::dispatch( Advance() );
+            handleTaskCompleted();
         }
 
         // Certain games can tolerate only certain number of mistakes
@@ -112,7 +189,6 @@ public:
     }
 
     virtual void react( UpdateTask const & ) {};
-    virtual void react( Advance const & ) {};
 
     /* Keypad */
     virtual void react( KeypadPressed const & ) {};
@@ -167,6 +243,11 @@ protected:
     uint32_t last_time_update = 0;
     const uint32_t time_update_delay = 250;
     uint8_t last_second_buzzer = 0;
+
+    const uint8_t number_of_tasks = 4;
+    bool handeling_task_completed = false;
+    uint32_t start_millis = 0;
+    const uint32_t finish_delay = 1000;
 };
 
 
@@ -181,11 +262,6 @@ class Button;
 class G1Button : public GameOne {
     void entry() {
         Button::start();
-        last_task = true;
-    }
-
-    void react( Advance const & e ) {
-        transit<G1Defused>();
     }
 
     /* General update event */
@@ -247,10 +323,6 @@ class G1Patterns : public GameOne {
         Patterns::start();
     }
 
-    void react( Advance const & e ) {
-        transit<G1Button>();
-    }
-
     /* General update event */
     void react( UpdateTask const & e ) override { Patterns::dispatch( Update() ); };
     
@@ -273,10 +345,6 @@ class G1Maze : public GameOne {
         Maze::start();
     }
 
-    void react( Advance const & e ) {
-        transit<G1Patterns>();
-    }
-
     /* General update event */
     void react( UpdateTask const & e ) override { Maze::dispatch( Update() ); };
 
@@ -291,10 +359,6 @@ class G1Maze : public GameOne {
 class G1SimonSays : public GameOne {
     void entry() {
         SimonSays::start();
-    }
-
-    void react( Advance const & e ) {
-        transit<G1Maze>();
     }
 
     /* General update event */
@@ -365,7 +429,7 @@ class G1Init : public GameOne {
     }
 
     void react( UpdateTask const & ) override {
-        transit<G1SimonSays>();
+        makeTransit();
     }
 };
 

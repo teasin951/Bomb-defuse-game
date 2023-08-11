@@ -22,13 +22,6 @@ struct Update : tinyfsm::Event {};
 */
 struct UpdateTask : tinyfsm::Event {};
 
-/**
- * @brief For Games to advance stages
- * 
- * Every task state shall react to this by transiting to the next task state
-*/
-struct Advance : tinyfsm::Event {};
-
 // ------------------------------------------------------------------- //
 
 /**
