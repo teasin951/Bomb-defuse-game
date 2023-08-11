@@ -15,6 +15,7 @@
 #include "components/matrix/movingarrowleft.h"
 #include "components/matrix/movingarrowright.h"
 #include "components/matrix/movingarrowdown.h"
+#include "components/matrix/loadingcircle.h"
 
 
 
@@ -35,6 +36,7 @@ public:
         display_down = false;
         display_right = false;
         display_left = false;
+        display_loading_circle = false;
         fill_solid(canvas.m_LED, NUM_LEDS, CRGB::Black);
         FastLED.show();
 
@@ -68,6 +70,12 @@ public:
         }
         else if( display_down ) {
             moving_arrow_down.proceed();
+        }
+        else if( display_loading_circle ) {
+            loading_circle.proceed();
+            if( loading_circle.isFinished() ) {
+                display_loading_circle = false;
+            }
         }
 
     };
@@ -165,8 +173,10 @@ public:
     }
 
     void react( KeypadSevenPressed const & ) {
-        canvas.fillTriangle(0, 5, 6, 5, 3, 2, CRGB::Red);
-        FastLED.show();
+        stopOthersDisplaying();
+        tone(BUZZER_1, 400, 100);
+        loading_circle.setAnimation();
+        display_loading_circle = true;
     }
 
     void react( KeypadEightPressed const & ) {
@@ -255,6 +265,7 @@ public:
         display_down = false;
         display_right = false;
         display_left = false;
+        display_loading_circle = false;
 
     }
 
@@ -317,6 +328,7 @@ public:
     bool display_down = false;
     bool display_right = false;
     bool display_left = false;
+    bool display_loading_circle = false;
 };
 
 class UndefinedState : public TestGame {

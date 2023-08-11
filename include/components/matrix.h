@@ -51,6 +51,7 @@ public:
     */
     virtual void setAnimation() {
         resetAnimation();
+        animation_done = false;
         FastLED.show();
     }
 
@@ -141,6 +142,18 @@ public:
         return true;
     }
 
+    /**
+     * @brief Decide if the animation is at the end
+     * 
+     * @return Animation is at the end
+    */
+    bool isFinished() {
+        if( animation_done ) {
+            return true;
+        }
+        return false;
+    }
+
 protected:
     GFXcanvas & leds;
     bool (Animation::*actions[DEFAULT_FRAMES])() = {&Animation::resetAnimation};  /**< Every child should override! */
@@ -149,6 +162,8 @@ protected:
     uint16_t frame = 0;  /**< Animation frame currently displayed */
     uint16_t frame_count = 1;  /**< Number of frames in the animation, change in constructor!!! */
     uint16_t next_frame_in = 40000;  /**< ms between frames, change in constructor!!! */
+    
+    bool animation_done = false;  /**< Set to true when reseting the animation to indicate the end */
 };
 
 
