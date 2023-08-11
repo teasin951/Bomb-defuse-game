@@ -92,7 +92,60 @@ public:
                 return false;
         }
 
-        if( tones[tone] == pos ) {
+        Serial.print(tones[0]);
+        Serial.print(", ");
+        Serial.print(tones[1]);
+        Serial.print(", ");
+        Serial.print(tones[2]);
+        Serial.print(", ");
+        Serial.print(tones[3]);
+        Serial.print(": ");
+        Serial.println(pos);
+
+        if( tones[tone - 1] == pos ) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    /**
+     * @brief Check the input against the table B
+     * 
+     * @param tone Which tone in the sequence to check
+     * @param number_pressed User inputed number
+    */
+    bool checkTableB( uint8_t tone, uint8_t number_pressed ) {
+        uint8_t pos = 0;
+        switch(number_pressed) {
+            case 6:
+                pos = 1;
+                break;
+            case 8:
+                pos = 2;
+                break;
+            case 0:
+                pos = 3;
+                break;
+            case 1:
+                pos = 4;
+                break;
+            default:
+                return false;
+        }
+
+        Serial.print(tones[0]);
+        Serial.print(", ");
+        Serial.print(tones[1]);
+        Serial.print(", ");
+        Serial.print(tones[2]);
+        Serial.print(", ");
+        Serial.print(tones[3]);
+        Serial.print(": ");
+        Serial.println(pos);
+
+        if( tones[tone - 1] == pos ) {
             return true;
         }
         else {
@@ -117,11 +170,11 @@ public:
             case 1:
                 return checkTableA(3, x);
             case 2:
-                break;
+                return checkTableB(1, x);
             case 3:
                 return checkTableA(4, x);
             case 4:
-                break;
+                return checkTableB(2, x);
             case 5:
                 break;
             case 6:
@@ -141,23 +194,16 @@ public:
     virtual void react( Update const & ) {};
 
     /* Keypad */
-    virtual void react( KeypadZeroPressed const & ) {
-        if( checkNumber(0) ) {
-            transit<CompletedDiscrete>();
-        }
-        else {
-            transit<MistakeDiscrete>();
-        }
-    };
-    virtual void react( KeypadOnePressed const & ) {};
-    virtual void react( KeypadTwoPressed const & ) {};
-    virtual void react( KeypadThreePressed const & ) {};
-    virtual void react( KeypadFourPressed const & ) {};
-    virtual void react( KeypadFivePressed const & ) {};
-    virtual void react( KeypadSixPressed const & ) {};
-    virtual void react( KeypadSevenPressed const & ) {};
-    virtual void react( KeypadEightPressed const & ) {};
-    virtual void react( KeypadNinePressed const & ) {};
+    virtual void react( KeypadZeroPressed const & ) {}
+    virtual void react( KeypadOnePressed const & ) {}
+    virtual void react( KeypadTwoPressed const & ) {}
+    virtual void react( KeypadThreePressed const & ) {}
+    virtual void react( KeypadFourPressed const & ) {}
+    virtual void react( KeypadFivePressed const & ) {}
+    virtual void react( KeypadSixPressed const & ) {}
+    virtual void react( KeypadSevenPressed const & ) {}
+    virtual void react( KeypadEightPressed const & ) {}
+    virtual void react( KeypadNinePressed const & ) {}
 
     /* ADKeyboard */
     virtual void react( ADKeyboardEnterPressed const & ) {};
@@ -196,22 +242,104 @@ public:
 
     /* Keypad */
     void react( KeypadZeroPressed const & ) override {
+        clearSequence();
         if( checkNumber(0) ) {
             transit<CompletedDiscrete>();
         }
         else {
             transit<MistakeDiscrete>();
         }
-    };
-    void react( KeypadOnePressed const & ) override {};
-    void react( KeypadTwoPressed const & ) override {};
-    void react( KeypadThreePressed const & ) override {};
-    void react( KeypadFourPressed const & ) override {};
-    void react( KeypadFivePressed const & ) override {};
-    void react( KeypadSixPressed const & ) override {};
-    void react( KeypadSevenPressed const & ) override {};
-    void react( KeypadEightPressed const & ) override {};
-    void react( KeypadNinePressed const & ) override {};
+    }
+
+    void react( KeypadOnePressed const & ) override {
+        clearSequence();
+        if( checkNumber(1) ) {
+            transit<CompletedDiscrete>();
+        }
+        else {
+            transit<MistakeDiscrete>();
+        }
+    }
+
+    void react( KeypadTwoPressed const & ) override {
+        clearSequence();
+        if( checkNumber(2) ) {
+            transit<CompletedDiscrete>();
+        }
+        else {
+            transit<MistakeDiscrete>();
+        }
+    }
+
+    void react( KeypadThreePressed const & ) override {
+        clearSequence();
+        if( checkNumber(3) ) {
+            transit<CompletedDiscrete>();
+        }
+        else {
+            transit<MistakeDiscrete>();
+        }
+    }
+
+    void react( KeypadFourPressed const & ) override {
+        clearSequence();
+        if( checkNumber(4) ) {
+            transit<CompletedDiscrete>();
+        }
+        else {
+            transit<MistakeDiscrete>();
+        }
+    }
+
+    void react( KeypadFivePressed const & ) override {
+        clearSequence();
+        if( checkNumber(5) ) {
+            transit<CompletedDiscrete>();
+        }
+        else {
+            transit<MistakeDiscrete>();
+        }
+    }
+
+    void react( KeypadSixPressed const & ) override {
+        clearSequence();
+        if( checkNumber(6) ) {
+            transit<CompletedDiscrete>();
+        }
+        else {
+            transit<MistakeDiscrete>();
+        }
+    }
+
+    void react( KeypadSevenPressed const & ) override {
+        clearSequence();
+        if( checkNumber(7) ) {
+            transit<CompletedDiscrete>();
+        }
+        else {
+            transit<MistakeDiscrete>();
+        }
+    }
+
+    void react( KeypadEightPressed const & ) override {
+        clearSequence();
+        if( checkNumber(8) ) {
+            transit<CompletedDiscrete>();
+        }
+        else {
+            transit<MistakeDiscrete>();
+        }
+    }
+
+    void react( KeypadNinePressed const & ) override {
+        clearSequence();
+        if( checkNumber(9) ) {
+            transit<CompletedDiscrete>();
+        }
+        else {
+            transit<MistakeDiscrete>();
+        }
+    }
 };
 
 
@@ -220,26 +348,47 @@ public:
 */
 class MistakeDiscrete : public Discrete {
 public:
+    /**
+     * @brief Draw a cross to matrix
+    */
+    void drawCross() {
+        canvas.fillScreen(CRGB::Black);
+        canvas.drawLine(1, 1, 6, 6, CRGB::Red);
+        canvas.drawLine(1, 6, 6, 1, CRGB::Red);
+        FastLED.show();
+    }
 
-    void entry() override {
+
+    void react( Update const & ) {
+        if( millis() - start_millis > hide_delay && !hidden) {
+            clearMatrix();
+        }
+
+        if( millis() - start_millis > restart_delay ) {
+            transit<PlayDiscrete>();
+        }
+
+    }
+
+    void entry() {
         bomb_beep = false;
-
-        noTone(BUZZER_1);
-        tone(BUZZER_1, 200);
-
+        game_countdown_amount -= 30000;  // penalize the mistake -30s
+        tone(BUZZER_1, 200, 300);
+        
+        drawCross();
         start_millis = millis();
     }
 
     void exit() {
-        noTone(BUZZER_1);
         bomb_beep = true;
+        hidden = false;
     }
-
-    void react( Update const & ) {}
 
 private:
     uint32_t start_millis = 0;
-    const uint32_t blink_delay = 500;
+    const uint32_t restart_delay = 500;
+    const uint32_t hide_delay = 300;
+    bool hidden = false;
 };
 
 
@@ -248,16 +397,35 @@ private:
 */
 class CompletedDiscrete : public Discrete {
 public:
-    void entry() {}
+    /* Give a little time for the bomb to recover from the delays 
+       before marking the task as completed */
+    void entry() {
+        start_millis = millis();
+        cleared = false;
 
-    /* Completing the task after update
-       to catch up to the real time after the blocking animation 
-       when checking for the number
-       
-       This mean you will loose if you press even the correct answer at 0:01 */
-    void react( Update const & ) override {
-        task_completed = true;
+        /* Display a tick */
+        canvas.drawLine(0, 4, 2, 6, CRGB::Green);
+        canvas.drawLine(3, 5, 7, 1, CRGB::Green);
+        FastLED.show();
+        tone(BUZZER_1, 1000, 200);
     }
+
+    void react( Update const & ) override {
+        if( millis() > start_millis + complete_timeout ) {
+            task_completed = true;
+        }
+        if(millis() > start_millis + show_timeout && !cleared ) {
+            canvas.fillScreen(CRGB::Black);
+            FastLED.show();
+            cleared = true;
+        }
+    }
+
+private:
+    uint32_t start_millis = 0;
+    const uint32_t complete_timeout = 600;
+    const uint32_t show_timeout = 300;
+    bool cleared = false;
 };
 
 

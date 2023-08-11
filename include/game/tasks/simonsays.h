@@ -403,7 +403,7 @@ class ResetSimon : public SimonSays {
 
     void entry() {
         bomb_beep = false;
-        game_countdown_amount -= 30000;  // penalize the mistaky -30s
+        game_countdown_amount -= 30000;  // penalize the mistake -30s
         tone(BUZZER_1, 200, 300);
         
         drawCross();
