@@ -92,16 +92,6 @@ public:
                 return false;
         }
 
-        Serial.print(tones[0]);
-        Serial.print(", ");
-        Serial.print(tones[1]);
-        Serial.print(", ");
-        Serial.print(tones[2]);
-        Serial.print(", ");
-        Serial.print(tones[3]);
-        Serial.print(": ");
-        Serial.println(pos);
-
         if( tones[tone - 1] == pos ) {
             return true;
         }
@@ -135,21 +125,285 @@ public:
                 return false;
         }
 
-        Serial.print(tones[0]);
-        Serial.print(", ");
-        Serial.print(tones[1]);
-        Serial.print(", ");
-        Serial.print(tones[2]);
-        Serial.print(", ");
-        Serial.print(tones[3]);
-        Serial.print(": ");
-        Serial.println(pos);
-
         if( tones[tone - 1] == pos ) {
             return true;
         }
         else {
             return false;
+        }
+    }
+
+    /**
+     * @brief returns which condition in the P table is met first
+    */
+    uint8_t checkPConditions() {
+        if( tones[0] > tones[1] ) {
+            return 0;
+        }
+        else if( tones[0] < tones[2] ) {
+            return 1;
+        }
+        else if( tones[2] > tones[3] ) {
+            return 2;
+        }
+        else if( tones[0] > tones[3] ) {
+            return 3;
+        }
+        else {
+            return 4;
+        }
+    }
+
+    /**
+     * @brief returns which condition in the P table is met first
+    */
+    uint8_t checkQConditions() {
+        if( tones[1] > tones[2] ) {
+            return 0;
+        }
+        else if( tones[3] < tones[1] ) {
+            return 1;
+        }
+        else if( tones[0] > tones[2] ) {
+            return 2;
+        }
+        else if( tones[2] > tones[3] ) {
+            return 3;
+        }
+        else {
+            return 4;
+        }
+    }
+
+    /**
+     * @brief Check the inputed number against the first index in P table
+    */
+    bool checkFirstPIndex( uint8_t number_pressed ) {
+        switch( checkPConditions() ) {
+            case 0:
+                if( number_pressed == 1 ) { return true; }
+            case 1:
+                if( number_pressed == 9 ) { return true; }
+            case 2:
+                if( number_pressed == 5 ) { return true; }
+            case 3:
+                if( number_pressed == 8 ) { return true; }
+            case 4:
+                if( number_pressed == 3 ) { return true; }
+        }
+        return false;
+    }
+
+    /**
+     * @brief Check the inputed number against the second index in P table
+    */
+    bool checkSecondPIndex( uint8_t number_pressed ) {
+        switch( checkPConditions() ) {
+            case 0:
+                if( number_pressed == 4 ) { return true; }
+            case 1:
+                if( number_pressed == 0 ) { return true; }
+            case 2:
+                if( number_pressed == 7 ) { return true; }
+            case 3:
+                if( number_pressed == 9 ) { return true; }
+            case 4:
+                if( number_pressed == 8 ) { return true; }
+        }
+        return false;
+    }
+
+    /**
+     * @brief Check the inputed number against the third index in P table
+    */
+    bool checkThirdPIndex( uint8_t number_pressed ) {
+        switch( checkPConditions() ) {
+            case 0:
+                if( number_pressed == 0 ) { return true; }
+            case 1:
+                if( number_pressed == 2 ) { return true; }
+            case 2:
+                if( number_pressed == 1 ) { return true; }
+            case 3:
+                if( number_pressed == 3 ) { return true; }
+            case 4:
+                if( number_pressed == 0 ) { return true; }
+        }
+        return false;
+    }
+
+    /**
+     * @brief Check the inputed number against the fourth index in P table
+    */
+    bool checkFourthPIndex( uint8_t number_pressed ) {
+        switch( checkPConditions() ) {
+            case 0:
+                if( number_pressed == 9 ) { return true; }
+            case 1:
+                if( number_pressed == 7 ) { return true; }
+            case 2:
+                if( number_pressed == 8 ) { return true; }
+            case 3:
+                if( number_pressed == 0 ) { return true; }
+            case 4:
+                if( number_pressed == 4 ) { return true; }
+        }
+        return false;
+    }
+
+    /**
+     * @brief Check the inputed number against the first index in Q table
+    */
+    bool checkFirstQIndex( uint8_t number_pressed ) {
+        switch( checkQConditions() ) {
+            case 0:
+                if( number_pressed == 1 ) { return true; }
+            case 1:
+                if( number_pressed == 3 ) { return true; }
+            case 2:
+                if( number_pressed == 4 ) { return true; }
+            case 3:
+                if( number_pressed == 6 ) { return true; }
+            case 4:
+                if( number_pressed == 7 ) { return true; }
+        }
+        return false;
+    }
+
+    /**
+     * @brief Check the inputed number against the second index in Q table
+    */
+    bool checkSecondQIndex( uint8_t number_pressed ) {
+        switch( checkQConditions() ) {
+            case 0:
+                if( number_pressed == 5 ) { return true; }
+            case 1:
+                if( number_pressed == 0 ) { return true; }
+            case 2:
+                if( number_pressed == 9 ) { return true; }
+            case 3:
+                if( number_pressed == 2 ) { return true; }
+            case 4:
+                if( number_pressed == 5 ) { return true; }
+        }
+        return false;
+    }
+
+    /**
+     * @brief Check the inputed number against the third index in Q table
+    */
+    bool checkThirdQIndex( uint8_t number_pressed ) {
+        switch( checkQConditions() ) {
+            case 0:
+                if( number_pressed == 7 ) { return true; }
+            case 1:
+                if( number_pressed == 3 ) { return true; }
+            case 2:
+                if( number_pressed == 8 ) { return true; }
+            case 3:
+                if( number_pressed == 4 ) { return true; }
+            case 4:
+                if( number_pressed == 9 ) { return true; }
+        }
+        return false;
+    }
+
+    /**
+     * @brief Check the inputed number against the fourth index in Q table
+    */
+    bool checkFourthQIndex( uint8_t number_pressed ) {
+        switch( checkQConditions() ) {
+            case 0:
+                if( number_pressed == 9 ) { return true; }
+            case 1:
+                if( number_pressed == 4 ) { return true; }
+            case 2:
+                if( number_pressed == 0 ) { return true; }
+            case 3:
+                if( number_pressed == 1 ) { return true; }
+            case 4:
+                if( number_pressed == 6 ) { return true; }
+        }
+        return false;
+    }
+
+    /**
+     * @brief Check the input against the table P
+     * 
+     * @param index What index to check
+     * @param number_pressed User inputed number
+    */
+    bool checkTableP( uint8_t index, uint8_t number_pressed ) {
+        switch( index ) {
+            case 1:
+                return checkFirstPIndex( number_pressed );
+
+            case 2:
+                return checkSecondPIndex( number_pressed );
+
+            case 3:
+                return checkThirdPIndex( number_pressed );
+
+            case 4:
+                return checkFourthPIndex( number_pressed );
+        }
+    }
+
+    /**
+     * @brief Check the input against the table P
+     * 
+     * @param index What index to check
+     * @param number_pressed User inputed number
+    */
+    bool checkTableQ( uint8_t index, uint8_t number_pressed ) {
+        switch( index ) {
+            case 1:
+                return checkFirstQIndex( number_pressed );
+
+            case 2:
+                return checkSecondQIndex( number_pressed );
+
+            case 3:
+                return checkThirdQIndex( number_pressed );
+
+            case 4:
+                return checkFourthQIndex( number_pressed );
+        }
+    }
+
+    /**
+     * @brief return what index to follow according to the E table
+     * 
+     * @param tone Which tone to check for ( 1 to 4 )
+    */
+    uint8_t getEIndex( uint8_t tone ) {
+        switch(tones[tone-1]) {
+            case 0:
+                return 3;
+            case 1:
+                return 1;
+            case 2:
+                return 4;
+            case 3:
+                return 2;
+        }
+    }
+
+    /**
+     * @brief return what index to follow according to the F table
+     * 
+     * @param tone Which tone to check for ( 1 to 4 )
+    */
+    uint8_t getFIndex( uint8_t tone ) {
+        switch(tones[tone-1]) {
+            case 0:
+                return 3;
+            case 1:
+                return 2;
+            case 2:
+                return 4;
+            case 3:
+                return 1;
         }
     }
 
@@ -176,17 +430,53 @@ public:
             case 4:
                 return checkTableB(2, x);
             case 5:
-                break;
+                uint8_t i = getEIndex(2);
+                if( i == 1 || i == 4 ) {
+                    return checkTableP(i, x);
+                }
+                else {
+                    return checkTableQ(i ,x);
+                }
             case 6:
-                break;
+                uint8_t i = getFIndex(4);
+                if( i == 3 || i == 2 ) {
+                    return checkTableP(i, x);
+                }
+                else {
+                    return checkTableQ(i ,x);
+                }
             case 7:
-                break;
+                uint8_t i = getFIndex(3);
+                if( i == 3 || i == 2 ) {
+                    return checkTableP(i, x);
+                }
+                else {
+                    return checkTableQ(i ,x);
+                }
             case 8:
-                break;
+                uint8_t i = getEIndex(1);
+                if( i == 1 || i == 4 ) {
+                    return checkTableP(i, x);
+                }
+                else {
+                    return checkTableQ(i ,x);
+                }
             case 9:
-                break;
+                uint8_t i = getFIndex(2);
+                if( i == 3 || i == 2 ) {
+                    return checkTableP(i, x);
+                }
+                else {
+                    return checkTableQ(i ,x);
+                }
             case 0:
-                break;
+                uint8_t i = getEIndex(4);
+                if( i == 1 || i == 4 ) {
+                    return checkTableP(i, x);
+                }
+                else {
+                    return checkTableQ(i ,x);
+                }
         }
         return false;
     }
